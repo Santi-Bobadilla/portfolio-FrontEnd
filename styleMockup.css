@@ -1,0 +1,10 @@
+/* imagen perfil portfolio */
+#img_perfil {
+    position: absolute!important;
+    top: 90%!important;
+};
+
+/* saco subrayado a btn-link */
+.btn-link {
+    text-decoration: none!important;
+}
