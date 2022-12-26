@@ -1,4 +1,7 @@
-# PortfolioFrontendSantiagoBobadilla
+# portfolio-FrontEnd
+Código Frontend de Portfolio Santiago Bobadilla - Argentina Programa 2022 - 3º Cohorte
+
+# Portfolio Frontend Santiago Bobadilla
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.4.
 
