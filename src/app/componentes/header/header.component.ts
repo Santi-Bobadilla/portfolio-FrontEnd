@@ -24,14 +24,14 @@ export class HeaderComponent {
 			"nombres": "Santiago",
 			"apellido": "Bobadilla",
 			"fecha_nacimiento": "14/01/1990",
-			"nacionalidad": "Argentino",
+			"nacionalidad": 1,
 			"mail": "santiagobobadilla@gmail.com",
       "telefono": "3515213640",
 			"sobre_mi": "Full Stack Developer Jr. con experiencia en diversos lenguajes de programación y freameworks.",
 			"ocupación": "Full Stack Developer Jr.",
 			"image_background_header": "https://fondosmil.com/fondo/19455.jpg",
 			"image_perfil": "https://media.licdn.com/dms/image/D4D03AQHrWI-J-WvjRw/profile-displayphoto-shrink_200_200/0/1672043719971?e=1677715200&v=beta&t=hmu2DAPSVKjWwVQ2yMJPe-GcyMfl5rGGk8dnZ1f4W8I",
-			"id_domicilio":"Córdoba (Argentina)"
+			"id_domicilio":5
     }];
   }
     

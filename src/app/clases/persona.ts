@@ -3,12 +3,12 @@ export class Persona {
     nombres: string;
     apellido: string;
     fecha_nacimiento: string;
-    nacionalidad: string;
+    nacionalidad: number;
     mail: string;
     telefono: string;
     sobre_mi: string;
     ocupación: string;
     image_background_header: string;
     image_perfil: string;
-    id_domicilio: string;
+    id_domicilio: number;
 }
