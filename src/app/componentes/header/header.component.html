@@ -22,9 +22,9 @@
             <i class="fa-solid fa-user"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active" *ngIf="!authService.logIn">Registrarse</a></li>
-            <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active" *ngIf="!authService.logIn">Iniciar Sesión</a></li>
-            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" *ngIf="authService.logIn" (click)="logout()">Cerrar Sesión</a></li>
+            <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active" *ngIf="!authService.iniciarSesion">Registrarse</a></li>
+            <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active" *ngIf="!authService.iniciarSesion">Iniciar Sesión</a></li>
+            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" *ngIf="authService.iniciarSesion" >Cerrar Sesión</a></li>
           </ul>
         </li>
       </ul>
@@ -41,7 +41,7 @@
       <div class="col-10">
         <h5 class="card-title">{{p.nombres+' '+p.apellido}}</h5>
       </div>
-      <div class="col-2 text-end" *ngIf="authService.logIn">
+      <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
         <button type="button" class="btn btn-sm btn-light">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
@@ -65,14 +65,14 @@
           <div class="col-10">
               <h5 class="card-title text-start">Acerca de</h5>
           </div>
-          <div class="col-2 text-end" *ngIf="authService.logIn">
+          <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
             <button type="button" class="btn btn-sm btn-light">
               <i class="fa-regular fa-pen-to-square"></i>
             </button>
           </div>
       </div>
               
-      <p class="card-text my-0">Full Stack Developer Jr. con experiencia en diversos lenguajes de programación y freameworks. </p>
+      <p class="card-text my-0">{{p.sobre_mi}}</p>
     </div>
   <!-- </div> -->
 

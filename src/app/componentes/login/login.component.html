@@ -1,26 +1,37 @@
 <div class="container-fluid">
-    <div class="card my-5 position-absolute top-50 start-50 translate-middle" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title text-center">Iniciar Sesión</h5>
-          <form>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  <div class="card my-5 position-absolute top-50 start-50 translate-middle" style="width: 18rem">
+    <div class="card-body">
+      <h5 class="card-title text-center">Iniciar Sesión</h5>
+      <form [formGroup]="form" (ngSubmit)="onEnviar($event)">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email</label>
+          <input type="email" formControlName="email" [ngClass]="{'is-invalid': Email?.errors && Email?.touched, 'is-valid': !Email?.errors && !Email?.touched}" class="form-control" id="exampleInputEmail1"
+            aria-describedby="emailHelp" />
+            <div *ngIf="Email?.errors && Email?.touched">
+              <p *ngIf="Email?.hasError('required')" class="text-danger">
+                El email es requerido.
+              </p>
+              <p *ngIf="Email?.hasError('email')" class="text-danger">
+                El formato de email es incorrecto.
+              </p>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Recordarme</label>
-            </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Ingresar</button>
-            </div>
-            
-        </form>
         </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" formControlName="password" [ngClass]="{'is-invalid': Password?.errors && Password?.touched, 'is-valid': !Password?.errors && !Password?.touched}" class="form-control" id="exampleInputPassword1" />
+          <div *ngIf="Password?.errors && Password?.touched">
+            <p *ngIf="Password?.hasError('required')" class="text-danger">
+              La contraseña es requerida
+            </p>
+            <p *ngIf="Password?.errors?.['minlength']" class="text-danger">
+              La contraseña debe tener por lo menos 8 caracteres.
+            </p>
+          </div>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">Ingresar</button>
+        </div>
+      </form>
     </div>
-    
+  </div>
 </div>
