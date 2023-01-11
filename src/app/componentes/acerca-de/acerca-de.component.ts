@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/servicios/Auth/auth.service';
 
 @Component({
   selector: 'app-acerca-de',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AcercaDeComponent {
 
+  constructor(protected authService: AuthService) { }
+  
 }

@@ -1,54 +1,119 @@
 <div class="container-fluid">
   <nav class="navbar navbar-expand-lg bg-light">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <!-- <span class="navbar-toggler-icon"></span> -->
-        <img src="./assets/img/arg-programa.png" alt="logo" width="100"> <span>Santiago Bobadilla</span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <a class="navbar-brand d-none d-lg-block" href="#">
-          <img src="./assets/img/arg-programa.png" alt="logo" width="150">
-        </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- <span class="navbar-toggler-icon"></span> -->
+      <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" width="100"> <span>Santiago Bobadilla</span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand d-none d-lg-block" href="#">
+        <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" width="150">
+      </a>
+      
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://www.linkedin.com/in/santiago-bobadilla/"><i class="fa-brands fa-linkedin"></i></a>
+        </li>
         
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-user"></i>
-              Login
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Iniciar Sesión</a></li>
-              <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-  </nav>
-  <div class="card mb-3 pb-2">
-    <div class="position-relative">
-      <img src="https://fondosmil.com/fondo/19455.jpg" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
-      <img src="./assets/img/foto.jpeg" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil" id="img_perfil" height="100" width="100">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-user"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active" *ngIf="!authService.logIn">Registrarse</a></li>
+            <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active" *ngIf="!authService.logIn">Iniciar Sesión</a></li>
+            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" *ngIf="authService.logIn" (click)="logout()">Cerrar Sesión</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
+</nav>
+<div class="card mb-3 pb-2" *ngFor="let p of persona">
+  <div class="position-relative">
+    <img src="{{p.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
+    <img src="{{p.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil" id="img_perfil" height="100" width="100">
+  </div>
 
-    <div class="card-body mt-5">
+  <div class="card-body mt-5">
+    <div class="row">
+      <div class="col-10">
+        <h5 class="card-title">{{p.nombres+' '+p.apellido}}</h5>
+      </div>
+      <div class="col-2 text-end" *ngIf="authService.logIn">
+        <button type="button" class="btn btn-sm btn-light">
+          <i class="fa-regular fa-pen-to-square"></i>
+        </button>
+      </div>
+    </div>
+    <p class="card-text my-0">Full Stack Developer Jr.</p>
+    <p class="card-text my-0">Córdoba (Argentina) <span>
+      <button type="button" class="btn btn-link px-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Información de contacto</button>
+    </span> </p>
+  </div>
+
+  <div>
+    <button type="button" class="btn btn-primary btn-sm mx-2">Tengo interes en</button>
+    <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Añadir sección</button>
+    <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Más</button>
+  </div>
+
+  <!-- <div class="card mb-3 pb-2">       -->
+    <div class="card-body py-2">
       <div class="row">
-        <div class="col-10">
-          <h5 class="card-title">Santiago Bobadilla</h5>
+          <div class="col-10">
+              <h5 class="card-title text-start">Acerca de</h5>
+          </div>
+          <div class="col-2 text-end" *ngIf="authService.logIn">
+            <button type="button" class="btn btn-sm btn-light">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+          </div>
+      </div>
+              
+      <p class="card-text my-0">Full Stack Developer Jr. con experiencia en diversos lenguajes de programación y freameworks. </p>
+    </div>
+  <!-- </div> -->
+
+    
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Contacto</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="col-2 text-end">
-          <button type="button" class="btn btn-sm btn-light">
-            <i class="fa-regular fa-pen-to-square"></i>
-          </button>
+        <div class="modal-body">
+          <!-- modal body -->
+          <div class="row row-cols-2 align-items-center">
+            <div class="col d-grid gap-2 mx-auto">
+              <button class="btn btn-success">
+                <a class="btn-link text-white" href="https://wa.me/+549{{p.telefono}}"> <i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
+              </button>
+
+              <button class="btn btn-danger">
+                <a class="btn-link text-white" href = "mailto: {{p.mail}}"> <i class="fa-regular fa-envelope"></i> Email</a>
+              </button>
+            </div>
+            <div class="col d-grid gap-2 mx-auto">
+              <button class="btn btn-primary">
+                <a class="btn-link text-white" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i> Instagram</a>
+              </button>
+
+              <button class="btn btn-dark">
+                <a class="btn-link text-white" href="https://www.linkedin.com/in/santiago-bobadilla/"><i class="fa-brands fa-linkedin"></i> Linkedin</a>
+              </button>
+            </div>
+          </div>        
         </div>
       </div>
-      <p class="card-text my-0">Full Stack Developer Jr.</p>
-      <p class="card-text my-0">Córdoba (Argentina) <span><button type="button" class="btn btn-link px-0">Información de contacto</button></span> </p>
-    </div>
-
-    <div>
-      <button type="button" class="btn btn-primary btn-sm mx-2">Tengo interes en</button>
-      <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Añadir sección</button>
-      <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Más</button>
     </div>
   </div>
+  <!-- fin modal body -->
+
+  </div>
 </div>
+
 
