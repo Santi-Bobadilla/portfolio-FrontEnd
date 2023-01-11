@@ -13,6 +13,7 @@ import { LoginComponent } from './componentes/login/login.component';
 import { PageNotFoundComponent } from './componentes/page-not-found/page-not-found.component';
 import { RegisterComponent } from './componentes/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PortfolioComponent } from './componentes/portfolio/portfolio.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { HttpClientModule } from '@angular/common/http';
     ProyectosComponent,
     LoginComponent,
     PageNotFoundComponent,
-    RegisterComponent
+    RegisterComponent,
+    PortfolioComponent
   ],
   imports: [
     BrowserModule,
