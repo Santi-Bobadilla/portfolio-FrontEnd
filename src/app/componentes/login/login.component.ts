@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/servicios/Auth/auth.service';
 import { Router } from '@angular/router';
+import { Credentials } from 'src/app/clases/persona';
 
 
 @Component({
@@ -10,7 +11,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit{
+export class LoginComponent{
+
+  credentials: Credentials={
+    email: '',
+    password: ''
+  };
 
   form: FormGroup;
 
@@ -20,10 +26,6 @@ export class LoginComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
     })
-  }
-
-  ngOnInit():void{
-
   }
 
   get Email(){
@@ -37,8 +39,8 @@ export class LoginComponent implements OnInit{
   onEnviar(event:Event){
     event.preventDefault;
     this.authService.iniciarSesion(this.form.value).subscribe(data=>{
-      console.log("DATA: "+JSON.stringify(data));
       this.router.navigate(["/portfolio"]);
     });
   }
+
 }

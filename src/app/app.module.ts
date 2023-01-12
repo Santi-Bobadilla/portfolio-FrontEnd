@@ -11,9 +11,10 @@ import { ProyectosComponent } from './componentes/proyectos/proyectos.component'
 import { LoginComponent } from './componentes/login/login.component';
 import { PageNotFoundComponent } from './componentes/page-not-found/page-not-found.component';
 import { RegisterComponent } from './componentes/register/register.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PortfolioComponent } from './componentes/portfolio/portfolio.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthInterceptor } from './servicios/Interceptor/auth.interceptor';
 
 
 @NgModule({
@@ -35,7 +36,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

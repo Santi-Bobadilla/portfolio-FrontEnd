@@ -1,4 +1,4 @@
-export class Persona {
+export interface Persona {
     id:number;
     nombres: string;
     apellido: string;
@@ -11,4 +11,9 @@ export class Persona {
     image_background_header: string;
     image_perfil: string;
     id_domicilio: number;
+}
+
+export interface Credentials{
+    email: string;
+    password: string;
 }

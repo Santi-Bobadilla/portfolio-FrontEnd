@@ -24,7 +24,7 @@
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active" *ngIf="!authService.iniciarSesion">Registrarse</a></li>
             <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active" *ngIf="!authService.iniciarSesion">Iniciar Sesión</a></li>
-            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" *ngIf="authService.iniciarSesion" >Cerrar Sesión</a></li>
+            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" *ngIf="authService.iniciarSesion" (click)="authService.logOut()">Cerrar Sesión</a></li>
           </ul>
         </li>
       </ul>
