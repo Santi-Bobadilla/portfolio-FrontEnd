@@ -1,19 +1,18 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { AuthService } from '../Auth/auth.service';
+import { HeaderComponent } from 'src/app/componentes/header/header.component';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class PortfolioService{
+export class PortfolioService implements OnInit{
 
-  url:string = "http://localhost:8080/api/";
+  persona: any;
+  constructor(private authService:AuthService, private header:HeaderComponent) { }
 
-  constructor(private http:HttpClient) { }
+  ngOnInit(): void {
 
-  obtenerDatos():Observable<any> {    
-    return this.http.get<any>('ver/personas');
   }
 
   

@@ -26,18 +26,17 @@ export class AuthService {
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
       const token = bearerToken && bearerToken.replace('Bearer ', '');
-      sessionStorage.setItem('currentUser', JSON.stringify(token));                  
-      return bearerToken;
+      sessionStorage.setItem('currentUser', JSON.stringify(token));
+      return token;
     }))
   }
   
   getToken() {
     return sessionStorage.getItem('currentUser');
   }
-
+  
   logOut(){
     let a = confirm("¿esta seguro que desea cerrar la sesion?");
-    console.log(a);
     if (a===true) {
       sessionStorage.removeItem('currentUser');
       this.currentUserSubject.next(null);
@@ -46,8 +45,10 @@ export class AuthService {
       this.currentUserSubject.next(null);
       this.router.navigate(['/portfolio']);
     }
-    
   }
 
+ // get usuarioAutenticado(){
+ // return this.currentUserSubject.asObservable();
+ // }
   
 }
