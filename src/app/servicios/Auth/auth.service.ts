@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs';
-import { Credentials } from 'src/app/clases/persona';
+import { Credentials } from 'src/app/modelo/modelo';
 
 @Injectable({
   providedIn: 'root'
@@ -11,23 +11,24 @@ import { Credentials } from 'src/app/clases/persona';
 
 export class AuthService {
 
-  api = 'http://localhost:8080/api';
+  api = 'http://localhost:8080/api/login';
   currentUserSubject: BehaviorSubject<any>;
   
   constructor(private http:HttpClient, private router:Router) {
-    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || "{}"));
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem('currentUser') || "{}"));
 
     
   }
 
   iniciarSesion(credentials:Credentials): Observable<any> {
-    return this.http.post(this.api + '/login', credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
+    return this.http.post(this.api, credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
       const body = response.body;
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
       const token = bearerToken && bearerToken.replace('Bearer ', '');
-      sessionStorage.setItem('currentUser', JSON.stringify(token));                  
-      return bearerToken;
+      sessionStorage.setItem('currentUser', JSON.stringify(token));
+      this.currentUserSubject.next(token);
+      return token;
     }))
   }
   
@@ -37,7 +38,6 @@ export class AuthService {
 
   logOut(){
     let a = confirm("¿esta seguro que desea cerrar la sesion?");
-    console.log(a);
     if (a===true) {
       sessionStorage.removeItem('currentUser');
       this.currentUserSubject.next(null);
@@ -47,6 +47,10 @@ export class AuthService {
       this.router.navigate(['/portfolio']);
     }
     
+  }
+
+  get UsuarioAutenticado(){
+    return this.currentUserSubject.value;
   }
 
   

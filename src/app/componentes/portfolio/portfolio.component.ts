@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
-import { Persona } from 'src/app/clases/persona';
 
 @Component({
   selector: 'app-portfolio',
@@ -9,7 +8,7 @@ import { Persona } from 'src/app/clases/persona';
 })
 
 export class PortfolioComponent{
-  persona: Persona[];
+  persona: any;
 
   constructor(private portfolioService:PortfolioService) { }
 

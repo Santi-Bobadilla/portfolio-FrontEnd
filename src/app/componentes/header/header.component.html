@@ -39,7 +39,7 @@
   <div class="card-body mt-5">
     <div class="row">
       <div class="col-10">
-        <h5 class="card-title">{{p.nombres+' '+p.apellido}}</h5>
+        <h5 class="card-title">{{p.nombre+' '+p.apellido}}</h5>
       </div>
       <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
         <button type="button" class="btn btn-sm btn-light">
@@ -47,17 +47,17 @@
         </button>
       </div>
     </div>
-    <p class="card-text my-0">Full Stack Developer Jr.</p>
+    <p class="card-text my-0">{{p.ocupacion}}</p>
     <p class="card-text my-0">Córdoba (Argentina) <span>
       <button type="button" class="btn btn-link px-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Información de contacto</button>
     </span> </p>
   </div>
 
-  <div>
+  <!-- <div>
     <button type="button" class="btn btn-primary btn-sm mx-2">Tengo interes en</button>
     <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Añadir sección</button>
     <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Más</button>
-  </div>
+  </div> -->
 
   <!-- <div class="card mb-3 pb-2">       -->
     <div class="card-body py-2">
@@ -94,7 +94,7 @@
               </button>
 
               <button class="btn btn-danger">
-                <a class="btn-link text-white" href = "mailto: {{p.mail}}"> <i class="fa-regular fa-envelope"></i> Email</a>
+                <a class="btn-link text-white" href = "mailto: {{p.email}}"> <i class="fa-regular fa-envelope"></i> Email</a>
               </button>
             </div>
             <div class="col d-grid gap-2 mx-auto">
