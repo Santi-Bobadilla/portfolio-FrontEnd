@@ -9,8 +9,6 @@ import { AuthService } from '../Auth/auth.service';
 
 export class PortfolioService implements OnInit{
 
-  private persona: any;
-
   private url:string = "http://localhost:8080/api/";
 
   constructor(private http:HttpClient, private authService:AuthService) { }
@@ -26,9 +24,17 @@ export class PortfolioService implements OnInit{
     return this.http.get<any>(this.url+"ver/edu");
   }
     
-   
+  obtenerExp():Observable<any> {
+    return this.http.get<any>(this.url+"ver/exp");
+  }
 
+  obtenerSkill():Observable<any> {
+    return this.http.get<any>(this.url+"ver/skill");
+  }
 
+  obtenerProy():Observable<any> {
+    return this.http.get<any>(this.url+"ver/proy");
+  }
   
   
 }

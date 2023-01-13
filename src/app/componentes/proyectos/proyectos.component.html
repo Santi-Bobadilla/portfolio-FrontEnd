@@ -1,59 +1,114 @@
 <div class="container-fluid">
-    <div class="card mb-3 pb-2">      
-      <div class="card-body">
-        <div class="row">
-            <div class="col-10">
-                <h5 class="card-title text-start">Proyectos</h5>
-            </div>
-            <div class="col-2 text-end">
-                <button type="button" class="btn btn-sm btn-light">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
-        </div>
-      </div>
-      <!-- Proyectos -->
-      <div class="container-fluid">
-        <div class="row" ng>
-            <div class="col">
-                <div class="card mb-3">
-                    <div class="row">
-                      <div class="col-9">
-                        <div class="card-body">
-                          <h5 class="card-title">Portfolio Web</h5>
-                        </div>
-                      </div>
-                      <div class="col-3 text-end">
-                        <button type="button" class="btn btn-sm btn-light">
-                            <i class="fa-regular fa-pen-to-square"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="container-fluid mb-2">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <b>Fecha de Inicio:</b> 28/06/2.022
-                            </li>
-                            <li class="list-group-item">
-                                <b>Fecha de Fin:</b> 15/01/2.023
-                            </li>
-                            <li class="list-group-item">
-                                <b>Link: </b> <a href="link link">aca el link</a>
-                            </li>
-                            <li class="list-group-item">
-                                <b>Descripción:</b> Aca la descripción
-                            </li>
-                        </ul>
-                    </div>
+    <div class="card mb-3 pb-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-10">
+                    <h5 class="card-title text-start">Proyectos</h5>
+                </div>
+                <div class="col-2 text-end">
+                    <button type="button" class="btn btn-sm btn-light">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
                 </div>
             </div>
         </div>
-      </div>
-      <!-- Fin Proyectos -->
+        <!-- Proyectos -->
+        <div class="container-fluid" *ngFor="let proy of proyectos">
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="row">
+                            <div class="col-4 d-flex justify-content-center align-self-center">
+                                <img src="{{proy.url_image}}" class="img-fluid p-0" alt="{{proy.url_image}}"
+                                    width="150px" height="150px">
+                            </div>
+                            <div class="col-8 align-self-center">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{proy.nombre}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 text-end">
+                                        <div class="card-body">
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                                                [attr.data-bs-target]="'#proyectosModal'+proy.id">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-light">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container-fluid mb-2">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <b>Descripción:</b> {{proy.descripcion}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Fecha de Inicio:</b> {{proy.fecha_inicio}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Fecha de Fin:</b> {{proy.fecha_fin}}
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Link: </b> <a [routerLink]="proy.link">{{proy.link}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="proyectosModal{{proy.id}}" tabindex="-1" aria-labelledby="proyectosModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="proyectosModalLabel">Editar {{proy.nombre}}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- modal proyectos -->
+                            <form [formGroup]="proyectoForm" (ngSubmit)="editarProy(proy.id)">
+                                <div class="mb-3">
+                                    <label for="inputDescripcion" class="form-label">Descripcion</label>
+                                    <input type="text" formControlName="descripcion" class="form-control"
+                                        id="inputDescripcion" aria-describedby="descripcion" value="{{proy.descripcion}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+                                    <input type="text" formControlName="fecha_inicio" class="form-control"
+                                        id="inputFechaInicio" aria-describedby="fecha_inicio" value="{{proy.fecha_inicio}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="inputFechaFin" class="form-label">Fecha de Inicio</label>
+                                    <input type="text" formControlName="fecha_fin" class="form-control"
+                                        id="inputFechaFin" aria-describedby="fecha_fin" value="{{proy.fecha_fin}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="inputLink" class="form-label">Fecha de Inicio</label>
+                                    <input type="text" formControlName="link" class="form-control" id="inputLink" aria-describedby="link" value="{{proy.link}}">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                            <!-- fin modal proyectos -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- fin modal proyectos -->
+
+        </div>
+        <!-- Fin Proyectos -->
     </div>
- </div>
 
 
+
+</div>

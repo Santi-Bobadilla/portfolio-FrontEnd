@@ -13,14 +13,14 @@
         </div>
       </div>
       <!-- Experiencias -->
-      <div class="container-fluid">
-        <div class="row" ng>
+      <div class="container-fluid" *ngFor="let exp of experiencia">
+        <div class="row">
             <div class="col">
                 <div class="card mb-3">
                     <div class="row">
                       <div class="col-9">
                         <div class="card-body">
-                          <h5 class="card-title">Programador Web Independiente</h5>
+                          <h5 class="card-title">{{exp.nombre}}</h5>
                         </div>
                       </div>
                       <div class="col-3 text-end">
@@ -34,12 +34,21 @@
                     </div>
                     <div class="container-fluid mb-2">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <b>Fecha de Inicio:</b> Marzo de 2020 a la actualidad
-                            </li>
-                            <li class="list-group-item">
-                                <b>Tareas realizadas:</b> Desarrollo de Backend y Frontend en PHP, JavaScript y JQuery. Creación de sitios web con panel de administración y sistemas de gestión acorde a las necesidades del cliente. Creación e implementación de API REST. Creación, implementación y manejo de Base de Datos relacionales MySQL. Automatización de tareas con JavaScript. Creación de proyectos en Laravel con Bootstrap, CSS y HTML5, con sistema de roles, implementación de middlewares, subida de archivos y fotos al servidor, relaciones de modelos, creación de tablas dinámicas, diseño de estructura del sitio web de acuerdo a lo solicitado por cada cliente, manteniendo la arquitectura y funcionalidad del mismo.
-                            </li>
+                          <li class="list-group-item">
+                              <b>Fecha de Inicio:</b> {{exp.fecha_inicio}}
+                          </li>
+                          <li class="list-group-item">
+                            <b>Fecha de Fin:</b> {{exp.fecha_fin}}
+                          </li>
+                          <li class="list-group-item">
+                              <b>Tareas realizadas:</b> {{exp.descripcion}}
+                          </li>
+                          <li class="list-group-item">
+                            <b>Tipo de empleo:</b> {{exp.id_tipo_empleo}}
+                          </li>
+                          <li class="list-group-item">
+                            <b>Trabajo Actual:</b> {{exp.es_trabajo_actual}}
+                          </li>
                         </ul>
                     </div>
                 </div>

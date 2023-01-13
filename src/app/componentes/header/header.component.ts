@@ -14,8 +14,6 @@ export class HeaderComponent {
 
   constructor(protected authService: AuthService, protected portfolioService:PortfolioService) { }
 
-
-
   ngOnInit(): void {
     this.portfolioService.obtenerDatos().subscribe(data => {
       console.log("Datos: "+JSON.stringify(data));

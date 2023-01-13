@@ -13,14 +13,14 @@
         </div>
       </div>
       <!-- Educacion -->
-      <div class="container-fluid">
-        <div class="row" ng>
+      <div class="container-fluid" *ngFor="let edu of educacion">
+        <div class="row">
             <div class="col">
                 <div class="card mb-3">
                     <div class="row">
                       <div class="col-9">
                         <div class="card-body">
-                          <h5 class="card-title">ARGENTINA PROGRAMA: #YoProgramo</h5>
+                          <h5 class="card-title">{{edu.nombre}}</h5>
                         </div>
                       </div>
                       <div class="col-3 text-end">
@@ -35,16 +35,16 @@
                     <div class="container-fluid mb-2">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <b>Fecha de Inicio:</b> 28/06/2.022
+                                <b>Fecha de Inicio:</b> {{edu.fecha_inicio}}
                             </li>
                             <li class="list-group-item">
-                                <b>Fecha de Fin:</b> 15/01/2.023
+                                <b>Fecha de Fin:</b> {{edu.fecha_fin}}
                             </li>
                             <li class="list-group-item">
-                                <b>Certificación:</b> Progrador Web Full Stack Jr.
+                                <b>Certificación:</b> {{edu.certificacion}}
                             </li>
                             <li class="list-group-item">
-                                <b>Condición Actual:</b> Egresado?
+                                <b>Condición Actual:</b> {{edu.id_condicion}}
                             </li>
                         </ul>
                     </div>
