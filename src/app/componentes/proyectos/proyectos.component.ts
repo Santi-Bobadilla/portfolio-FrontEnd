@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Proyecto } from 'src/app/modelo/modelo';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -36,10 +35,10 @@ export class ProyectosComponent {
       url_image:['']
     });
   }
-
-  editarProyecto(proy:any):void{
-    console.log(proy);
-    this.proyectoForm.controls['id'].setValue(proy.id);
+  
+  editarProyecto(id:number):void{
+    console.log(id);
+    this.proyectoForm.controls['id'].setValue(id);
     console.log('Form->', this.proyectoForm.value);
     console.log('entre editProyecto proyectos');
     this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {

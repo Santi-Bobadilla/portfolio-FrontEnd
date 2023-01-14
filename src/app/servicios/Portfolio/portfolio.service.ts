@@ -46,7 +46,8 @@ export class PortfolioService implements OnInit{
   editarProy(body:any):Observable<void>{
     console.log(body);
     console.log('entre editProy portfolioservice');
-    return this.http.put<void>(this.url+"editarProy/"+body.id, body);
+    return this.http.patch<void>(this.url+"editarProy/"+body.id, body);
+    // return this.http.put<void>(this.url+"editarProy/"+body.id, body);
   }
   
 }
