@@ -41,14 +41,45 @@ export class PortfolioService implements OnInit, OnDestroy{
   editarPers(body:any):Observable<void>{
     console.log(body.id);
     console.log('entre editPers portfolioservice');
-    return this.http.patch<void>(this.url+"editar/"+body.id, body);
+    return this.http.patch<void>(this.url+"editar/"+body.id, body).pipe(
+      tap(() => {
+        this._refresh$.next();
+      })
+    );
   }
 
   // educacion
   obtenerEdu():Observable<any> {    
     return this.http.get<any>(this.url+"ver/edu");
   }
-    
+
+  nuevoEdu(body:any):Observable<any>{
+    console.log(body);
+    console.log('entre nuevoEdu portfolioservice');
+    return this.http.post<any>(this.url+"new/edu", body);
+  }
+
+  editarEdu(body:any):Observable<void>{
+    console.log(body);
+    console.log('entre editEdu portfolioservice');
+    return this.http.patch<void>(this.url+"editarEdu/"+body.id, body).pipe(
+      tap(() => {
+        this._refresh$.next();
+      })
+    );
+  }
+
+  eliminarEdu(id:number):Observable<void>{
+    console.log(id);
+    console.log('entre eliminarEdu portfolioservice');
+    return this.http.delete<void>(this.url+"deleteEdu/"+id).pipe(
+      tap(() => {
+        this._refresh$.next();
+      })
+    );
+  }
+
+  // Experiencia    
   obtenerExp():Observable<any> {
     return this.http.get<any>(this.url+"ver/exp");
   }

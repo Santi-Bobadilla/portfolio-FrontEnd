@@ -27,3 +27,4 @@ export interface Persona{
     image_perfil?:string,
     fecha_nacimiento?: string
 }
+
