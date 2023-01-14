@@ -35,7 +35,7 @@
                                         <div class="card-body">
                                             <!-- Button modal editar -->
                                             <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-                                                [attr.data-bs-target]="'#proyectosModal'+proy.id" >
+                                                [attr.data-bs-target]="'#proyectosModal'+proy.id" (click)="abrirModal(proy)">
                                                 <i class="fa-regular fa-pen-to-square"></i>
                                             </button>
                                             <button type="button" class="btn btn-sm btn-light">
@@ -77,39 +77,39 @@
                         </div>
                         <div class="modal-body">
                             <!-- form modal proyectos -->
-                            <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy.id)" method="patch">
+                            <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy)" method="patch">
                                 <input type="number" name="id" formControlName="id" class="form-control"
-                                        id="inputId" aria-describedby="id" value="{{proy.id}}">
+                                        id="inputId" aria-describedby="id" [defaultValue]="proy.id">
                                 <div class="mb-3">
                                     <label for="inputNombre" class="form-label">Nombre</label>
-                                    <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre" aria-describedby="nombre" [value]="proy.nombre">
+                                    <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre" aria-describedby="nombre" [defaultValue]="proy.nombre">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="inputDescripcion" class="form-label">Descripcion</label>
-                                    <input type="text" name="descripcion" formControlName="descripcion" class="form-control" id="inputDescripcion" aria-describedby="descripcion" [value]="proy.descripcion">
+                                    <input type="text" name="descripcion" formControlName="descripcion" class="form-control" id="inputDescripcion" aria-describedby="descripcion" [defaultValue]="proy.descripcion" value="{{proy.descripcion}}">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
                                     <input type="text" formControlName="fecha_inicio" name="fecha_inicio" class="form-control"
-                                        id="inputFechaInicio" aria-describedby="fecha_inicio" [value]="proy.fecha_inicio">
+                                        id="inputFechaInicio" aria-describedby="fecha_inicio" [defaultValue]="proy.fecha_inicio">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
                                     <input type="text" formControlName="fecha_fin" name="fecha_fin" class="form-control"
-                                        id="inputFechaFin" aria-describedby="fecha_fin" [value]="proy.fecha_fin">
+                                        id="inputFechaFin" aria-describedby="fecha_fin" [defaultValue]="proy.fecha_fin">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="inputLink" class="form-label">Link</label>
-                                    <input type="text" name="link" formControlName="link" class="form-control" id="inputLink" aria-describedby="link" [value]="proy.link">
+                                    <input type="text" name="link" formControlName="link" class="form-control" id="inputLink" aria-describedby="link" [defaultValue]="proy.link">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="inputUrlImage" class="form-label">Url imagen</label>
-                                    <input type="text" name="url_image" formControlName="url_image" class="form-control" id="inputUrlImage" aria-describedby="url_image" [value]="proy.url_image">
+                                    <input type="text" name="url_image" formControlName="url_image" class="form-control" id="inputUrlImage" aria-describedby="url_image" [defaultValue]="proy.url_image">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Editar</button>

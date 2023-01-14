@@ -2,17 +2,17 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
-import { Proyecto } from 'src/app/modelo/modelo';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class PortfolioService implements OnInit{
-
+  
   private url:string = "http://localhost:8080/api/";
 
-  constructor(private http:HttpClient, private authService:AuthService) { }
+  constructor(private http:HttpClient, private authService:AuthService, private router:Router) { }
 
   ngOnInit(): void {
   }
@@ -47,7 +47,7 @@ export class PortfolioService implements OnInit{
     console.log(body);
     console.log('entre editProy portfolioservice');
     return this.http.patch<void>(this.url+"editarProy/"+body.id, body);
-    // return this.http.put<void>(this.url+"editarProy/"+body.id, body);
   }
   
+
 }

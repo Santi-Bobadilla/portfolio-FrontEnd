@@ -10,6 +10,7 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 })
 
 export class ProyectosComponent {
+
   proyectos:any;
   proyectoForm: FormGroup;
   
@@ -21,27 +22,30 @@ export class ProyectosComponent {
   }
 
   ngOnInit(): void {
-    this.proyectoForm = this.initForm()
+    this.proyectoForm = this.initForm();
   }
 
-  initForm():FormGroup {
+  initForm(proy?:any):FormGroup {
     return this.formBuilder.group({
-      id: [''],
-      nombre: [''],
-      descripcion:[''],
-      fecha_inicio:[''],
-      fecha_fin:[''],
-      link:[''],
-      url_image:['']
+      id: [proy?.id],
+      nombre: [proy?.nombre],
+      descripcion:[proy?.descripcion],
+      fecha_inicio:[proy?.fecha_inicio],
+      fecha_fin:[proy?.fecha_fin],
+      link:[proy?.link],
+      url_image:[proy?.url_image]
     });
   }
-  
-  editarProyecto(id:number):void{
-    console.log(id);
-    this.proyectoForm.controls['id'].setValue(id);
+
+  abrirModal(proy:any):void{
+    this.proyectoForm = this.initForm(proy)
+    console.log('Form abrir->', this.proyectoForm.value);
+  }
+
+  editarProyecto(proy:any):void{
+    console.log(proy);
     console.log('Form->', this.proyectoForm.value);
-    console.log('entre editProyecto proyectos');
-    this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
+    this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {   
       return data = data
     })
   }
@@ -53,4 +57,5 @@ export class ProyectosComponent {
       return data = data
     })
   }
+
 }
