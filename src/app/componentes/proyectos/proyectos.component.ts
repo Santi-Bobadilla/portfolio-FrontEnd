@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
+
 
 @Component({
   selector: 'app-proyectos',
@@ -9,19 +10,17 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
   styleUrls: ['./proyectos.component.css']
 })
 
-export class ProyectosComponent {
-
+export class ProyectosComponent implements OnInit {
   proyectos:any;
   proyectoForm: FormGroup;
-  
-  constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder, private router:Router) {
+    
+  constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder, private router:Router) {}
+
+  ngOnInit(): void {
     this.portfolioService.obtenerProy().subscribe(data => {
       this.proyectos=data;
     })
-    
-  }
 
-  ngOnInit(): void {
     this.proyectoForm = this.initForm();
   }
 
@@ -38,14 +37,12 @@ export class ProyectosComponent {
   }
 
   abrirModal(proy:any):void{
-    this.proyectoForm = this.initForm(proy)
-    console.log('Form abrir->', this.proyectoForm.value);
+    this.proyectoForm = this.initForm(proy);
   }
 
   editarProyecto(proy:any):void{
-    console.log(proy);
     console.log('Form->', this.proyectoForm.value);
-    this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {   
+    this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
       return data = data
     })
   }
@@ -57,5 +54,12 @@ export class ProyectosComponent {
       return data = data
     })
   }
+
+  eliminarProyecto(id:number){
+    this.portfolioService.eliminarProy(id).subscribe(data => {
+      return data=data;
+    })
+  }
+
 
 }

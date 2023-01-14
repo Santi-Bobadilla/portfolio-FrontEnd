@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/servicios/Auth/auth.service';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
@@ -11,14 +12,46 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 export class HeaderComponent {
   
   persona:any;
+  personaForm: FormGroup;
 
-  constructor(protected authService: AuthService, protected portfolioService:PortfolioService) { }
+  constructor(protected authService: AuthService, private portfolioService:PortfolioService, private fb:FormBuilder) {
+    
+  }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.portfolioService.obtenerDatos().subscribe(data => {
       this.persona = data;
     });
 
+    this.personaForm = this.initForm();
+
+  }
+
+  initForm(pers?:any):FormGroup {
+    return this.fb.group({
+      id: [pers?.id],
+      nombre: [pers?.nombre],
+      apellido:[pers?.apellido],
+      sobre_mi:[pers?.sobre_mi],
+      telefono:[pers?.telefono],
+      email:[pers?.email],
+      id_nacionalidad:[pers?.id_nacionalidad],
+      id_domicilio:[pers?.id_domicilio],
+      image_background_header:[pers?.image_background_header],
+      image_perfil:[pers?.image_perfil],
+      fecha_nacimiento: [pers?.fecha_nacimiento]
+    });
+  }
+
+  abrirModalP(pers:any):void{
+    this.personaForm = this.initForm(pers);
+  }
+
+  editarPersona(pers:any):void{
+    console.log('Form->', this.personaForm.value);
+    this.portfolioService.editarPers(this.personaForm.value).subscribe(data => {
+      return data = data
+    })
   }
     
 }

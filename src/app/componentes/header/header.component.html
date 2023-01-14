@@ -30,24 +30,24 @@
       </ul>
     </div>
 </nav>
-<div class="card mb-3 pb-2" *ngFor="let p of persona">
+<div class="card mb-3 pb-2" *ngFor="let pers of persona">
   <div class="position-relative">
-    <img src="{{p.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
-    <img src="{{p.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil" id="img_perfil" height="100" width="100">
+    <img src="{{pers.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
+    <img src="{{pers.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil" id="img_perfil" height="100" width="100">
   </div>
 
   <div class="card-body mt-5">
     <div class="row">
       <div class="col-10">
-        <h5 class="card-title">{{p.nombre+' '+p.apellido}}</h5>
+        <h5 class="card-title">{{pers.nombre+' '+pers.apellido}}</h5>
       </div>
       <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
-        <button type="button" class="btn btn-sm btn-light">
+        <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#personaModal" (click)="abrirModalP(pers)">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
       </div>
     </div>
-    <p class="card-text my-0">{{p.ocupacion}}</p>
+    <p class="card-text my-0">{{pers.ocupacion}}</p>
     <p class="card-text my-0">Córdoba (Argentina) <span>
       <button type="button" class="btn btn-link px-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Información de contacto</button>
     </span> </p>
@@ -64,17 +64,12 @@
           <div class="col-10">
               <h5 class="card-title text-start">Acerca de</h5>
           </div>
-          <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
-            <button type="button" class="btn btn-sm btn-light">
-              <i class="fa-regular fa-pen-to-square"></i>
-            </button>
-          </div>
       </div>
               
-      <p class="card-text my-0">{{p.sobre_mi}}</p>
+      <p class="card-text my-0">{{pers.sobre_mi}}</p>
     </div>
     
-  <!-- Modal -->
+  <!-- Modal Contacto -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -87,11 +82,11 @@
           <div class="row row-cols-2 align-items-center">
             <div class="col d-grid gap-2 mx-auto">
               <button class="btn btn-success">
-                <a class="btn-link text-white" href="https://wa.me/+549{{p.telefono}}"> <i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
+                <a class="btn-link text-white" href="https://wa.me/+549{{pers.telefono}}"> <i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
               </button>
 
               <button class="btn btn-danger">
-                <a class="btn-link text-white" href = "mailto: {{p.email}}"> <i class="fa-regular fa-envelope"></i> Email</a>
+                <a class="btn-link text-white" href = "mailto: {{pers.email}}"> <i class="fa-regular fa-envelope"></i> Email</a>
               </button>
             </div>
             <div class="col d-grid gap-2 mx-auto">
@@ -109,6 +104,101 @@
     </div>
   </div>
   <!-- fin modal body -->
+
+  <!-- Modal Editar -->
+  <ng-container>
+    <div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="personaModalLabel">Editar {{pers.nombre}}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- form modal proyectos -->
+                    <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers)"
+                        method="patch">
+                        <input type="number" name="id" formControlName="id" class="form-control"
+                            id="inputId" aria-describedby="id" [defaultValue]="pers.id">
+                        <div class="mb-3">
+                            <label for="inputNombre" class="form-label">Nombre</label>
+                            <input type="text" name="nombre" formControlName="nombre" class="form-control"
+                                id="inputNombre" aria-describedby="nombre" [defaultValue]="pers.nombre">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="inputApellido" class="form-label">Apellido</label>
+                          <input type="text" name="apellido" formControlName="apellido" class="form-control"
+                              id="inputApellido" aria-describedby="apellido" [defaultValue]="pers.apellido">
+                      </div>
+
+                        <div class="mb-3">
+                            <label for="inputOcupacion" class="form-label">Sobre mi</label>
+                            <input type="text" name="sobre_mi" formControlName="sobre_mi"
+                                class="form-control" id="inputOcupacion" aria-describedby="sobre_mi"
+                                [defaultValue]="pers.sobre_mi" value="{{pers.sobre_mi}}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputTelefono" class="form-label">Telefono</label>
+                            <input type="text" formControlName="telefono" name="telefono"
+                                class="form-control" id="inputTelefono" aria-describedby="telefono"
+                                [defaultValue]="pers.telefono">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">Email</label>
+                            <input type="text" formControlName="email" name="email"
+                                class="form-control" id="inputEmail" aria-describedby="email"
+                                [defaultValue]="pers.email">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="inputIdNacionalidad" class="form-label">Nacionalidad</label>
+                          <input type="text" formControlName="id_nacionalidad" name="id_nacionalidad"
+                              class="form-control" id="inputIdNacionalidad" aria-describedby="id_nacionalidad"
+                              [defaultValue]="pers.id_nacionalidad">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="inputIdDomicilio" class="form-label">Domicilio</label>
+                          <input type="text" formControlName="id_domicilio" name="id_domicilio"
+                              class="form-control" id="inputIdDomicilio" aria-describedby="id_domicilio"
+                              [defaultValue]="pers.id_domicilio">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="inputImageBackground" class="form-label">Url imagen de fondo</label>
+                          <input type="text" formControlName="image_background_header" name="image_background_header" class="form-control" id="inputImageBackground" aria-describedby="image_background_header" [defaultValue]="pers.image_background_header">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="inputImagePerfil" class="form-label">Url imagen de perfil</label>
+                          <input type="text" formControlName="image_perfil" name="image_perfil" class="form-control" id="inputImagePerfil" aria-describedby="image_perfil" [defaultValue]="pers.image_perfil">
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="inputFechaNacimiento" class="form-label">fecha de nacimiento</label>
+                          <input type="text" formControlName="fecha_nacimiento" name="fecha_nacimiento" class="form-control" id="inputFechaNacimiento" aria-describedby="fecha_nacimiento" [defaultValue]="pers.fecha_nacimiento">
+                        </div>
+
+                        <!-- aca option ciudad 
+                        <div class="mb-3">
+                            <label for="inputUrlImage" class="form-label">Url imagen</label>
+                            <input type="text" name="url_image" formControlName="url_image"
+                                class="form-control" id="inputUrlImage" aria-describedby="url_image"
+                                [defaultValue]="">
+                        </div> -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Editar</button>
+                    </form>
+                    <!-- fin form proyectos -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal proyectos -->
+</ng-container>
 
   </div>
 </div>

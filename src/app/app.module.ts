@@ -17,7 +17,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './servicios/Interceptor/auth.interceptor';
 import { PortfolioService } from './servicios/Portfolio/portfolio.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,

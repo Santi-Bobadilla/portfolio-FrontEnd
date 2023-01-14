@@ -1,26 +1,50 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class PortfolioService implements OnInit{
+export class PortfolioService implements OnInit, OnDestroy{
   
   private url:string = "http://localhost:8080/api/";
-
+  private _refresh$ = new Subject<void>();
+  subscription: Subscription;
+  
   constructor(private http:HttpClient, private authService:AuthService, private router:Router) { }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    console.log("observable cerrado");
   }
 
+  get refresh$(){
+    return this._refresh$;
+  }
+
+  ngOnInit(): void {
+    this.subscription = this.refresh$.subscribe(()=>{
+      console.log("entre a subscription");
+    })
+    this.obtenerProy;
+  }
+
+  // persona
   obtenerDatos():Observable<any> {    
     return this.http.get<any>(this.url+"ver/personas");
   }
 
+  editarPers(body:any):Observable<void>{
+    console.log(body.id);
+    console.log('entre editPers portfolioservice');
+    return this.http.patch<void>(this.url+"editar/"+body.id, body);
+  }
+
+  // educacion
   obtenerEdu():Observable<any> {    
     return this.http.get<any>(this.url+"ver/edu");
   }
@@ -33,6 +57,7 @@ export class PortfolioService implements OnInit{
     return this.http.get<any>(this.url+"ver/skill");
   }
 
+  // proyectos
   obtenerProy():Observable<any> {
     return this.http.get<any>(this.url+"ver/proy");
   }
@@ -46,7 +71,21 @@ export class PortfolioService implements OnInit{
   editarProy(body:any):Observable<void>{
     console.log(body);
     console.log('entre editProy portfolioservice');
-    return this.http.patch<void>(this.url+"editarProy/"+body.id, body);
+    return this.http.patch<void>(this.url+"editarProy/"+body.id, body).pipe(
+      tap(() => {
+        this._refresh$.next();
+      })
+    );
+  }
+
+  eliminarProy(id:number):Observable<void>{
+    console.log(id);
+    console.log('entre editProy portfolioservice');
+    return this.http.delete<void>(this.url+"deleteProy/"+id).pipe(
+      tap(() => {
+        this._refresh$.next();
+      })
+    );
   }
   
 
