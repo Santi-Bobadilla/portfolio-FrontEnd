@@ -8,7 +8,6 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 })
 
 export class PortfolioComponent{
-  persona: any;
 
   constructor(private portfolioService:PortfolioService) { }
 

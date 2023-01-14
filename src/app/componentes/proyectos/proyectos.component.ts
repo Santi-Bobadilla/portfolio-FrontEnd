@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Proyecto } from 'src/app/modelo/modelo';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -11,21 +12,46 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 
 export class ProyectosComponent {
   proyectos:any;
-
-  proyectoForm:FormGroup;
-  constructor(private portfolioService:PortfolioService, private formBuilder:FormBuilder, private router:Router) {
+  proyectoForm: FormGroup;
+  
+  constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder, private router:Router) {
     this.portfolioService.obtenerProy().subscribe(data => {
-      console.log("Data: "+JSON.stringify(data));
       this.proyectos=data;
+    })
+    
+  }
+
+  ngOnInit(): void {
+    this.proyectoForm = this.initForm()
+  }
+
+  initForm():FormGroup {
+    return this.formBuilder.group({
+      id: [''],
+      nombre: [''],
+      descripcion:[''],
+      fecha_inicio:[''],
+      fecha_fin:[''],
+      link:[''],
+      url_image:['']
+    });
+  }
+
+  editarProyecto(proy:any):void{
+    console.log(proy);
+    this.proyectoForm.controls['id'].setValue(proy.id);
+    console.log('Form->', this.proyectoForm.value);
+    console.log('entre editProyecto proyectos');
+    this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
+      return data = data
     })
   }
 
-  editarProy(id:number) {
-    this.proyectoForm = this.formBuilder.group({
-      descripcion: ['', [Validators.required, Validators.minLength(8)]],
-      fecha_inicio: ['', [Validators.required, Validators.minLength(8)]],
-      fecha_fin: ['', [Validators.required, Validators.minLength(8)]],
-      link: ['', [Validators.required, Validators.minLength(8)]]
+  nuevoProyecto():void{
+    console.log('Form->', this.proyectoForm.value);
+    console.log('entre nuevoProyecto proyectos');
+    this.portfolioService.nuevoProy(this.proyectoForm.value).subscribe(data => {
+      return data = data
     })
   }
 }

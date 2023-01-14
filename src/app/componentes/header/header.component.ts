@@ -16,7 +16,6 @@ export class HeaderComponent {
 
   ngOnInit(): void {
     this.portfolioService.obtenerDatos().subscribe(data => {
-      console.log("Datos: "+JSON.stringify(data));
       this.persona = data;
     });
 

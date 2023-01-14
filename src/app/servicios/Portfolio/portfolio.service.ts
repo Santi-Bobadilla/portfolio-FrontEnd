@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
+import { Proyecto } from 'src/app/modelo/modelo';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,17 @@ export class PortfolioService implements OnInit{
   obtenerProy():Observable<any> {
     return this.http.get<any>(this.url+"ver/proy");
   }
-  
+
+  nuevoProy(body:any):Observable<any>{
+    console.log(body);
+    console.log('entre nuevoProy portfolioservice');
+    return this.http.post<any>(this.url+"new/proy", body);
+  }
+
+  editarProy(body:any):Observable<void>{
+    console.log(body);
+    console.log('entre editProy portfolioservice');
+    return this.http.put<void>(this.url+"editarProy/"+body.id, body);
+  }
   
 }

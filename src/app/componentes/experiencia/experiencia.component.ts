@@ -14,8 +14,7 @@ export class ExperienciaComponent {
   constructor(private portfolioService:PortfolioService){}
 
   ngOnInit():void {
-    this.portfolioService.obtenerExp().subscribe(data => {
-      console.log("Datos: "+JSON.stringify(data));      
+    this.portfolioService.obtenerExp().subscribe(data => {    
       this.experiencia = data;
     })
 

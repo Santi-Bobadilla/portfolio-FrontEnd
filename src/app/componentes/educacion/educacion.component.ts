@@ -15,7 +15,6 @@ export class EducacionComponent {
 
   ngOnInit(){
     this.portfolioService.obtenerEdu().subscribe(data => {
-      console.log("Edu: "+JSON.stringify(data));
       this.educacion = data;
     });
   }
