@@ -48,7 +48,7 @@
       </div>
     </div>
     <p class="card-text my-0">{{pers.ocupacion}}</p>
-    <p class="card-text my-0">Córdoba (Argentina) <span>
+    <p class="card-text my-0">{{pers.provincia.nombre}} <span>
       <button type="button" class="btn btn-link px-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Información de contacto</button>
     </span> </p>
   </div>
@@ -154,17 +154,10 @@
                         </div>
 
                         <div class="mb-3">
-                          <label for="inputIdNacionalidad" class="form-label">Nacionalidad</label>
-                          <input type="text" formControlName="id_nacionalidad" name="id_nacionalidad"
-                              class="form-control" id="inputIdNacionalidad" aria-describedby="id_nacionalidad"
-                              [defaultValue]="pers.id_nacionalidad">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputIdDomicilio" class="form-label">Domicilio</label>
-                          <input type="text" formControlName="id_domicilio" name="id_domicilio"
-                              class="form-control" id="inputIdDomicilio" aria-describedby="id_domicilio"
-                              [defaultValue]="pers.id_domicilio">
+                          <label for="inputProvinciaId" class="form-label">Domicilio</label>
+                          <input type="text" formControlName="provincia_id" name="provincia_id"
+                              class="form-control" id="inputProvinciaId" aria-describedby="provincia_id"
+                              [defaultValue]="pers.provincia_id">
                         </div>
 
                         <div class="mb-3">

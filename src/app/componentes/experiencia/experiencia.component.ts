@@ -15,6 +15,7 @@ export class ExperienciaComponent {
 
   ngOnInit():void {
     this.portfolioService.obtenerExp().subscribe(data => {    
+      console.log(data);
       this.experiencia = data;
     })
 

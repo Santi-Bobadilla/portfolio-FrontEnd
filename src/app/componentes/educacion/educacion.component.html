@@ -48,7 +48,7 @@
                                 <b>Certificación:</b> {{edu.certificacion}}
                             </li>
                             <li class="list-group-item">
-                                <b>Condición Actual:</b> {{edu.id_condicion}}
+                                <b>Condición Actual:</b> {{edu.condicion.nombre}}
                             </li>
                         </ul>
                     </div>
@@ -102,8 +102,8 @@
 
                                 <div class="mb-3">
                                     <label for="inputCondicion" class="form-label">Condicion</label>
-                                    <input type="text" name="id_condicion" formControlName="id_condicion" class="form-control"
-                                        id="inputCondicion" aria-describedby="id_condicion" [defaultValue]="edu.id_condicion">
+                                    <input type="text" name="condicion_id" formControlName="condicion_id" class="form-control"
+                                        id="inputCondicion" aria-describedby="condicion_id" [defaultValue]="edu.condicion.nombre">
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Editar</button>
@@ -162,8 +162,8 @@
 
                                 <div class="mb-3">
                                     <label for="inputCondicion" class="form-label">Condicion</label>
-                                    <input type="text" name="id_condicion" formControlName="id_condicion" class="form-control"
-                                        id="inputCondicion" aria-describedby="id_condicion" [defaultValue]="edu.id_condicion">
+                                    <input type="text" name="condicion_id" formControlName="condicion_id" class="form-control"
+                                        id="inputCondicion" aria-describedby="condicion_id" [defaultValue]="edu.condicion.nombre">
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 <button type="submit" class="btn btn-primary">Crear</button>

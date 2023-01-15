@@ -11,7 +11,7 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 
 export class HeaderComponent {
   
-  persona:any;
+  persona:any;  
   personaForm: FormGroup;
 
   constructor(protected authService: AuthService, private portfolioService:PortfolioService, private fb:FormBuilder) {
@@ -20,6 +20,8 @@ export class HeaderComponent {
 
   ngOnInit(): void {    
     this.portfolioService.obtenerDatos().subscribe(data => {
+      console.log(data);
+      
       this.persona = data;
     });
 
@@ -32,15 +34,16 @@ export class HeaderComponent {
       id: [pers?.id],
       nombre: [pers?.nombre],
       apellido:[pers?.apellido],
-      sobre_mi:[pers?.sobre_mi],
-      telefono:[pers?.telefono],
+      fecha_nacimiento: [pers?.fecha_nacimiento],
       email:[pers?.email],
-      id_nacionalidad:[pers?.id_nacionalidad],
-      id_domicilio:[pers?.id_domicilio],
+      telefono:[pers?.telefono],
+      sobre_mi:[pers?.sobre_mi],
+      ocupacion:[pers?.ocupacion],
       image_background_header:[pers?.image_background_header],
       image_perfil:[pers?.image_perfil],
-      fecha_nacimiento: [pers?.fecha_nacimiento]
+      provincia_id: [pers?.provincia_id]
     });
+    
   }
 
   abrirModalP(pers:any):void{

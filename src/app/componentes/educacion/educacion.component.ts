@@ -17,6 +17,7 @@ export class EducacionComponent {
 
   ngOnInit(){
     this.portfolioService.obtenerEdu().subscribe(data => {
+      console.log(data);
       this.educacion = data;
     });
 
@@ -31,7 +32,8 @@ export class EducacionComponent {
       fecha_inicio:[edu?.fecha_inicio],
       fecha_fin:[edu?.fecha_fin],
       certificacion:[edu?.certificacion],
-      id_condicion:[edu?.id_condicion]
+      condicion_id:[edu?.condicion_id],
+      persona_id:[edu?.persona_id]
     });
   }
 

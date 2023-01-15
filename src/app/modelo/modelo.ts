@@ -11,20 +11,20 @@ export interface Proyecto{
     fecha_fin:string;
     link:string;
     url_image?:string;
-    id_persona?:number;
+    persona_id?:number;
 }
 
 export interface Persona{
-    id?:number,
-    nombre?: string,
-    apellido?:string,
-    sobre_mi?:string,
-    telefono?:string,
-    email?:string,
-    id_nacionalidad?:number,
-    id_domicilio?:number,
-    image_background_header?:string,
-    image_perfil?:string,
-    fecha_nacimiento?: string
+    id?:number;
+    nombre?: string;
+    apellido?:string;
+    sobre_mi?:string;
+    telefono?:string;
+    email?:string;
+    provincia_id?:number;
+    image_background_header?:string;
+    image_perfil?:string;
+    fecha_nacimiento?: string;
+    ocupacion?: string;
 }
 

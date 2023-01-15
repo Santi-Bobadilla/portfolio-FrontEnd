@@ -15,6 +15,7 @@ export class HardSoftSkillComponent {
 
   ngOnInit():void {
     this.portfolioService.obtenerSkill().subscribe(data=>{
+      console.log(data);      
       this.skills = data;
     })
   }

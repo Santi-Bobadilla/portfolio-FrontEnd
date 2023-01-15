@@ -44,10 +44,13 @@
                               <b>Tareas realizadas:</b> {{exp.descripcion}}
                           </li>
                           <li class="list-group-item">
-                            <b>Tipo de empleo:</b> {{exp.id_tipo_empleo}}
+                            <b>Tipo de empleo:</b> {{exp.tipo_empleo.nombre}}
                           </li>
-                          <li class="list-group-item">
-                            <b>Trabajo Actual:</b> {{exp.es_trabajo_actual}}
+                          <li class="list-group-item" *ngIf="exp.es_trabajo_actual===0">
+                            <b>Trabajo Actual:</b> No
+                          </li>
+                          <li class="list-group-item" *ngIf="exp.es_trabajo_actual!=0">
+                            <b>Trabajo Actual:</b> Si
                           </li>
                         </ul>
                     </div>

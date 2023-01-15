@@ -9,7 +9,7 @@ import { tap } from 'rxjs';
   providedIn: 'root'
 })
 
-export class PortfolioService implements OnInit, OnDestroy{
+export class PortfolioService implements OnInit,OnDestroy{
   
   private url:string = "http://localhost:8080/api/";
   private _refresh$ = new Subject<void>();
