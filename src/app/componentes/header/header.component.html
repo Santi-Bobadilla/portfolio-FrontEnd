@@ -48,7 +48,7 @@
       </div>
     </div>
     <p class="card-text my-0">{{pers.ocupacion}}</p>
-    <p class="card-text my-0">{{pers.provincia.nombre}} <span>
+    <p class="card-text my-0">{{pers.provincia.nombre}} ({{pers.provincia.nacionalidad.nombre}}) <span>
       <button type="button" class="btn btn-link px-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Información de contacto</button>
     </span> </p>
   </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- form modal proyectos -->
-                    <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers)"
+                    <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers.id, pers)"
                         method="patch">
                         <input type="number" name="id" formControlName="id" class="form-control"
                             id="inputId" aria-describedby="id" [defaultValue]="pers.id">
@@ -154,10 +154,35 @@
                         </div>
 
                         <div class="mb-3">
-                          <label for="inputProvinciaId" class="form-label">Domicilio</label>
-                          <input type="text" formControlName="provincia_id" name="provincia_id"
-                              class="form-control" id="inputProvinciaId" aria-describedby="provincia_id"
-                              [defaultValue]="pers.provincia_id">
+                          <label for="inputProvinciaId" class="form-label">Provincia</label>
+                          <select class="form-select" formControlName="provincia_id" name="provincia_id"
+                          class="form-select" id="inputProvinciaId">
+                            <option selected value="{{pers.provincia.id}}">{{pers.provincia.nombre}}</option>
+                            <option value="1">Buenos Aires</option>
+                            <option value="2">Catamarca</option>
+                            <option value="3">Chaco</option>
+                            <option value="4">Chubut</option>
+                            <option value="5">Córdoba</option>
+                            <option value="6">Corrientes</option>
+                            <option value="7">Entre Rios</option>
+                            <option value="8">Formosa</option>
+                            <option value="9">Jujuy</option>
+                            <option value="10">La Pampa</option>
+                            <option value="11">La Rioja</option>
+                            <option value="12">Mendoza</option>
+                            <option value="13">Misiones</option>
+                            <option value="14">Neuquen</option>
+                            <option value="15">Rio Negro</option>
+                            <option value="16">Salta</option>
+                            <option value="17">San Juan</option>
+                            <option value="18">San Luis</option>
+                            <option value="19">Santa Cruz</option>
+                            <option value="20">Santa Fe</option>
+                            <option value="21">Santiago del Estero</option>
+                            <option value="22">Tierra del Fuego</option>
+                            <option value="23">Tucuman</option>
+                            <option value="24">Ciudad Autonoma de Buenos Aires</option>
+                          </select>
                         </div>
 
                         <div class="mb-3">

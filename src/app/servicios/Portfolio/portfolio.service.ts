@@ -38,8 +38,8 @@ export class PortfolioService implements OnInit,OnDestroy{
     return this.http.get<any>(this.url+"ver/personas");
   }
 
-  editarPers(body:any):Observable<void>{
-    console.log(body.id);
+  editarPers(id:number, body:any):Observable<void>{
+    console.log(body);
     console.log('entre editPers portfolioservice');
     return this.http.patch<void>(this.url+"editar/"+body.id, body).pipe(
       tap(() => {
