@@ -26,9 +26,9 @@ export class AuthService {
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
       const token = bearerToken && bearerToken.replace('Bearer ', '');
-      // console.log(token);
+      console.log(token);
       sessionStorage.setItem('currentUser', JSON.stringify(token));
-      // console.log(sessionStorage.getItem('currentUser'));
+      console.log(sessionStorage.getItem('currentUser'));
       this.currentUserSubject.next(token);
       return token;
     }))
