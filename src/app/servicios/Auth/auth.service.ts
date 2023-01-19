@@ -11,7 +11,7 @@ import { Credentials } from 'src/app/modelo/modelo';
 
 export class AuthService {
 
-  api = 'https://backend-6hbb.onrender.com/api/login';
+  api = 'https://backend-6hbb.onrender.com/login';
   currentUserSubject: BehaviorSubject<any>;
   
   constructor(private http:HttpClient, private router:Router) {
