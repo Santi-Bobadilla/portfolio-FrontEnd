@@ -3,7 +3,9 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpEventType,
+  HttpHeaders
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
@@ -11,15 +13,18 @@ import { AuthService } from '../Auth/auth.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private authService:AuthService) {}
+  constructor(protected  authService:AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log(request.headers);
     var currentUser = this.authService.UsuarioAutenticado;
+    console.log(currentUser);  
     if(currentUser) {
       request= request.clone({
         setHeaders: {
           Authorization: `Bearer ${currentUser}`
-        }
+        },
+        withCredentials:true
       })
     }
     console.log('interceptor esta corriendo: '+JSON.stringify(currentUser));

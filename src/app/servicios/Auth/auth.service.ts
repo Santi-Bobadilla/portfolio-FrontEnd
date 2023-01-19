@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs';
 import { Credentials } from 'src/app/modelo/modelo';
+import { LoginComponent } from 'src/app/componentes/login/login.component';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +12,18 @@ import { Credentials } from 'src/app/modelo/modelo';
 
 export class AuthService {
 
-  api = 'https://backend-6hbb.onrender.com/login';
-  currentUserSubject: BehaviorSubject<any>;
+  api = 'http://backend-6hbb.onrender.com/login';
+  currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({'currentUser':null});
   
   constructor(private http:HttpClient, private router:Router) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem('currentUser') || "{}"));
-
-    
+    console.log(this.currentUserSubject.value);
   }
 
-  iniciarSesion(credentials:Credentials): Observable<any> {
-    return this.http.post(this.api, credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
+  iniciarSesion(credentials:any): Observable<any> {
+    return this.http.post(this.api,credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
+      console.log(JSON.stringify(response));
+      console.log(response);
       const body = response.body;
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
@@ -33,6 +35,17 @@ export class AuthService {
       return token;
     }))
   }
+
+  // iniciarSesion(credentials:any): Observable<any> {
+  //   return this.http.post(this.api,credentials).pipe(map(data=>{
+  //     console.log(JSON.stringify(data));
+  //     sessionStorage.setItem('currentUser',JSON.stringify(data));
+  //     console.log(sessionStorage.getItem('currentUser'));      
+  //     this.currentUserSubject.next(data);
+  //     return data;
+  //   }))
+  // }
+  
   
   getToken() {
     return sessionStorage.getItem('currentUser');
