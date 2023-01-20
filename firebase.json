@@ -1,7 +1,6 @@
 {
   "hosting": {
-    "firebase":"portfolio argentina programa",
-    "public": "./dist/portfolio-frontend-santiago-bobadilla",
+    "public": "/dist/portfolio-frontend-santiago-bobadilla",
     "ignore": [
       "firebase.json",
       "**/.*",
