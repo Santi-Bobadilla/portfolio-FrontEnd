@@ -12,7 +12,7 @@ import { LoginComponent } from 'src/app/componentes/login/login.component';
 
 export class AuthService {
 
-  api = 'http://backend-6hbb.onrender.com/login';
+  api = 'https://backend-6hbb.onrender.com/login';
   currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({'currentUser':null});
   
   constructor(private http:HttpClient, private router:Router) {
