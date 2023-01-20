@@ -81,8 +81,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- form modal proyectos -->
-                                <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy)"
-                                    method="post">
+                                <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy)" method="post">
                                     <input type="number" name="id" formControlName="id" class="form-control"
                                         id="inputId" aria-describedby="id" [defaultValue]="proy.id" hidden>
                                     <div class="mb-3">

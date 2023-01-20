@@ -43,6 +43,8 @@ export class ProyectosComponent implements OnInit {
   editarProyecto(proy:any):void{
     console.log('Form->', this.proyectoForm.value);
     this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
+      console.log(data);
+      
       return data = data
     })
   }
