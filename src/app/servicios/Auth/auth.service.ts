@@ -22,30 +22,15 @@ export class AuthService {
 
   iniciarSesion(credentials:any): Observable<any> {
     return this.http.post(this.api,credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
-      console.log(JSON.stringify(response));
-      console.log(response);
       const body = response.body;
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
       const token = bearerToken && bearerToken.replace('Bearer ', '');
-      console.log(token);
       sessionStorage.setItem('currentUser', JSON.stringify(token));
-      console.log(sessionStorage.getItem('currentUser'));
       this.currentUserSubject.next(token);
       return token;
     }))
   }
-
-  // iniciarSesion(credentials:any): Observable<any> {
-  //   return this.http.post(this.api,credentials).pipe(map(data=>{
-  //     console.log(JSON.stringify(data));
-  //     sessionStorage.setItem('currentUser',JSON.stringify(data));
-  //     console.log(sessionStorage.getItem('currentUser'));      
-  //     this.currentUserSubject.next(data);
-  //     return data;
-  //   }))
-  // }
-  
   
   getToken() {
     return sessionStorage.getItem('currentUser');

@@ -16,15 +16,13 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(protected  authService:AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(request.headers);
     var currentUser = this.authService.UsuarioAutenticado;
-    console.log(currentUser);  
     if(currentUser) {
       request= request.clone({
         setHeaders: {
           Authorization: `Bearer ${currentUser}`
-        },
-        withCredentials:true
+        }
+        // withCredentials:false
       })
     }
     console.log('interceptor esta corriendo: '+JSON.stringify(currentUser));
