@@ -3,8 +3,6 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs';
-import { Credentials } from 'src/app/modelo/modelo';
-import { LoginComponent } from 'src/app/componentes/login/login.component';
 
 @Injectable({
   providedIn: 'root'
