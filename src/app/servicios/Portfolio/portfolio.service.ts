@@ -11,7 +11,7 @@ import { tap } from 'rxjs';
 
 export class PortfolioService implements OnInit,OnDestroy{
   
-  private url:string = "https://backend-6hbb.onrender.com/";
+  private url:string = "https://backend-6hbb.onrender.com/api/";
   private _refresh$ = new Subject<void>();
   subscription: Subscription;
   
