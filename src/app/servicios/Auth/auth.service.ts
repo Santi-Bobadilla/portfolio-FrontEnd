@@ -10,7 +10,9 @@ import { map } from 'rxjs';
 
 export class AuthService {
 
-  api = 'https://backend-6hbb.onrender.com/api/login';
+  // api = 'https://backend-6hbb.onrender.com/api/login';
+  api = 'http://localhost:8080/api/login';
+
   currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({'currentUser':null});
   
   constructor(private http:HttpClient, private router:Router) {
@@ -20,6 +22,7 @@ export class AuthService {
 
   iniciarSesion(credentials:any): Observable<any> {
     return this.http.post(this.api,credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
+      // console.log(JSON.stringify(response));
       const body = response.body;
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
@@ -48,6 +51,7 @@ export class AuthService {
   }
 
   get UsuarioAutenticado(){    
+    // console.log(this.currentUserSubject.value);
     return this.currentUserSubject.value;
   }
 

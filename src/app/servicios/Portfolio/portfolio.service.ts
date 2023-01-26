@@ -1,9 +1,14 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
+
+// let headersToSend = new HttpHeaders();
+//     headersToSend = headersToSend
+//       .set('Bearer', 'Access Token Here')
+//       .set('Accept','application/json');
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +16,15 @@ import { tap } from 'rxjs';
 
 export class PortfolioService implements OnInit,OnDestroy{
   
-  private url:string = "https://backend-6hbb.onrender.com/api/";
+  // private url:string = "https://backend-6hbb.onrender.com/api/";
+  private url:string = "http://localhost:8080/api/";
   private _refresh$ = new Subject<void>();
   subscription: Subscription;
   
-  constructor(private http:HttpClient, private authService:AuthService, private router:Router) { }
+  constructor(private http:HttpClient, private authService:AuthService, private router:Router) {}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    console.log("observable cerrado");
   }
 
   get refresh$(){
@@ -27,9 +32,9 @@ export class PortfolioService implements OnInit,OnDestroy{
   }
 
   ngOnInit(): void {
-    this.subscription = this.refresh$.subscribe(()=>{
-      console.log("entre a subscription");
-    })
+    // this.subscription = this.refresh$.subscribe(()=>{
+    //   console.log("entre a subscription");
+    // })
     this.obtenerProy;
   }
 
@@ -102,11 +107,12 @@ export class PortfolioService implements OnInit,OnDestroy{
   editarProy(body:any):Observable<void>{
     console.log(body);
     console.log('entre editProy portfolioservice');
-    return this.http.patch<void>(this.url+"editarProy/"+body.id, body).pipe(
-      tap(() => {
-        this._refresh$.next();
-      })
-    );
+    return this.http.patch<void>(this.url+"editarProy/"+body.id, body)
+    // .pipe(
+    //   tap(() => {
+    //     this._refresh$.next();
+    //   })
+    // );
   }
 
   eliminarProy(id:number):Observable<void>{

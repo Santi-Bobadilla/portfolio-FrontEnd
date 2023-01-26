@@ -32,7 +32,8 @@ export class ProyectosComponent implements OnInit {
       fecha_inicio:[proy?.fecha_inicio],
       fecha_fin:[proy?.fecha_fin],
       link:[proy?.link],
-      url_image:[proy?.url_image]
+      url_image:[proy?.url_image],
+      persona_id:1
     });
   }
 
@@ -40,7 +41,7 @@ export class ProyectosComponent implements OnInit {
     this.proyectoForm = this.initForm(proy);
   }
 
-  editarProyecto(proy:any):void{
+  editarProyecto(proy:any){
     console.log('Form->', this.proyectoForm.value);
     this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
       console.log(data);
