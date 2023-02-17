@@ -123,6 +123,14 @@
                                             class="form-control" id="inputUrlImage" aria-describedby="url_image"
                                             [defaultValue]="proy.url_image">
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="inputPersona" class="form-label">Persona id</label>
+                                        <input type="text" name="persona_id" formControlName="persona_id"
+                                            class="form-control" id="inputPersona" aria-describedby="persona_id"
+                                            [defaultValue]="proy.persona.id">
+                                    </div>
+
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                     <button type="submit" class="btn btn-primary">Editar</button>
                                 </form>

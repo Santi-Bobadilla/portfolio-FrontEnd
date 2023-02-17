@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
@@ -24,6 +24,10 @@ export class ProyectosComponent implements OnInit {
     this.proyectoForm = this.initForm();
   }
 
+  public persona = new FormArray([
+    new FormControl({id:1}),
+  ]);
+
   initForm(proy?:any):FormGroup {
     return this.formBuilder.group({
       id: [proy?.id],
@@ -33,7 +37,8 @@ export class ProyectosComponent implements OnInit {
       fecha_fin:[proy?.fecha_fin],
       link:[proy?.link],
       url_image:[proy?.url_image],
-      persona_id:1
+      persona:[this.persona.value[0]],
+      persona_id:[proy?.persona_id]
     });
   }
 
@@ -43,6 +48,7 @@ export class ProyectosComponent implements OnInit {
 
   editarProyecto(proy:any){
     console.log('Form->', this.proyectoForm.value);
+    this.proyectoForm.controls['persona'].setValue({id: Number(this.proyectoForm.value.persona_id)})
     this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
       console.log(data);
       return data = data
