@@ -155,33 +155,8 @@
 
                         <div class="mb-3">
                           <label for="inputProvinciaId" class="form-label">Provincia</label>
-                          <select class="form-select" formControlName="provincia_id" name="provincia_id"
-                          class="form-select" id="inputProvinciaId">
-                            <option selected value="{{pers.provincia.id}}">{{pers.provincia.nombre}}</option>
-                            <option value="1">Buenos Aires</option>
-                            <option value="2">Catamarca</option>
-                            <option value="3">Chaco</option>
-                            <option value="4">Chubut</option>
-                            <option value="5">Córdoba</option>
-                            <option value="6">Corrientes</option>
-                            <option value="7">Entre Rios</option>
-                            <option value="8">Formosa</option>
-                            <option value="9">Jujuy</option>
-                            <option value="10">La Pampa</option>
-                            <option value="11">La Rioja</option>
-                            <option value="12">Mendoza</option>
-                            <option value="13">Misiones</option>
-                            <option value="14">Neuquen</option>
-                            <option value="15">Rio Negro</option>
-                            <option value="16">Salta</option>
-                            <option value="17">San Juan</option>
-                            <option value="18">San Luis</option>
-                            <option value="19">Santa Cruz</option>
-                            <option value="20">Santa Fe</option>
-                            <option value="21">Santiago del Estero</option>
-                            <option value="22">Tierra del Fuego</option>
-                            <option value="23">Tucuman</option>
-                            <option value="24">Ciudad Autonoma de Buenos Aires</option>
+                          <select class="form-select" formControlName="provincia" name="provincia_id" class="form-select" id="inputProvinciaId">
+                            <option *ngFor="let opt of options; let i = index" [selected]="i+1 === ngSelect" value="{{i+1}}"> {{ opt.name }} </option>
                           </select>
                         </div>
 
@@ -200,15 +175,30 @@
                           <input type="text" formControlName="fecha_nacimiento" name="fecha_nacimiento" class="form-control" id="inputFechaNacimiento" aria-describedby="fecha_nacimiento" [defaultValue]="pers.fecha_nacimiento">
                         </div>
 
-                        <!-- aca option ciudad 
-                        <div class="mb-3">
-                            <label for="inputUrlImage" class="form-label">Url imagen</label>
-                            <input type="text" name="url_image" formControlName="url_image"
-                                class="form-control" id="inputUrlImage" aria-describedby="url_image"
-                                [defaultValue]="">
-                        </div> -->
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Editar</button>
+                        <div class="container overflow-hidden text-center">
+                          <div class="row gx-5">
+                            <div class="col">
+                             <div class="p-3">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reload()">Cerrar</button>
+                             </div>
+                            </div>
+                            <div class="col">
+                              <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                  <button type="submit" class="btn btn-info">Editar</button>
+                              </div>
+                              
+                              <div class="p-3" *ngIf="this.resp == 200">
+                                  <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                              </div>
+
+                              <div class="p-3" *ngIf="this.resp == 'error'">
+                                  <button type="submit" class="btn btn-danger">Error</button>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        
                     </form>
                     <!-- fin form proyectos -->
                 </div>

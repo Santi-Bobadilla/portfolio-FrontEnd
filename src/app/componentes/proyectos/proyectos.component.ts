@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
-
 
 @Component({
   selector: 'app-proyectos',
@@ -11,9 +10,11 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 })
 
 export class ProyectosComponent implements OnInit {
+ 
   proyectos:any;
   proyectoForm: FormGroup;
-    
+  resp:any='';
+  
   constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder, private router:Router) {}
 
   ngOnInit(): void {
@@ -22,6 +23,7 @@ export class ProyectosComponent implements OnInit {
     })
 
     this.proyectoForm = this.initForm();
+    this.resp='';
   }
 
   public persona = new FormArray([
@@ -38,7 +40,7 @@ export class ProyectosComponent implements OnInit {
       link:[proy?.link],
       url_image:[proy?.url_image],
       persona:[this.persona.value[0]],
-      persona_id:[proy?.persona_id]
+      // persona_id:[proy?.persona_id]
     });
   }
 
@@ -46,12 +48,21 @@ export class ProyectosComponent implements OnInit {
     this.proyectoForm = this.initForm(proy);
   }
 
+  reload() {
+    this.ngOnInit();
+  }
+
   editarProyecto(proy:any){
     console.log('Form->', this.proyectoForm.value);
-    this.proyectoForm.controls['persona'].setValue({id: Number(this.proyectoForm.value.persona_id)})
     this.portfolioService.editarProy(this.proyectoForm.value).subscribe(data => {
-      console.log(data);
-      return data = data
+      this.resp = data
+      console.log(this.resp);
+      if(this.resp == 200){
+        return data = data;
+      } else {
+        this.resp='error';        
+        return data=this.resp;
+      }
     })
   }
 
@@ -59,14 +70,35 @@ export class ProyectosComponent implements OnInit {
     console.log('Form->', this.proyectoForm.value);
     console.log('entre nuevoProyecto proyectos');
     this.portfolioService.nuevoProy(this.proyectoForm.value).subscribe(data => {
-      return data = data
+      this.resp = data
+      console.log(this.resp);
+      if(this.resp == 200){
+        return data = data;
+      } else {
+        this.resp='error';
+        return data = this.resp;
+      }
     })
   }
 
   eliminarProyecto(id:number){
-    this.portfolioService.eliminarProy(id).subscribe(data => {
-      return data=data;
-    })
+    let a = confirm('¿Desea realmente eliminar este proyecto?');
+    if(a==true){
+      this.portfolioService.eliminarProy(id).subscribe(data => {
+        this.resp = data
+        console.log(this.resp);
+        if(this.resp == 200){
+          console.log('entre a if');
+          this.reload();
+          return data = data;
+        } else {
+          console.log('entre a else');
+          this.resp='error';
+          return data = this.resp;
+        }
+      })
+    }
+    
   }
 
 

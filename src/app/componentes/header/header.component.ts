@@ -16,6 +16,37 @@ export class HeaderComponent {
   persona:any;  
   personaForm: FormGroup;
 
+  ngSelect:any;
+  options:any[] = 
+  [
+    {'name':'Buenos Aires'},
+    {'name':'Catamarca'},
+    {'name':'Chaco'},
+    {'name':'Chubut'},
+    {'name':'Córdoba'},
+    {'name':'Corrientes'},
+    {'name':'Entre Rios'},
+    {'name':'Formosa'},
+    {'name':'Jujuy'},
+    {'name':'La Pampa'},
+    {'name':'La Rioja'},
+    {'name':'Mendoza'},
+    {'name':'Misiones'},
+    {'name':'Neuquen'},
+    {'name':'Rio Negro'},
+    {'name':'Salta'},
+    {'name':'San Juan'},
+    {'name':'San Luis'},
+    {'name':'Santa Cruz'},
+    {'name':'Santa Fe'},
+    {'name':'Santiago del Estero'},
+    {'name':'Tierra del Fuego'},
+    {'name':'Tucuman'},
+    {'name':'Ciudad Autonoma de Buenos Aires'}
+  ]
+
+  resp:any;
+
   constructor(protected authService: AuthService, private portfolioService:PortfolioService, private fb:FormBuilder, private router:Router) {
     
   }
@@ -23,26 +54,19 @@ export class HeaderComponent {
   ngOnInit(): void {    
     this.portfolioService.obtenerDatos().subscribe(data => {
       console.log(data);
-      
       this.persona = data;
     });
 
     this.personaForm = this.initForm();
-
+    this.resp='';
   }
-
-  // public provincia = new FormControl({
-  //                   id:5,
-  //                   nombre:'Córdoba',
-  //                   nacionalidad:new FormControl({id:1, nombre:'Argentina'})
-  //                 });
 
   public nac = new FormArray([
     new FormControl({id:1, nombre:'Argentina'}),
   ]);
 
   public provincia = new FormArray([
-    new FormControl({id:5,
+    new FormControl({id:0,
                     nacionalidad: this.nac.value[0]
                   }),
   ]);
@@ -59,23 +83,33 @@ export class HeaderComponent {
       ocupacion:[pers?.ocupacion],
       image_background_header:[pers?.image_background_header],
       image_perfil:[pers?.image_perfil],
-      provincia:[this.provincia.value[0]],
-      // provincia_id:[pers?.provincia_id]
-      provincia_id:[pers?.provincia_id]
+      provincia:[pers?.provincia.id]
     });
-    
   }
+  
 
   abrirModalP(pers:any):void{
     this.personaForm = this.initForm(pers);
+    this.ngSelect=pers?.provincia.id
   }
 
   editarPersona(id:number, pers:any):void{
-    this.personaForm.controls['provincia'].setValue({id: Number(this.personaForm.value.provincia_id), nacionalidad:{id:1, nombre:'Argentina'}})
+    this.personaForm.controls['provincia'].setValue({id: Number(this.personaForm.value.provincia), nacionalidad:{id:1, nombre:'Argentina'}})
     id = this.personaForm.value.id;
     this.portfolioService.editarPers(id, this.personaForm.value).subscribe(data => {
-      return data = data
+      this.resp = data
+      console.log(this.resp);
+      if(this.resp == 200){
+        return data = data;
+      } else {
+        this.resp='error';        
+        return data=this.resp;
+      }
     });
+  }
+
+  reload() {
+    this.ngOnInit();
   }
     
 }

@@ -1,41 +1,25 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Injectable, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable, Subject, Subscription } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
-
-// let headersToSend = new HttpHeaders();
-//     headersToSend = headersToSend
-//       .set('Bearer', 'Access Token Here')
-//       .set('Accept','application/json');
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class PortfolioService implements OnInit,OnDestroy{
+export class PortfolioService implements OnInit{
   
   // private url:string = "https://backend-6hbb.onrender.com/api/";
   private url:string = "http://localhost:8080/api/";
   private _refresh$ = new Subject<void>();
   subscription: Subscription;
+  responseStatus: any
   
   constructor(private http:HttpClient, private authService:AuthService, private router:Router) {}
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  get refresh$(){
-    return this._refresh$;
-  }
-
   ngOnInit(): void {
-    // this.subscription = this.refresh$.subscribe(()=>{
-    //   console.log("entre a subscription");
-    // })
-    this.obtenerProy;
+    
   }
 
   // persona
@@ -46,11 +30,10 @@ export class PortfolioService implements OnInit,OnDestroy{
   editarPers(id:number, body:any):Observable<void>{
     console.log(body);
     console.log('entre editPers portfolioservice');
-    return this.http.patch<void>(this.url+"editar/"+body.id, body).pipe(
-      tap(() => {
-        this._refresh$.next();
-      })
-    );
+    return this.http.patch<void>(this.url+"editar/"+body.id, body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
 
   // educacion
@@ -61,27 +44,28 @@ export class PortfolioService implements OnInit,OnDestroy{
   nuevoEdu(body:any):Observable<any>{
     console.log(body);
     console.log('entre nuevoEdu portfolioservice');
-    return this.http.post<any>(this.url+"new/edu", body);
+    return this.http.post<any>(this.url+"new/edu", body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
 
   editarEdu(body:any):Observable<void>{
     console.log(body);
     console.log('entre editEdu portfolioservice');
-    return this.http.patch<void>(this.url+"editarEdu/"+body.id, body).pipe(
-      tap(() => {
-        this._refresh$.next();
-      })
-    );
+    return this.http.patch<void>(this.url+"editarEdu/"+body.id, body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
 
   eliminarEdu(id:number):Observable<void>{
     console.log(id);
     console.log('entre eliminarEdu portfolioservice');
-    return this.http.delete<void>(this.url+"deleteEdu/"+id).pipe(
-      tap(() => {
-        this._refresh$.next();
-      })
-    );
+    return this.http.delete<void>(this.url+"deleteEdu/"+id, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
 
   // Experiencia    
@@ -89,6 +73,7 @@ export class PortfolioService implements OnInit,OnDestroy{
     return this.http.get<any>(this.url+"ver/exp");
   }
 
+  // skills
   obtenerSkill():Observable<any> {
     return this.http.get<any>(this.url+"ver/skill");
   }
@@ -101,28 +86,28 @@ export class PortfolioService implements OnInit,OnDestroy{
   nuevoProy(body:any):Observable<any>{
     console.log(body);
     console.log('entre nuevoProy portfolioservice');
-    return this.http.post<any>(this.url+"new/proy", body);
+    return this.http.post<any>(this.url+"new/proy", body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
 
   editarProy(body:any):Observable<void>{
     console.log(body);
     console.log('entre editProy portfolioservice');
-    return this.http.patch<void>(this.url+"editarProy/"+body.id, body)
-    // .pipe(
-    //   tap(() => {
-    //     this._refresh$.next();
-    //   })
-    // );
+    return this.http.patch<any>(this.url+"editarProy/"+body.id, body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
 
   eliminarProy(id:number):Observable<void>{
     console.log(id);
     console.log('entre editProy portfolioservice');
-    return this.http.delete<void>(this.url+"deleteProy/"+id).pipe(
-      tap(() => {
-        this._refresh$.next();
-      })
-    );
+    return this.http.delete<void>(this.url+"deleteProy/"+id, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
   }
   
 
