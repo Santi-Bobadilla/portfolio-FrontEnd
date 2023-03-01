@@ -16,6 +16,8 @@ import { PortfolioComponent } from './componentes/portfolio/portfolio.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './servicios/Interceptor/auth.interceptor';
 import { PortfolioService } from './servicios/Portfolio/portfolio.service';
+// Import ng-circle-progress
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,18 @@ import { PortfolioService } from './servicios/Portfolio/portfolio.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    // Specify ng-circle-progress as an import
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 300,
+      responsive: true
+    })
   ],
   providers: [PortfolioService,
     {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true}

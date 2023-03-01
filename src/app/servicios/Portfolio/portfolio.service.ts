@@ -137,6 +137,33 @@ export class PortfolioService implements OnInit{
   obtenerSkill():Observable<any> {
     return this.http.get<any>(this.url+"ver/skill");
   }
+
+  nuevoSkill(body:any):Observable<any>{
+    console.log(body);
+    console.log('entre nuevoSkill portfolioservice');
+    return this.http.post<any>(this.url+"new/Skill", body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
+  }
+
+  editarSkill(body:any):Observable<void>{
+    console.log(body);
+    console.log('entre editSkill portfolioservice');
+    return this.http.patch<any>(this.url+"editarSkill/"+body.id, body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
+  }
+
+  eliminarSkill(id:number):Observable<void>{
+    console.log(id);
+    console.log('entre editSkill portfolioservice');
+    return this.http.delete<void>(this.url+"deleteSkill/"+id, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
+  }
   
 
 }
