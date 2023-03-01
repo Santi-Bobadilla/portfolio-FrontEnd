@@ -1,65 +1,305 @@
 <div class="container-fluid">
-    <div class="card mb-3 pb-2">      
-      <div class="card-body">
-        <div class="row">
-            <div class="col-10">
-                <h5 class="card-title text-start">Experiencia</h5>
-            </div>
-            <div class="col-2 text-end">
-                <button type="button" class="btn btn-sm btn-light">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
+  <div class="card mb-3 pb-2">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-10">
+          <h5 class="card-title text-start">Experiencia</h5>
+        </div>
+        <div class="col-2 text-end">
+          <!-- Button modal new -->
+          <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+            data-bs-target="#newexperienciaModal" (click)="cargarAnio()">
+            <i class="fa-solid fa-plus"></i>
+          </button>
         </div>
       </div>
-      <!-- Experiencias -->
-      <div class="container-fluid" *ngFor="let exp of experiencia">
-        <div class="row">
-            <div class="col">
-                <div class="card mb-3">
-                    <div class="row">
-                      <div class="col-9">
-                        <div class="card-body">
-                          <h5 class="card-title">{{exp.nombre}}</h5>
-                        </div>
-                      </div>
-                      <div class="col-3 text-end">
-                        <button type="button" class="btn btn-sm btn-light">
-                            <i class="fa-regular fa-pen-to-square"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-light">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="container-fluid mb-2">
-                        <ul class="list-group">
-                          <li class="list-group-item">
-                              <b>Fecha de Inicio:</b> {{exp.fecha_inicio}}
-                          </li>
-                          <li class="list-group-item">
-                            <b>Fecha de Fin:</b> {{exp.fecha_fin}}
-                          </li>
-                          <li class="list-group-item">
-                              <b>Tareas realizadas:</b> {{exp.descripcion}}
-                          </li>
-                          <li class="list-group-item">
-                            <b>Tipo de empleo:</b> {{exp.tipo_empleo.nombre}}
-                          </li>
-                          <li class="list-group-item" *ngIf="exp.es_trabajo_actual===0">
-                            <b>Trabajo Actual:</b> No
-                          </li>
-                          <li class="list-group-item" *ngIf="exp.es_trabajo_actual!=0">
-                            <b>Trabajo Actual:</b> Si
-                          </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-      <!-- Fin Experiencias -->
     </div>
+    <!-- Experiencias -->
+    <div class="container-fluid" *ngFor="let exp of experiencia">
+      <div class="row">
+        <div class="col">
+          <div class="card mb-3">
+            <div class="row">
+              <div class="col-9">
+                <div class="card-body">
+                  <h5 class="card-title">{{exp.nombre}}</h5>
+                </div>
+              </div>
+              <div class="col-3 text-end">
+                <!-- Button modal editar -->
+                <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                  [attr.data-bs-target]="'#experienciaModal'+exp.id" (click)="abrirModal(exp);cargarAnio()">
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-light" (click)="eliminarExperiencia(exp.id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="container-fluid mb-2">
+              <ul class="list-group">
+                <li class="list-group-item" *ngIf="exp.es_trabajo_actual===0">
+                  <b>Trabajo Actual:</b> No
+                </li>
+                <li class="list-group-item" *ngIf="exp.es_trabajo_actual!==0">
+                  <b>Trabajo Actual:</b> Si
+                </li>
+                <li class="list-group-item">
+                  <b>Fecha de Inicio:</b> {{exp.mes_inicio+'-'+exp.anio_inicio}}
+                </li>
+                <li class="list-group-item" *ngIf="exp.es_trabajo_actual===0">
+                  <b>Fecha de Fin:</b> {{exp.mes_fin+'-'+exp.anio_fin}}
+                </li>
+                <li class="list-group-item">
+                  <b>Tareas realizadas:</b> {{exp.descripcion}}
+                </li>
+                <li class="list-group-item">
+                  <b>Tipo de empleo:</b> {{exp.tipo_empleo.nombre}}
+                </li>
+                
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    
- </div>
+      <!-- Modal Editar -->
+      <div class="modal fade" id="experienciaModal{{exp.id}}" tabindex="-1" aria-labelledby="experienciaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h1 class="modal-title fs-5" id="experienciaModalLabel">Editar {{exp.nombre}}</h1>
+            </div>
+            <div class="modal-body">
+              <!-- form modal experiencia -->
+              <form class="form-control" [formGroup]="experienciaForm" (ngSubmit)="editarExperiencia(exp)"
+                method="post">
+                <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                  aria-describedby="id" [defaultValue]="exp.id" hidden>
+                <div class="mb-3">
+                  <label for="inputNombre" class="form-label">Nombre</label>
+                  <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
+                    aria-describedby="nombre" [defaultValue]="exp.nombre">
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputDescripcion" class="form-label">Descripcion</label>
+                  <input type="text" name="descripcion" formControlName="descripcion" class="form-control"
+                    id="inputDescripcion" aria-describedby="descripcion" [defaultValue]="exp.descripcion"
+                    value="{{exp.descripcion}}">
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+                  <div class="row">
+                    <div class="col">
+                      <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaFin"
+                        formControlName="mes_inicio">
+                        <option value=""></option>
+                        <option *ngFor="let m of mes; let i = index" [selected]="m === mISelect" value="{{m}}"> {{ m }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaFin"
+                        formControlName="anio_inicio">
+                        <option value=""></option>
+                        <option *ngFor="let a of anio; let i = index" [selected]="a === aISelect" value="{{a}}"> {{ a }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
+                  <div class="row">
+                    <div class="col">
+                      <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin"
+                        formControlName="mes_fin">
+                        <option value=""></option>
+                        <option *ngFor="let m of mes; let i = index" [selected]="m === mFSelect" value="{{m}}"> {{ m }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin"
+                        formControlName="anio_fin">
+                        <option value=""></option>
+                        <option *ngFor="let a of anio; let i = index" [selected]="a === aFSelect" value="{{a}}"> {{ a }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
+                  <select class="form-select" name="tipo_empleo" class="form-select" id="inputTipoEmpleo"
+                    formControlName="tipo_empleo">
+                    <option *ngFor="let te of tipoEmpleo; let i = index" [selected]="i === teSelect" value="{{i+1}}"> {{
+                      te.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
+                  <select class="form-select" name="es_trabajo_actual" class="form-select" id="inputTrabajoActual"
+                    formControlName="es_trabajo_actual">
+                    <option *ngFor="let eta of esTrabajoActual; let i = index" [selected]="i === etaSelect"
+                      value="{{i}}"> {{ eta.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="container overflow-hidden text-center">
+                  <div class="row gx-5">
+                    <div class="col">
+                      <div class="p-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                          (click)="reload()">Cerrar</button>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                        <button type="submit" class="btn btn-info">Editar</button>
+                      </div>
+
+                      <div class="p-3" *ngIf="this.resp == 200">
+                        <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                      </div>
+
+                      <div class="p-3" *ngIf="this.resp == 'error'">
+                        <button type="submit" class="btn btn-danger">Error</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <!-- fin form experiencia -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- fin modal experiencia -->
+
+      <!-- Modal New Experiencia -->
+      <div class="modal fade" id="newexperienciaModal" tabindex="-1" aria-labelledby="newexperienciaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 text-capitalize" id="newexperienciaModalLabel">crear nuevo
+                expecto</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- form modal new experiencia -->
+              <form class="form-control" [formGroup]="experienciaForm" (ngSubmit)="nuevoExperiencia()" method="post">
+                <div class="mb-3">
+                  <label for="inputNombre" class="form-label">Nombre</label>
+                  <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
+                    aria-describedby="nombre" value="">
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputDescripcion" class="form-label">Descripcion</label>
+                  <input type="text" formControlName="descripcion" class="form-control" id="inputDescripcion"
+                    aria-describedby="descripcion" value="">
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+                  <div class="row">
+                    <div class="col">
+                      <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio"
+                        formControlName="mes_inicio">
+                        <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio"
+                        formControlName="anio_inicio">
+                        <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
+                  <div class="row">
+                    <div class="col">
+                      <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin"
+                        formControlName="mes_fin">
+                        <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                      </select>
+                    </div>
+                    <div class="col">
+                      <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin"
+                        formControlName="anio_fin">
+                        <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
+                  <select class="form-select" name="tipo_empleo" class="form-select" id="inputTipoEmpleo"
+                    formControlName="tipo_empleo">
+                    <option *ngFor="let te of tipoEmpleo; let i = index" value="{{i+1}}"> {{ te.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
+                  <select class="form-select" name="es_trabajo_actual" class="form-select" id="inputTrabajoActual"
+                    formControlName="es_trabajo_actual">
+                    <option *ngFor="let eta of esTrabajoActual; let i = index" value="{{i}}"> {{ eta.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="container overflow-hidden text-center">
+                  <div class="row gx-5">
+                    <div class="col">
+                      <div class="p-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                          (click)="reload()">Cerrar</button>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                        <button type="submit" class="btn btn-info">Crear</button>
+                      </div>
+
+                      <div class="p-3" *ngIf="this.resp == 200">
+                        <button type="submit" class="btn btn-success" disabled>Creado</button>
+                      </div>
+
+                      <div class="p-3" *ngIf="this.resp == 'error'">
+                        <button type="submit" class="btn btn-danger">Error</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+              <!-- fin form new experiencia -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- fin modal new experiencia -->
+
+    </div>
+    <!-- Fin Experiencias -->
+  </div>
+
+</div>

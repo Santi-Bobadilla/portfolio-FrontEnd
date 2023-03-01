@@ -119,7 +119,7 @@
                     <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers.id, pers)"
                         method="patch">
                         <input type="number" name="id" formControlName="id" class="form-control"
-                            id="inputId" aria-describedby="id" [defaultValue]="pers.id">
+                            id="inputId" aria-describedby="id" [defaultValue]="pers.id" hidden>
                         <div class="mb-3">
                             <label for="inputNombre" class="form-label">Nombre</label>
                             <input type="text" name="nombre" formControlName="nombre" class="form-control"

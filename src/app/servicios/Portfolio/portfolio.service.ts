@@ -13,7 +13,6 @@ export class PortfolioService implements OnInit{
   // private url:string = "https://backend-6hbb.onrender.com/api/";
   private url:string = "http://localhost:8080/api/";
   private _refresh$ = new Subject<void>();
-  subscription: Subscription;
   responseStatus: any
   
   constructor(private http:HttpClient, private authService:AuthService, private router:Router) {}
@@ -55,6 +54,8 @@ export class PortfolioService implements OnInit{
     console.log('entre editEdu portfolioservice');
     return this.http.patch<void>(this.url+"editarEdu/"+body.id, body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
+      console.log(this.responseStatus);
+      
       return this.responseStatus;
    }));
   }
@@ -66,16 +67,6 @@ export class PortfolioService implements OnInit{
       this.responseStatus = res.status;
       return this.responseStatus;
    }));
-  }
-
-  // Experiencia    
-  obtenerExp():Observable<any> {
-    return this.http.get<any>(this.url+"ver/exp");
-  }
-
-  // skills
-  obtenerSkill():Observable<any> {
-    return this.http.get<any>(this.url+"ver/skill");
   }
 
   // proyectos
@@ -108,6 +99,43 @@ export class PortfolioService implements OnInit{
       this.responseStatus = res.status;
       return this.responseStatus;
    }));
+  }
+
+  // Experiencia    
+  obtenerExp():Observable<any> {
+    return this.http.get<any>(this.url+"ver/exp");
+  }
+
+  nuevoExp(body:any):Observable<any>{
+    console.log(body);
+    console.log('entre nuevoExp portfolioservice');
+    return this.http.post<any>(this.url+"new/Exp", body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
+  }
+
+  editarExp(body:any):Observable<void>{
+    console.log(body);
+    console.log('entre editExp portfolioservice');
+    return this.http.patch<any>(this.url+"editarExp/"+body.id, body, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
+  }
+
+  eliminarExp(id:number):Observable<void>{
+    console.log(id);
+    console.log('entre editExp portfolioservice');
+    return this.http.delete<void>(this.url+"deleteExp/"+id, {observe: 'response'}).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+   }));
+  }
+
+  // skills
+  obtenerSkill():Observable<any> {
+    return this.http.get<any>(this.url+"ver/skill");
   }
   
 

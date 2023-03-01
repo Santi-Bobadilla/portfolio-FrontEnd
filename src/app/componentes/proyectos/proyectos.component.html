@@ -6,9 +6,9 @@
                     <h5 class="card-title text-start">Proyectos</h5>
                 </div>
                 <div class="col-2 text-end">
-                    <!-- Button modal editar -->
+                    <!-- Button modal new -->
                     <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-                        data-bs-target="#newProyectosModal">
+                        data-bs-target="#newProyectosModal" (click)="cargarAnio()">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -36,7 +36,7 @@
                                             <!-- Button modal editar -->
                                             <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
                                                 [attr.data-bs-target]="'#proyectosModal'+proy.id"
-                                                (click)="abrirModal(proy)">
+                                                (click)="abrirModal(proy);cargarAnio()">
                                                 <i class="fa-regular fa-pen-to-square"></i>
                                             </button>
                                             <button type="button" class="btn btn-sm btn-light"
@@ -53,10 +53,15 @@
                                         <b>Descripción:</b> {{proy.descripcion}}
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Fecha de Inicio:</b> {{proy.fecha_inicio}}
+                                        <b>Fecha de Inicio:</b> {{ proy.mes_inicio+'-'+proy.anio_inicio}}
                                     </li>
-                                    <li class="list-group-item">
-                                        <b>Fecha de Fin:</b> {{proy.fecha_fin}}
+                                    
+                                    <li class="list-group-item" *ngIf="proy.mes_fin!==null && proy.anio_fin!==null ">
+                                        <b>Fecha de Fin:</b> {{ proy.mes_fin+'-'+proy.anio_fin}}
+                                    </li>
+
+                                    <li class="list-group-item" *ngIf="proy.mes_fin===null || proy.anio_fin===null">
+                                        <b>Fecha de Fin:</b> en proceso
                                     </li>
                                     
                                     <li class="list-group-item" *ngIf="proy.link.includes('http://') || proy.link.includes('https://')">
@@ -102,16 +107,38 @@
 
                                     <div class="mb-3">
                                         <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
-                                        <input type="text" formControlName="fecha_inicio" name="fecha_inicio"
-                                            class="form-control" id="inputFechaInicio" aria-describedby="fecha_inicio"
-                                            [defaultValue]="proy.fecha_inicio">
+                                        <div class="row">
+                                            <div class="col">
+                                                <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaFin" formControlName="mes_inicio">
+                                                    <option value=""></option>
+                                                    <option *ngFor="let m of mes; let i = index" [selected]="m === mISelect" value="{{m}}"> {{ m }} </option>
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaFin" formControlName="anio_inicio">
+                                                    <option value=""></option>
+                                                    <option *ngFor="let a of anio; let i = index" [selected]="a === aISelect" value="{{a}}"> {{ a }} </option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
-                                        <input type="text" formControlName="fecha_fin" name="fecha_fin"
-                                            class="form-control" id="inputFechaFin" aria-describedby="fecha_fin"
-                                            [defaultValue]="proy.fecha_fin">
+                                        <div class="row">
+                                            <div class="col">
+                                                <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin" formControlName="mes_fin">
+                                                    <option value=""></option>
+                                                    <option *ngFor="let m of mes; let i = index" [selected]="m === mFSelect" value="{{m}}"> {{ m }} </option>
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin" formControlName="anio_fin">
+                                                    <option value=""></option>
+                                                    <option *ngFor="let a of anio; let i = index" [selected]="a === aFSelect" value="{{a}}"> {{ a }} </option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="mb-3">
@@ -185,14 +212,34 @@
 
                                 <div class="mb-3">
                                     <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
-                                    <input type="text" formControlName="fecha_inicio" class="form-control"
-                                        id="inputFechaInicio" aria-describedby="fecha_inicio" value="">
+                                    <div class="row">
+                                        <div class="col">
+                                            <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio" formControlName="mes_inicio">
+                                                <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio" formControlName="anio_inicio">
+                                                <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
-                                    <input type="text" formControlName="fecha_fin" class="form-control"
-                                        id="inputFechaFin" aria-describedby="fecha_fin" value="">
+                                    <div class="row">
+                                        <div class="col">
+                                            <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin" formControlName="mes_fin">
+                                                <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin" formControlName="anio_fin">
+                                                <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">

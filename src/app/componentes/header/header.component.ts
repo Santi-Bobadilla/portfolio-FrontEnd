@@ -96,7 +96,8 @@ export class HeaderComponent {
   editarPersona(id:number, pers:any):void{
     this.personaForm.controls['provincia'].setValue({id: Number(this.personaForm.value.provincia), nacionalidad:{id:1, nombre:'Argentina'}})
     id = this.personaForm.value.id;
-    this.portfolioService.editarPers(id, this.personaForm.value).subscribe(data => {
+    pers = this.personaForm.value;
+    this.portfolioService.editarPers(id, pers).subscribe(data => {
       this.resp = data
       console.log(this.resp);
       if(this.resp == 200){
