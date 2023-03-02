@@ -4,3 +4,7 @@
 .btn-link {
     text-decoration: none!important;
 }
+
+.card {
+    border-width: 0px!important;
+}

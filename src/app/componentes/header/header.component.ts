@@ -53,7 +53,7 @@ export class HeaderComponent {
 
   ngOnInit(): void {    
     this.portfolioService.obtenerDatos().subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.persona = data;
     });
 
@@ -99,7 +99,7 @@ export class HeaderComponent {
     pers = this.personaForm.value;
     this.portfolioService.editarPers(id, pers).subscribe(data => {
       this.resp = data
-      console.log(this.resp);
+      // console.log(this.resp);
       if(this.resp == 200){
         return data = data;
       } else {

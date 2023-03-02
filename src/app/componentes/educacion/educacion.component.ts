@@ -34,7 +34,7 @@ export class EducacionComponent {
 
   ngOnInit(){
     this.portfolioService.obtenerEdu().subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.educacion = data;
     });
 
@@ -81,10 +81,10 @@ export class EducacionComponent {
   }
 
   editarEducacion(edu:any):void{
-    console.log('Form->', this.educacionForm.value);
+    // console.log('Form->', this.educacionForm.value);
     this.educacionForm.controls['condicion'].setValue({id: Number(this.educacionForm.value.condicion)})
     edu=this.educacionForm.value;
-    console.log(edu);    
+    // console.log(edu);    
     this.portfolioService.editarEdu(edu).subscribe(data => {
       this.resp = data
       console.log(this.resp);
@@ -99,20 +99,18 @@ export class EducacionComponent {
 
   nuevoEducacion():void{
     this.educacionForm.controls['condicion'].setValue({id: Number(this.educacionForm.value.condicion)})
-    console.log('entre nuevoEducacion Educacions');
-    console.log('Form->', this.educacionForm.value);
-    // cambiar fecha_inicio y fecha_fin en back y db por mes_inicio anio_inicio, mes_fin y anio_fin. Modificar todos los formcontrols
-
-    // this.portfolioService.nuevoEdu(this.educacionForm.value).subscribe(data => {
-    //   this.resp = data
-    //   console.log(this.resp);
-    //   if(this.resp == 200){
-    //     return data = data;
-    //   } else {
-    //     this.resp='error';        
-    //     return data=this.resp;
-    //   }
-    // })
+    // console.log('entre nuevoEducacion Educacions');
+    // console.log('Form->', this.educacionForm.value);
+    this.portfolioService.nuevoEdu(this.educacionForm.value).subscribe(data => {
+      this.resp = data
+      // console.log(this.resp);
+      if(this.resp == 200){
+        return data = data;
+      } else {
+        this.resp='error';        
+        return data=this.resp;
+      }
+    })
   }
 
   eliminarEducacion(id:number){
@@ -122,11 +120,9 @@ export class EducacionComponent {
         this.resp = data
         console.log(this.resp);
         if(this.resp == 200){
-          console.log('entre a if');
           this.reload();
           return data = data;
         } else {
-          console.log('entre a else');
           this.resp='error';
           return data = this.resp;
         }

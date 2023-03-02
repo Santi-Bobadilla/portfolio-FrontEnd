@@ -43,7 +43,7 @@ export class ExperienciaComponent {
 
   ngOnInit():void {
     this.portfolioService.obtenerExp().subscribe(data => {    
-      console.log(data);
+      // console.log(data);
       this.experiencia = data;
     })
     this.experienciaForm = this.initForm();
@@ -93,7 +93,7 @@ export class ExperienciaComponent {
 
   
   editarExperiencia(exp:any){
-    console.log('Form->', this.experienciaForm.value);
+    // console.log('Form->', this.experienciaForm.value);
     this.experienciaForm.controls['tipo_empleo'].setValue({id: Number(this.experienciaForm.value.tipo_empleo)})
     exp=this.experienciaForm.value
     this.portfolioService.editarExp(exp).subscribe(data => {
@@ -110,8 +110,8 @@ export class ExperienciaComponent {
 
   nuevoExperiencia():void{
     this.experienciaForm.controls['tipo_empleo'].setValue({id: Number(this.experienciaForm.value.tipo_empleo)})
-    console.log('Form->', this.experienciaForm.value);
-    console.log('entre nuevoExperiencia Experiencias');
+    // console.log('Form->', this.experienciaForm.value);
+    // console.log('entre nuevoExperiencia Experiencias');
     this.portfolioService.nuevoExp(this.experienciaForm.value).subscribe(data => {
       this.resp = data
       console.log(this.resp);
@@ -131,11 +131,9 @@ export class ExperienciaComponent {
         this.resp = data
         console.log(this.resp);
         if(this.resp == 200){
-          console.log('entre a if');
           this.reload();
           return data = data;
         } else {
-          console.log('entre a else');
           this.resp='error';
           return data = this.resp;
         }

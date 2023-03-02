@@ -27,8 +27,8 @@ export class PortfolioService implements OnInit{
   }
 
   editarPers(id:number, body:any):Observable<void>{
-    console.log(body);
-    console.log('entre editPers portfolioservice');
+    // console.log(body);
+    // console.log('entre editPers portfolioservice');
     return this.http.patch<void>(this.url+"editar/"+body.id, body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -41,8 +41,8 @@ export class PortfolioService implements OnInit{
   }
 
   nuevoEdu(body:any):Observable<any>{
-    console.log(body);
-    console.log('entre nuevoEdu portfolioservice');
+    // console.log(body);
+    // console.log('entre nuevoEdu portfolioservice');
     return this.http.post<any>(this.url+"new/edu", body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -50,19 +50,18 @@ export class PortfolioService implements OnInit{
   }
 
   editarEdu(body:any):Observable<void>{
-    console.log(body);
-    console.log('entre editEdu portfolioservice');
+    // console.log(body);
+    // console.log('entre editEdu portfolioservice');
     return this.http.patch<void>(this.url+"editarEdu/"+body.id, body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
-      console.log(this.responseStatus);
-      
+      // console.log(this.responseStatus);
       return this.responseStatus;
    }));
   }
 
   eliminarEdu(id:number):Observable<void>{
-    console.log(id);
-    console.log('entre eliminarEdu portfolioservice');
+    // console.log(id);
+    // console.log('entre eliminarEdu portfolioservice');
     return this.http.delete<void>(this.url+"deleteEdu/"+id, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -75,8 +74,8 @@ export class PortfolioService implements OnInit{
   }
 
   nuevoProy(body:any):Observable<any>{
-    console.log(body);
-    console.log('entre nuevoProy portfolioservice');
+    // console.log(body);
+    // console.log('entre nuevoProy portfolioservice');
     return this.http.post<any>(this.url+"new/proy", body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -84,8 +83,8 @@ export class PortfolioService implements OnInit{
   }
 
   editarProy(body:any):Observable<void>{
-    console.log(body);
-    console.log('entre editProy portfolioservice');
+    // console.log(body);
+    // console.log('entre editProy portfolioservice');
     return this.http.patch<any>(this.url+"editarProy/"+body.id, body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -93,8 +92,8 @@ export class PortfolioService implements OnInit{
   }
 
   eliminarProy(id:number):Observable<void>{
-    console.log(id);
-    console.log('entre editProy portfolioservice');
+    // console.log(id);
+    // console.log('entre editProy portfolioservice');
     return this.http.delete<void>(this.url+"deleteProy/"+id, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -107,8 +106,8 @@ export class PortfolioService implements OnInit{
   }
 
   nuevoExp(body:any):Observable<any>{
-    console.log(body);
-    console.log('entre nuevoExp portfolioservice');
+    // console.log(body);
+    // console.log('entre nuevoExp portfolioservice');
     return this.http.post<any>(this.url+"new/Exp", body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -116,8 +115,8 @@ export class PortfolioService implements OnInit{
   }
 
   editarExp(body:any):Observable<void>{
-    console.log(body);
-    console.log('entre editExp portfolioservice');
+    // console.log(body);
+    // console.log('entre editExp portfolioservice');
     return this.http.patch<any>(this.url+"editarExp/"+body.id, body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -125,8 +124,8 @@ export class PortfolioService implements OnInit{
   }
 
   eliminarExp(id:number):Observable<void>{
-    console.log(id);
-    console.log('entre editExp portfolioservice');
+    // console.log(id);
+    // console.log('entre editExp portfolioservice');
     return this.http.delete<void>(this.url+"deleteExp/"+id, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -139,8 +138,8 @@ export class PortfolioService implements OnInit{
   }
 
   nuevoSkill(body:any):Observable<any>{
-    console.log(body);
-    console.log('entre nuevoSkill portfolioservice');
+    // console.log(body);
+    // console.log('entre nuevoSkill portfolioservice');
     return this.http.post<any>(this.url+"new/Skill", body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -148,8 +147,8 @@ export class PortfolioService implements OnInit{
   }
 
   editarSkill(body:any):Observable<void>{
-    console.log(body);
-    console.log('entre editSkill portfolioservice');
+    // console.log(body);
+    // console.log('entre editSkill portfolioservice');
     return this.http.patch<any>(this.url+"editarSkill/"+body.id, body, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;
@@ -157,8 +156,8 @@ export class PortfolioService implements OnInit{
   }
 
   eliminarSkill(id:number):Observable<void>{
-    console.log(id);
-    console.log('entre editSkill portfolioservice');
+    // console.log(id);
+    // console.log('entre editSkill portfolioservice');
     return this.http.delete<void>(this.url+"deleteSkill/"+id, {observe: 'response'}).pipe(map(res => {
       this.responseStatus = res.status;
       return this.responseStatus;

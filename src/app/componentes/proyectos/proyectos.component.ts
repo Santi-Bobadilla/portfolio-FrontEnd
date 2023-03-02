@@ -36,7 +36,7 @@ export class ProyectosComponent implements OnInit {
   ngOnInit(): void {
     this.portfolioService.obtenerProy().subscribe(data => {
       this.proyectos=data;
-      console.log(this.proyectos);
+      // console.log(this.proyectos);
     })
 
     this.proyectoForm = this.initForm();
@@ -76,7 +76,7 @@ export class ProyectosComponent implements OnInit {
   }
 
   editarProyecto(proy:any){
-    console.log('Form->', this.proyectoForm.value);
+    // console.log('Form->', this.proyectoForm.value);
     proy=this.proyectoForm.value
     this.portfolioService.editarProy(proy).subscribe(data => {
       this.resp = data
@@ -91,8 +91,8 @@ export class ProyectosComponent implements OnInit {
   }
 
   nuevoProyecto():void{
-    console.log('Form->', this.proyectoForm.value);
-    console.log('entre nuevoProyecto proyectos');
+    // console.log('Form->', this.proyectoForm.value);
+    // console.log('entre nuevoProyecto proyectos');
     this.portfolioService.nuevoProy(this.proyectoForm.value).subscribe(data => {
       this.resp = data
       console.log(this.resp);
@@ -112,11 +112,9 @@ export class ProyectosComponent implements OnInit {
         this.resp = data
         console.log(this.resp);
         if(this.resp == 200){
-          console.log('entre a if');
           this.reload();
           return data = data;
         } else {
-          console.log('entre a else');
           this.resp='error';
           return data = this.resp;
         }

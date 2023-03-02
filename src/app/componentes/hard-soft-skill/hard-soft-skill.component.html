@@ -1,19 +1,21 @@
 <div class="container-fluid">
   <div class="card mb-3 pb-2">
     <div class="card-body">
-      <!-- hard skill -->
+      <!-- skills -->
       <div class="row">
         <div class="col-10">
-          <h5 class="card-title text-start">Hard Skills</h5>
+          <h5 class="card-title text-start">Skills</h5>
         </div>
         <div class="col-2 text-end">
           <!-- Button modal new -->
-          <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-            data-bs-target="#newexperienciaModal">
+          <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#newSkillModal">
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
       </div>
+      <!-- hard skill -->
+      <hr class="border border-dark border-1 opacity-50">
+      <h5 class="card-title text-center">Hard Skills</h5>
       <div class="container text-center">
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5">
           <div class="col py-md-3" *ngFor="let h of hard">
@@ -21,13 +23,13 @@
               <!-- Button modal editar -->
               <div>
                 <circle-progress [percent]="h.porcentaje" [space]="-10" [radius]="100" [outerStrokeWidth]="10"
-                  [innerStrokeWidth]="10" [outerStrokeColor]="'#4882c2'" [innerStrokeColor]="'#e7e8ea'"
-                  [animation]="true" [animationDuration]="1000"></circle-progress>
+                  [innerStrokeWidth]="10" [outerStrokeColor]="h.color" [innerStrokeColor]="'#e7e8ea'" [animation]="true"
+                  [animationDuration]="1000"></circle-progress>
                 <div class="text-center">
                   <span>
                     <h6>{{h.nombre}}</h6>
                     <button type="button" class="btn btn-sm btn-light mx-1" data-bs-toggle="modal"
-                      [attr.data-bs-target]="'#experienciaModal'+h.id" (click)="abrirModal(h)">
+                      [attr.data-bs-target]="'#hardSkillModal'+h.id" (click)="abrirModal(h)">
                       <i class="fa-regular fa-pen-to-square"></i>
                     </button>
                     <button type="button" class="btn btn-sm btn-light mx-1" (click)="eliminarSkills(h.id)">
@@ -37,21 +39,81 @@
                 </div>
               </div>
             </div>
+            
+            <!-- Modal Editar Hard -->
+            <div class="modal fade" id="hardSkillModal{{h.id}}" tabindex="-1" aria-labelledby="hardSkillLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header text-center">
+                    <h1 class="modal-title fs-5" id="hardSkillLabel">Editar {{h.nombre}}</h1>
+                  </div>
+                  <div class="modal-body">
+                    <!-- form modal hard skill -->
+                    <form class="form-control" [formGroup]="skillForm" (ngSubmit)="editarSkills(h)" method="post">
+                      <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                        aria-describedby="id" [defaultValue]="h.id" hidden>
+                      <div class="mb-3">
+                        <label for="inputNombre" class="form-label">Nombre</label>
+                        <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
+                          aria-describedby="nombre" [defaultValue]="h.nombre">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="inputPorcentaje" class="form-label">Porcentaje</label>
+                        <input type="number" formControlName="porcentaje" class="form-control" id="inputPorcentaje"
+                          aria-describedby="porcentaje" step="1" min="0" max="100" [defaultValue]="h.descripcion"
+                          value="{{h.descripcion}}">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="inputTipoSkill" class="form-label">Tipo de Empleo</label>
+                        <select class="form-select" name="tipo_skill" class="form-select" id="inputTipoSkill"
+                          formControlName="tipo_skill">
+                          <option *ngFor="let ts of tipoSkill; let i = index" value="{{i+1}}"
+                            [selected]="i === h.tipo_skill"> {{ ts.name }}
+                          </option>
+                        </select>
+                      </div>
+
+                      <div class="container overflow-hidden text-center">
+                        <div class="row gx-5">
+                          <div class="col">
+                            <div class="p-3">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                (click)="reload()">Cerrar</button>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                              <button type="submit" class="btn btn-info">Editar</button>
+                            </div>
+
+                            <div class="p-3" *ngIf="this.resp == 200">
+                              <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                            </div>
+
+                            <div class="p-3" *ngIf="this.resp == 'error'">
+                              <button type="submit" class="btn btn-danger">Error</button>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <!-- fin form skill hard -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- fin modal skill hard -->
 
           </div>
         </div>
       </div>
       <!-- soft skill -->
-      <div class="row">
-        <div class="col-10">
-          <h5 class="card-title text-start">Soft Skills</h5>
-        </div>
-        <div class="col-2 text-end">
-          <button type="button" class="btn btn-sm btn-light">
-            <i class="fa-regular fa-pen-to-square"></i>
-          </button>
-        </div>
-      </div>
+      <hr class="border border-dark border-1 opacity-50">
+      <h5 class="card-title text-center">Soft Skills</h5>
       <div class="container text-center">
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5">
           <div class="col py-md-3" *ngFor="let s of soft">
@@ -59,13 +121,13 @@
               <!-- Button modal editar -->
               <div>
                 <circle-progress [percent]="s.porcentaje" [space]="-10" [radius]="100" [outerStrokeWidth]="10"
-                  [innerStrokeWidth]="10" [outerStrokeColor]="'#4882c2'" [innerStrokeColor]="'#e7e8ea'"
-                  [animation]="true" [animationDuration]="1000"></circle-progress>
+                  [innerStrokeWidth]="10" [outerStrokeColor]="s.color" [innerStrokeColor]="'#e7e8ea'" [animation]="true"
+                  [animationDuration]="1000"></circle-progress>
                 <div class="text-center">
                   <span>
                     <h6>{{s.nombre}}</h6>
                     <button type="button" class="btn btn-sm btn-light mx-1" data-bs-toggle="modal"
-                      [attr.data-bs-target]="'#experienciaModal'+s.id" (click)="abrirModal(s)">
+                      [attr.data-bs-target]="'#softSkillModal'+s.id" (click)="abrirModal(s)">
                       <i class="fa-regular fa-pen-to-square"></i>
                     </button>
                     <button type="button" class="btn btn-sm btn-light mx-1" (click)="eliminarSkills(s.id)">
@@ -77,10 +139,146 @@
               </div>
             </div>
 
+            <!-- Modal Editar Soft -->
+            <div class="modal fade" id="softSkillModal{{s.id}}" tabindex="-1" aria-labelledby="softSkillLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header text-center">
+                    <h1 class="modal-title fs-5" id="softSkillLabel">Editar {{s.nombre}}</h1>
+                  </div>
+                  <div class="modal-body">
+                    <!-- form modal soft skill -->
+                    <form class="form-control" [formGroup]="skillForm" (ngSubmit)="editarSkills(s)" method="post">
+                      <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                        aria-describedby="id" [defaultValue]="s.id" hidden>
+                      <div class="mb-3">
+                        <label for="inputNombre" class="form-label">Nombre</label>
+                        <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
+                          aria-describedby="nombre" [defaultValue]="s.nombre">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="inputPorcentaje" class="form-label">Porcentaje</label>
+                        <input type="number" formControlName="porcentaje" class="form-control" id="inputPorcentaje"
+                          aria-describedby="porcentaje" step="1" min="0" max="100" [defaultValue]="s.descripcion"
+                          value="{{s.descripcion}}">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="inputTipoSkill" class="form-label">Tipo de Empleo</label>
+                        <select class="form-select" name="tipo_skill" class="form-select" id="inputTipoSkill"
+                          formControlName="tipo_skill">
+                          <option *ngFor="let ts of tipoSkill; let i = index" value="{{i+1}}"
+                            [selected]="i === s.tipo_skill"> {{ ts.name }}
+                          </option>
+                        </select>
+                      </div>
+
+                      <div class="container overflow-hidden text-center">
+                        <div class="row gx-5">
+                          <div class="col">
+                            <div class="p-3">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                (click)="reload()">Cerrar</button>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                              <button type="submit" class="btn btn-info">Editar</button>
+                            </div>
+
+                            <div class="p-3" *ngIf="this.resp == 200">
+                              <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                            </div>
+
+                            <div class="p-3" *ngIf="this.resp == 'error'">
+                              <button type="submit" class="btn btn-danger">Error</button>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <!-- fin form skill soft -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- fin modal skill soft -->
+
           </div>
         </div>
       </div>
       <!-- aca va modal -->
+
+
+
+      <!-- Modal New Experiencia -->
+      <div class="modal fade" id="newSkillModal" tabindex="-1" aria-labelledby="newSkillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 text-capitalize" id="newSkillModalLabel">Crear Nuevo Skill</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- form modal new experiencia -->
+              <form class="form-control" [formGroup]="skillForm" (ngSubmit)="nuevoSkills()" method="post">
+                <div class="mb-3">
+                  <label for="inputNombre" class="form-label">Nombre</label>
+                  <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
+                    aria-describedby="nombre" value="">
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputPorcentaje" class="form-label">Porcentaje</label>
+                  <input type="number" formControlName="porcentaje" class="form-control" id="inputPorcentaje"
+                    aria-describedby="porcentaje" value="" step="1" min="0" max="100">
+                </div>
+
+                <div class="mb-3">
+                  <label for="inputTipoSkill" class="form-label">Tipo de Empleo</label>
+                  <select class="form-select" name="tipo_skill" class="form-select" id="inputTipoSkill"
+                    formControlName="tipo_skill">
+                    <option value="">Seleccione una opción...</option>
+                    <option *ngFor="let ts of tipoSkill; let i = index" value="{{i+1}}"> {{ ts.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="container overflow-hidden text-center">
+                  <div class="row gx-5">
+                    <div class="col">
+                      <div class="p-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                          (click)="reload()">Cerrar</button>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                        <button type="submit" class="btn btn-info">Crear</button>
+                      </div>
+
+                      <div class="p-3" *ngIf="this.resp == 200">
+                        <button type="submit" class="btn btn-success" disabled>Creado</button>
+                      </div>
+
+                      <div class="p-3" *ngIf="this.resp == 'error'">
+                        <button type="submit" class="btn btn-danger">Error</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+              <!-- fin form new skill -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- fin modal new skill -->
 
     </div>
     <!-- fin card body -->
