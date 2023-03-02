@@ -46,7 +46,7 @@ export class ExperienciaComponent {
       // console.log(data);
       this.experiencia = data;
     })
-    this.experienciaForm = this.initForm();
+    this.experienciaForm = this.initForm();    
     this.resp='';
   }
 
@@ -75,6 +75,10 @@ export class ExperienciaComponent {
       this.anio.push(index);
     }
     return this.anio;
+  }
+
+  resetForm(){
+    this.experienciaForm.reset();
   }
 
   reload() {

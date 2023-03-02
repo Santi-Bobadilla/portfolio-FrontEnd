@@ -52,6 +52,10 @@ export class EducacionComponent {
     }
     return this.anio;
   }
+
+  resetForm(){
+    this.educacionForm.reset();
+  }
   
   initForm(edu?:any):FormGroup {
     return this.formBuilder.group({

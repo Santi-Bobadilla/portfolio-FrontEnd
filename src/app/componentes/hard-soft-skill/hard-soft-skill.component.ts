@@ -59,6 +59,10 @@ export class HardSoftSkillComponent implements OnInit {
     this.ngOnInit();
   }
 
+  resetForm(){
+    this.skillForm.reset();
+  }
+
   abrirModal(skill:any):void{
     this.skillForm = this.initForm(skill);
     this.mISelect=skill?.tipo_skill;

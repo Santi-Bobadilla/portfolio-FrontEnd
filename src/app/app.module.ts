@@ -18,6 +18,9 @@ import { AuthInterceptor } from './servicios/Interceptor/auth.interceptor';
 import { PortfolioService } from './servicios/Portfolio/portfolio.service';
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { LoaderComponent } from './componentes/loader/loader.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     LoginComponent,
     PageNotFoundComponent,
     RegisterComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +55,9 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
       titleColor:'black',
       unitsColor:'black',
       subtitle:''
-    })
+    }),
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule
   ],
   providers: [PortfolioService,
     {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true}

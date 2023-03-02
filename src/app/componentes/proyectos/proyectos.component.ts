@@ -75,6 +75,10 @@ export class ProyectosComponent implements OnInit {
     this.ngOnInit();
   }
 
+  resetForm(){
+    this.proyectoForm.reset();
+  }
+
   editarProyecto(proy:any){
     // console.log('Form->', this.proyectoForm.value);
     proy=this.proyectoForm.value

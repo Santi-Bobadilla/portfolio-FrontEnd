@@ -8,7 +8,7 @@
         <div class="col-2 text-end">
           <!-- Button modal new -->
           <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-            data-bs-target="#newexperienciaModal" (click)="cargarAnio()">
+            data-bs-target="#newexperienciaModal" (click)="resetForm();cargarAnio()">
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
@@ -217,12 +217,14 @@
                     <div class="col">
                       <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio"
                         formControlName="mes_inicio">
+                        <option value="">Seleccione...</option>
                         <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
                       </select>
                     </div>
                     <div class="col">
                       <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio"
                         formControlName="anio_inicio">
+                        <option value="">Seleccione...</option>
                         <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
                       </select>
                     </div>
@@ -235,12 +237,14 @@
                     <div class="col">
                       <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin"
                         formControlName="mes_fin">
+                        <option value="">Seleccione...</option>
                         <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
                       </select>
                     </div>
                     <div class="col">
                       <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin"
                         formControlName="anio_fin">
+                        <option value="">Seleccione...</option>
                         <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
                       </select>
                     </div>
@@ -251,6 +255,7 @@
                   <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
                   <select class="form-select" name="tipo_empleo" class="form-select" id="inputTipoEmpleo"
                     formControlName="tipo_empleo">
+                    <option value="">Seleccione...</option>
                     <option *ngFor="let te of tipoEmpleo; let i = index" value="{{i+1}}"> {{ te.name }}
                     </option>
                   </select>
@@ -260,6 +265,7 @@
                   <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
                   <select class="form-select" name="es_trabajo_actual" class="form-select" id="inputTrabajoActual"
                     formControlName="es_trabajo_actual">
+                    <option value="">Seleccione...</option>
                     <option *ngFor="let eta of esTrabajoActual; let i = index" value="{{i}}"> {{ eta.name }}
                     </option>
                   </select>
