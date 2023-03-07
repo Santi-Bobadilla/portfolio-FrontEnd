@@ -10,17 +10,18 @@ import { map } from 'rxjs';
 
 export class AuthService {
 
-  api = 'https://backend-6hbb.onrender.com/api/login';
+  // api = 'https://backend-6hbb.onrender.com/api/login';
+  api = 'http://localhost:8080/api/login';
+
   currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({'currentUser':null});
-  
+
   constructor(private http:HttpClient, private router:Router) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem('currentUser') || "{}"));
-    console.log(this.currentUserSubject.value);
   }
 
   iniciarSesion(credentials:any): Observable<any> {
     return this.http.post(this.api,credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
-      const body = response.body;
+      const body = response.body;   
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
       const token = bearerToken && bearerToken.replace('Bearer ', '');

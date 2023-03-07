@@ -16,6 +16,11 @@ import { PortfolioComponent } from './componentes/portfolio/portfolio.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './servicios/Interceptor/auth.interceptor';
 import { PortfolioService } from './servicios/Portfolio/portfolio.service';
+// Import ng-circle-progress
+import { NgCircleProgressModule } from 'ng-circle-progress';
+import { LoaderComponent } from './componentes/loader/loader.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -28,13 +33,31 @@ import { PortfolioService } from './servicios/Portfolio/portfolio.service';
     LoginComponent,
     PageNotFoundComponent,
     RegisterComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    // Specify ng-circle-progress as an import
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 300,
+      responsive: true,
+      titleFontSize:'36',
+      titleColor:'black',
+      unitsColor:'black',
+      subtitle:''
+    }),
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule
   ],
   providers: [PortfolioService,
     {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true}
