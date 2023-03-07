@@ -21,6 +21,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { LoaderComponent } from './componentes/loader/loader.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       subtitle:''
     }),
     BrowserAnimationsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DragDropModule
   ],
   providers: [PortfolioService,
     {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true}

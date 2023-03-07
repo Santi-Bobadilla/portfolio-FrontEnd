@@ -42,7 +42,7 @@
         <h5 class="card-title">{{pers.nombre+' '+pers.apellido}}</h5>
       </div>
       <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
-        <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#personaModal" (click)="abrirModalP(pers)">
+        <button type="button" class="btn btn-sm btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#personaModal" (click)="abrirModalP(pers)">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
       </div>

@@ -3,16 +3,18 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
+import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
 import { LoaderService } from '../Loader/loader.service';
+import { PortfolioService } from '../Portfolio/portfolio.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(protected  authService:AuthService, private loaderService: LoaderService) {}
+  constructor(protected  authService:AuthService, private loaderService: LoaderService, private portfolioService:PortfolioService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderService.show();
@@ -29,8 +31,34 @@ export class AuthInterceptor implements HttpInterceptor {
     // console.log('interceptor esta corriendo: '+JSON.stringify(currentUser));
     // return next.handle(request);
     return next.handle(request).pipe(
-      finalize(() => this.loaderService.hide()),
+      tap({
+        next:(next) => {
+          // this.portfolioService.responseStatus= next;
+          // console.log(this.portfolioService.responseStatus);
+          return next
+        },
+        error: (error) => {
+          // this.portfolioService.responseStatus= next.type;
+          console.log(this.portfolioService.responseStatus);
+          
+          return this.portfolioService.responseStatus;
+          console.log(error);          
+        },
+        finalize:() => {
+          this.loaderService.hide()
+          console.log(this.portfolioService.responseStatus);
+          return this.portfolioService.responseStatus;
+        },
+      })
+      // finalize(() => this.loaderService.hide()),
       );
     }
+
+    // mensajeError(error: HttpErrorResponse){
+    //   console.log(error);
+    //   console.log('sucedio un error');
+    //   console.warn(error)
+    //   return throwError('prueba error')      
+    // }
 
 }
