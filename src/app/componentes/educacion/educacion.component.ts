@@ -1,6 +1,5 @@
-import { animation } from '@angular/animations';
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -19,12 +18,6 @@ export class EducacionComponent {
     {'name': 'En curso'},
     {'name': 'Abandonado'}
   ]
-  ngSelect:any;
-  mISelect:any;
-  aISelect:any;
-  mFSelect:any;
-  aFSelect:any;
-
   mes:any[] = ['01','02','03','04','05','06','07','08','09','10','11','12']
   anio:any [] = [];
   anio0:any=1960
@@ -37,14 +30,13 @@ export class EducacionComponent {
       // console.log(data);
       this.educacion = data;
     });
-
     this.educacionForm = this.initForm();
     this.resp='';
   }
 
-  public persona = new FormArray([
-    new FormControl({id:1}),
-  ]);
+  // public persona = new FormArray([
+  //   new FormControl({id:1}),
+  // ]);
   
   cargarAnio(){
     for (let index = this.anio1; index >= this.anio0; index--) {
@@ -67,17 +59,12 @@ export class EducacionComponent {
       anio_fin:[edu?.anio_fin],
       certificacion:[edu?.certificacion],
       condicion:[edu?.condicion.id],
-      persona:[this.persona.value[0]],
+      persona:[edu?.persona.id],
     });
   }
 
   abrirModalEd(edu:any):void{
     this.educacionForm = this.initForm(edu);
-    this.ngSelect=edu?.condicion.id;
-    this.mISelect=edu?.mes_inicio;
-    this.mFSelect=edu?.mes_fin;
-    this.aISelect=edu?.anio_inicio;
-    this.aFSelect=edu?.anio_fin;
   }
 
   reload() {
@@ -85,8 +72,8 @@ export class EducacionComponent {
   }
 
   editarEducacion(edu:any):void{
-    // console.log('Form->', this.educacionForm.value);
     this.educacionForm.controls['condicion'].setValue({id: Number(this.educacionForm.value.condicion)})
+    this.educacionForm.controls['persona'].setValue({id: Number(this.educacionForm.value.persona)})
     edu=this.educacionForm.value;
     // console.log(edu);    
     this.portfolioService.editarEdu(edu).subscribe(data => {
@@ -103,6 +90,7 @@ export class EducacionComponent {
 
   nuevoEducacion():void{
     this.educacionForm.controls['condicion'].setValue({id: Number(this.educacionForm.value.condicion)})
+    this.educacionForm.controls['persona'].setValue({id: Number(1)})
     // console.log('entre nuevoEducacion Educacions');
     // console.log('Form->', this.educacionForm.value);
     this.portfolioService.nuevoEdu(this.educacionForm.value).subscribe(data => {

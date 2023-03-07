@@ -10,8 +10,8 @@ import { map } from 'rxjs';
 
 export class AuthService {
 
-  // api = 'https://backend-6hbb.onrender.com/api/login';
-  api = 'http://localhost:8080/api/login';
+  api = 'https://backend-6hbb.onrender.com/api/login';
+  // api = 'http://localhost:8080/api/login';
 
   currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({'currentUser':null});
 

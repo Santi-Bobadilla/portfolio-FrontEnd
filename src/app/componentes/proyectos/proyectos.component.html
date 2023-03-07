@@ -2,293 +2,370 @@
     <div class="card mb-3 pb-2">
         <div class="card-body">
             <div class="row">
-                <div class="col-10">
-                    <h5 class="card-title text-start">Proyectos</h5>
-                </div>
-                <div class="col-2 text-end">
+                <div class="col text-center">
+                    <h5 class="card-title d-inline">Proyectos</h5>
                     <!-- Button modal new -->
-                    <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
                         data-bs-target="#newProyectosModal" (click)="resetForm();cargarAnio()">
                         <i class="fa-solid fa-plus"></i>
                     </button>
+
                 </div>
             </div>
-        </div>
-        <!-- Proyectos -->
-        <div class="container-fluid" *ngFor="let proy of proyectos">
-            <hr class="border border-dark border-1 opacity-50">
-            <div class="row">
-                <div class="col">
-                    <div class="card mb-3">
+            <!-- Proyectos -->
+            <div class="container-fluid">
+                
+                <div class="container-fluid" cdkDropList (cdkDropListDropped)="drop($event)">
+                    
+                    <div *ngFor="let proy of proyectos" cdkDrag>
+                        <hr class="border border-dark border-1 opacity-50">
                         <div class="row">
-                            <div class="col-4 d-flex justify-content-center align-self-center">
-                                <img src="{{proy.url_image}}" class="img-fluid p-0" alt="{{proy.url_image}}"
-                                    width="150px" height="150px">
-                            </div>
-                            <div class="col-8 align-self-center">
-                                <div class="row">
-                                    <div class="col-sm-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{proy.nombre}}</h5>
+                            <div class="col">
+                                <div class="card mb-3">
+                                    <div class="row">
+                                        <div class="col-4 d-flex justify-content-center align-self-center">
+                                            <img src="{{proy.url_image}}" class="img-fluid p-0" alt="{{proy.url_image}}"
+                                                width="150px" height="150px">
                                         </div>
-                                    </div>
-                                    <div class="col-sm-3 text-end">
-                                        <div class="card-body">
-                                            <!-- Button modal editar -->
-                                            <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
-                                                [attr.data-bs-target]="'#proyectosModal'+proy.id"
-                                                (click)="abrirModal(proy);cargarAnio()">
-                                                <i class="fa-regular fa-pen-to-square"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-light"
-                                                (click)="eliminarProyecto(proy.id)">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
+                                        <div class="col-8 align-self-center">
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{proy.nombre}}</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3 text-end">
+                                                    <div class="card-body">
+                                                        <!-- Button modal editar -->
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-outline-success mx-2"
+                                                            data-bs-toggle="modal"
+                                                            [attr.data-bs-target]="'#proyectosModal'+proy.id"
+                                                            (click)="abrirModal(proy);cargarAnio()">
+                                                            <i class="fa-regular fa-pen-to-square"></i>
+                                                        </button>
+                                                        <!-- Button modal eliminar -->
+                                                        <button type="button" class="btn btn-sm btn-outline-danger mx-2"
+                                                        data-bs-toggle="modal"
+                                                            [attr.data-bs-target]="'#proyectosEliminarP'+proy.id">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container mb-2">
+                                            <ul class="list-group mx-2">
+                                                <li class="list-group-item">
+                                                    <b>Descripción:</b> {{proy.descripcion}}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <b>Fecha de Inicio:</b> {{ proy.mes_inicio+'-'+proy.anio_inicio}}
+                                                </li>
+
+                                                <li class="list-group-item"
+                                                    *ngIf="proy.mes_fin!==null && proy.anio_fin!==null ">
+                                                    <b>Fecha de Fin:</b> {{ proy.mes_fin+'-'+proy.anio_fin}}
+                                                </li>
+
+                                                <li class="list-group-item"
+                                                    *ngIf="proy.mes_fin===null || proy.anio_fin===null">
+                                                    <b>Fecha de Fin:</b> en proceso
+                                                </li>
+
+                                                <li class="list-group-item"
+                                                    *ngIf="proy.link.includes('http://') || proy.link.includes('https://')">
+                                                    <b>Link: </b> <a href="{{proy.link}}"
+                                                        target="_blank">{{proy.link}}</a>
+                                                </li>
+
+                                                <li class="list-group-item" *ngIf="proy.link.indexOf('http')==-1">
+                                                    <b>Link: </b> <a href="{{'https://'+proy.link}}"
+                                                        target="_blank">{{'https://'+proy.link}}</a>
+                                                </li>
+
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="container mb-2">
-                                <ul class="list-group mx-2">
-                                    <li class="list-group-item">
-                                        <b>Descripción:</b> {{proy.descripcion}}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Fecha de Inicio:</b> {{ proy.mes_inicio+'-'+proy.anio_inicio}}
-                                    </li>
-                                    
-                                    <li class="list-group-item" *ngIf="proy.mes_fin!==null && proy.anio_fin!==null ">
-                                        <b>Fecha de Fin:</b> {{ proy.mes_fin+'-'+proy.anio_fin}}
-                                    </li>
-
-                                    <li class="list-group-item" *ngIf="proy.mes_fin===null || proy.anio_fin===null">
-                                        <b>Fecha de Fin:</b> en proceso
-                                    </li>
-                                    
-                                    <li class="list-group-item" *ngIf="proy.link.includes('http://') || proy.link.includes('https://')">
-                                        <b>Link: </b> <a href="{{proy.link}}" target="_blank">{{proy.link}}</a>
-                                    </li>
-
-                                    <li class="list-group-item" *ngIf="proy.link.indexOf('http')==-1">
-                                        <b>Link: </b> <a href="{{'https://'+proy.link}}" target="_blank">{{'https://'+proy.link}}</a>
-                                    </li>
-
-                                </ul>
-                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
-            <!-- Modal Editar -->
-                <div class="modal fade" id="proyectosModal{{proy.id}}" tabindex="-1"
-                    aria-labelledby="proyectosModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header text-center">
-                                <h1 class="modal-title fs-5" id="proyectosModalLabel">Editar {{proy.nombre}}</h1>
-                            </div>
-                            <div class="modal-body">
-                                <!-- form modal proyectos -->
-                                <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy)" method="post">
-                                    <input type="number" name="id" formControlName="id" class="form-control"
-                                        id="inputId" aria-describedby="id" [defaultValue]="proy.id" hidden>
-                                    <div class="mb-3">
-                                        <label for="inputNombre" class="form-label">Nombre</label>
-                                        <input type="text" name="nombre" formControlName="nombre" class="form-control"
-                                            id="inputNombre" aria-describedby="nombre" [defaultValue]="proy.nombre">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="inputDescripcion" class="form-label">Descripcion</label>
-                                        <input type="text" name="descripcion" formControlName="descripcion"
-                                            class="form-control" id="inputDescripcion" aria-describedby="descripcion"
-                                            [defaultValue]="proy.descripcion" value="{{proy.descripcion}}">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
-                                        <div class="row">
-                                            <div class="col">
-                                                <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaFin" formControlName="mes_inicio">
-                                                    <option value=""></option>
-                                                    <option *ngFor="let m of mes; let i = index" [selected]="m === mISelect" value="{{m}}"> {{ m }} </option>
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaFin" formControlName="anio_inicio">
-                                                    <option value=""></option>
-                                                    <option *ngFor="let a of anio; let i = index" [selected]="a === aISelect" value="{{a}}"> {{ a }} </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
-                                        <div class="row">
-                                            <div class="col">
-                                                <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin" formControlName="mes_fin">
-                                                    <option value=""></option>
-                                                    <option *ngFor="let m of mes; let i = index" [selected]="m === mFSelect" value="{{m}}"> {{ m }} </option>
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin" formControlName="anio_fin">
-                                                    <option value=""></option>
-                                                    <option *ngFor="let a of anio; let i = index" [selected]="a === aFSelect" value="{{a}}"> {{ a }} </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="inputLink" class="form-label">Link</label>
-                                        <input type="text" name="link" formControlName="link" class="form-control" id="inputLink" aria-describedby="link" [defaultValue]="proy.link">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="inputUrlImage" class="form-label">Url imagen</label>
-                                        <input type="text" name="url_image" formControlName="url_image"
-                                            class="form-control" id="inputUrlImage" aria-describedby="url_image"
-                                            [defaultValue]="proy.url_image">
-                                    </div>
-
-                                    <div class="container overflow-hidden text-center">
-                                        <div class="row gx-5">
-                                          <div class="col">
-                                           <div class="p-3">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reload()">Cerrar</button>
-                                           </div>
-                                          </div>
-                                          <div class="col">
-                                            <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                                <button type="submit" class="btn btn-info">Editar</button>
-                                            </div>
-                                            
-                                            <div class="p-3" *ngIf="this.resp == 200">
-                                                <button type="submit" class="btn btn-success" disabled>Guardado</button>
-                                            </div>
-
-                                            <div class="p-3" *ngIf="this.resp == 'error'">
-                                                <button type="submit" class="btn btn-danger">Error</button>
-                                            </div>
-
-                                          </div>
-                                        </div>
-                                      </div>
-                                </form>
-                                <!-- fin form proyectos -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- fin modal proyectos -->
-
-            <!-- Modal New Proyecto -->
-            <div class="modal fade" id="newProyectosModal" tabindex="-1" aria-labelledby="newProyectosModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5 text-capitalize" id="newProyectosModalLabel">crear nuevo
-                                proyecto</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- form modal new proyectos -->
-                            <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="nuevoProyecto()"
-                                method="post">
-                                <div class="mb-3">
-                                    <label for="inputNombre" class="form-label">Nombre</label>
-                                    <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
-                                        aria-describedby="nombre" value="">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="inputDescripcion" class="form-label">Descripcion</label>
-                                    <input type="text" formControlName="descripcion" class="form-control"
-                                        id="inputDescripcion" aria-describedby="descripcion" value="">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
-                                    <div class="row">
-                                        <div class="col">
-                                            <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio" formControlName="mes_inicio">
-                                                <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio" formControlName="anio_inicio">
-                                                <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
-                                    <div class="row">
-                                        <div class="col">
-                                            <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin" formControlName="mes_fin">
-                                                <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin" formControlName="anio_fin">
-                                                <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="inputLink" class="form-label">Link</label>
-                                    <input type="text" formControlName="link" class="form-control" id="inputLink"
-                                        aria-describedby="link" value="">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="inputUrlImage" class="form-label">Url imagen</label>
-                                    <input type="text" formControlName="url_image" class="form-control" id="inputUrlImage" aria-describedby="url_image" value="">
-                                </div>
-
-                                <div class="container overflow-hidden text-center">
-                                    <div class="row gx-5">
-                                      <div class="col">
-                                       <div class="p-3">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reload()">Cerrar</button>
-                                       </div>
-                                      </div>
-                                      <div class="col">
-                                        <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                            <button type="submit" class="btn btn-info">Crear</button>
-                                        </div>
-                                        
-                                        <div class="p-3" *ngIf="this.resp == 200">
-                                            <button type="submit" class="btn btn-success" disabled>Creado</button>
-                                        </div>
-
-                                        <div class="p-3" *ngIf="this.resp == 'error'">
-                                            <button type="submit" class="btn btn-danger">Error</button>
-                                        </div>
-
-                                      </div>
-                                    </div>
-                                  </div>
-
-                            </form>
-                            <!-- fin form new proyectos -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- fin modal new proyectos -->
-
+            <!-- Fin Proyectos -->
         </div>
-        <!-- Fin Proyectos -->
     </div>
-
 </div>
 
+<!-- Modal Editar Proyecto -->
+<div *ngFor="let proy of proyectos">
+    <div class="modal fade" id="proyectosModal{{proy.id}}" tabindex="-1" aria-labelledby="proyectosModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h1 class="modal-title fs-5" id="proyectosModalLabel">Editar {{proy.nombre}}</h1>
+                </div>
+                <div class="modal-body">
+                    <!-- form editar proyectos -->
+                    <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy)"
+                        method="post">
+                        <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                            aria-describedby="id" [defaultValue]="proy.id" hidden>
+                        <div class="mb-3">
+                            <label for="inputNombre" class="form-label">Nombre</label>
+                            <input type="text" name="nombre" formControlName="nombre" class="form-control"
+                                id="inputNombre" aria-describedby="nombre" [defaultValue]="proy.nombre"
+                                value="{{proy.nombre}}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputDescripcion" class="form-label">Descripcion</label>
+                            <input type="text" name="descripcion" formControlName="descripcion" class="form-control"
+                                id="inputDescripcion" aria-describedby="descripcion" [defaultValue]="proy.descripcion"
+                                value="{{proy.descripcion}}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+                            <div class="row">
+                                <div class="col">
+                                    <select class="form-select" name="mes_inicio" class="form-select"
+                                        formControlName="mes_inicio">
+                                        <option value=""></option>
+                                        <option *ngFor="let m of mes; let i = index" [selected]="m===proy.mes_inicio"
+                                            value="{{m}}"> {{ m }} </option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select class="form-select" name="anio_inicio" class="form-select"
+                                        formControlName="anio_inicio">
+                                        <option value=""></option>
+                                        <option *ngFor="let a of anio; let i = index" [selected]="a===proy.anio_inicio"
+                                            value="{{a}}"> {{ a }} </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
+                            <div class="row">
+                                <div class="col">
+                                    <select class="form-select" name="mes_fin" class="form-select"
+                                        formControlName="mes_fin">
+                                        <option value=""></option>
+                                        <option *ngFor="let m of mes; let i = index" [selected]="m===proy.mes_fin"
+                                            value="{{m}}"> {{ m }} </option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select class="form-select" name="anio_fin" class="form-select"
+                                        formControlName="anio_fin">
+                                        <option value=""></option>
+                                        <option *ngFor="let a of anio; let i = index" [selected]="a===proy.anio_fin"
+                                            value="{{a}}"> {{ a }} </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputLink" class="form-label">Link</label>
+                            <input type="text" name="link" formControlName="link" class="form-control" id="inputLink"
+                                aria-describedby="link" [defaultValue]="proy.link">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputUrlImage" class="form-label">Url imagen</label>
+                            <input type="text" name="url_image" formControlName="url_image" class="form-control"
+                                id="inputUrlImage" aria-describedby="url_image" [defaultValue]="proy.url_image">
+                        </div>
+
+                        <div class="container overflow-hidden text-center">
+                            <div class="row gx-5">
+                                <div class="col">
+                                    <div class="p-3">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            (click)="reload()">Cerrar</button>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                        <button type="submit" class="btn btn-info">Editar</button>
+                                    </div>
+
+                                    <div class="p-3" *ngIf="this.resp == 200">
+                                        <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                                    </div>
+
+                                    <div class="p-3" *ngIf="this.resp == 'error'">
+                                        <button type="submit" class="btn btn-danger">Error</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- fin form editar proyectos -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal editar proyectos -->
+
+<!-- Modal New Proyecto -->
+<div class="modal fade" id="newProyectosModal" tabindex="-1" aria-labelledby="newProyectosModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-capitalize" id="newProyectosModalLabel">crear nuevo
+                    proyecto</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- form modal new proyectos -->
+                <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="nuevoProyecto()" method="post">
+                    <div class="mb-3">
+                        <label for="inputNombre" class="form-label">Nombre</label>
+                        <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
+                            aria-describedby="nombre" value="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputDescripcion" class="form-label">Descripcion</label>
+                        <input type="text" formControlName="descripcion" class="form-control" id="inputDescripcion"
+                            aria-describedby="descripcion" value="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+                        <div class="row">
+                            <div class="col">
+                                <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio"
+                                    formControlName="mes_inicio">
+                                    <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio"
+                                    formControlName="anio_inicio">
+                                    <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
+                        <div class="row">
+                            <div class="col">
+                                <select class="form-select" name="mes_fin" class="form-select"
+                                    formControlName="mes_fin">
+                                    <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select class="form-select" name="anio_fin" class="form-select"
+                                    formControlName="anio_fin">
+                                    <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputLink" class="form-label">Link</label>
+                        <input type="text" formControlName="link" class="form-control" id="inputLink"
+                            aria-describedby="link" value="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputUrlImage" class="form-label">Url imagen</label>
+                        <input type="text" formControlName="url_image" class="form-control" id="inputUrlImage"
+                            aria-describedby="url_image" value="">
+                    </div>
+
+                    <div class="container overflow-hidden text-center">
+                        <div class="row gx-5">
+                            <div class="col">
+                                <div class="p-3">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        (click)="reload()">Cerrar</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                    <button type="submit" class="btn btn-info">Crear</button>
+                                </div>
+
+                                <div class="p-3" *ngIf="this.resp == 200">
+                                    <button type="submit" class="btn btn-success" disabled>Creado</button>
+                                </div>
+
+                                <div class="p-3" *ngIf="this.resp == 'error'">
+                                    <button type="submit" class="btn btn-danger">Error</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+                <!-- fin form new proyectos -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal new proyectos -->
+
+<!-- Modal Eliminar Proyecto -->
+<div *ngFor="let proy of proyectos">
+    <div class="modal fade" id="proyectosEliminarP{{proy.id}}" tabindex="-1" aria-labelledby="proyectosEliminarP"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- form modal eliminar proyectos -->
+                <div class="container">
+                    <p class="text-center">
+                        ¿Seguro desea eliminar el proyecto {{proy.nombre}}?
+                    </p>
+                </div>
+                <form class="container" [formGroup]="proyectoForm" (ngSubmit)="eliminarProyecto(proy.id)">
+                    <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                            aria-describedby="id" [defaultValue]="proy.id" value="proy.id" hidden>
+                    <div class="container text-center">
+                        <div class="row gx-5">
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reload()">Cerrar</button>
+                            </div>
+                            <div class="col">
+                                <div *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                    <button type="submit" class="btn btn-warning">Eliminar</button>
+                                </div>
+
+                                <div *ngIf="this.resp == 200">
+                                    <button type="submit" class="btn btn-success" disabled>Eliminado</button>
+                                </div>
+
+                                <div *ngIf="this.resp == 'error'">
+                                    <button type="submit" class="btn btn-danger" disabled>Error {{this.code}}</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- fin form eliminar proyectos -->
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- fin modal eliminar proyectos -->
