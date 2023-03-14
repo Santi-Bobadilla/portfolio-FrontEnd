@@ -65,6 +65,7 @@ export class HardSoftSkillComponent implements OnInit {
 
   editarSkills(skill:any){
     this.skillForm.controls['tipo_skill'].setValue({id: Number(this.skillForm.value.tipo_skill)})
+    this.skillForm.controls['persona'].setValue({id: Number(this.skillForm.value.persona)})
     skill=this.skillForm.value
     // console.log('Form->', skill);
     this.portfolioService.editarSkill(skill).subscribe(data => {

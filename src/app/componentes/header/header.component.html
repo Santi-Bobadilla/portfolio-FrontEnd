@@ -40,8 +40,6 @@
       </div>
     </div>
 
-
-
     <!-- prueba hasta md -->
     <button mat-button [matMenuTriggerFor]="menu" class="navbar-toggler float-end d-block d-lg-none" type="button">
       <span class="navbar-toggler-icon"></span>
@@ -72,8 +70,9 @@
       </ng-template>
       <ng-template #falseBlock>
         <button mat-menu-item>
-          <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()">Cerrar
-            Sesión</a>
+          <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
+            Cerrar Sesión
+          </button>
         </button>
       </ng-template>
     </mat-menu>
@@ -413,12 +412,12 @@
         <div class="container text-center">
           <div class="row gx-5">
             <div class="col">
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">No</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
             </div>
             <div class="col">
               <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()">
-                <button type="button" class="btn btn-danger">
-                  Cerrar Sesión
+                <button type="button" class="btn btn-warning">
+                  Sí
                 </button>
               </a>
             </div>
