@@ -3,10 +3,8 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor,
-  HttpErrorResponse
-} from '@angular/common/http';
-import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
+  HttpInterceptor} from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { AuthService } from '../Auth/auth.service';
 import { LoaderService } from '../Loader/loader.service';
 import { PortfolioService } from '../Portfolio/portfolio.service';
@@ -19,7 +17,6 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderService.show();
     var currentUser = this.authService.usuarioAutenticado;
-    console.log(currentUser);    
     if (currentUser && currentUser.token) {
       request = request.clone({
         setHeaders: {

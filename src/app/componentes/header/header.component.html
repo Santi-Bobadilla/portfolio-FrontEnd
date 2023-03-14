@@ -30,8 +30,11 @@
                 *ngIf="portfolioService.logueado===false">Registrarse</a></li>
             <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active"
                 *ngIf="portfolioService.logueado===false">Iniciar Sesión</a></li>
-            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active"
-                *ngIf="portfolioService.logueado===true" (click)="authService.logOut()">Cerrar Sesión</a></li>
+            <li>
+              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
+                Cerrar Sesión
+              </button>
+            </li>
           </ul>
         </div>
       </div>
@@ -44,14 +47,15 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <mat-menu #menu="matMenu" class="d-block d-lg-none">
-      <button mat-menu-item >
-        <a class="nav-link" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i> Instagram </a>
+      <button mat-menu-item>
+        <a class="nav-link" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i>
+          Instagram </a>
       </button>
-      <button mat-menu-item >
-        <a class="nav-link" href="https://www.linkedin.com/in/santiago-bobadilla/"><i
-            class="fa-brands fa-linkedin"></i> LinkedIn </a>
+      <button mat-menu-item>
+        <a class="nav-link" href="https://www.linkedin.com/in/santiago-bobadilla/"><i class="fa-brands fa-linkedin"></i>
+          LinkedIn </a>
       </button>
-      <button mat-menu-item [matMenuTriggerFor]="sesion" >
+      <button mat-menu-item [matMenuTriggerFor]="sesion">
         <i class="fa-solid fa-user"></i>
       </button>
     </mat-menu>
@@ -394,3 +398,34 @@
 
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="cerrarSesion" tabindex="-1" aria-labelledby="cerrarSesion" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <!-- form modal -->
+        <div class="container">
+          <p class="text-center">
+            ¿Seguro desea cerrar la sesión?
+          </p>
+        </div>
+        <div class="container text-center">
+          <div class="row gx-5">
+            <div class="col">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">No</button>
+            </div>
+            <div class="col">
+              <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()">
+                <button type="button" class="btn btn-danger">
+                  Cerrar Sesión
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- fin modal -->

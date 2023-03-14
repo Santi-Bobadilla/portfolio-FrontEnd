@@ -39,15 +39,18 @@ export class AuthService {
   }
 
   logOut(){
-    let a = confirm("¿esta seguro que desea cerrar la sesion?");
-    if (a===true) {
-      sessionStorage.removeItem('currentUser');
-      this.currentUserSubject.next(null);
-      this.router.navigate(['/login']);
-    } else {
-      this.currentUserSubject.next(null);
-      this.router.navigate(['/portfolio']);
-    }
+    sessionStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
+    // let a = confirm("¿esta seguro que desea cerrar la sesion?");
+    // if (a===true) {
+    //   sessionStorage.removeItem('currentUser');
+    //   this.currentUserSubject.next(null);
+    //   this.router.navigate(['/login']);
+    // } else {
+    //   this.currentUserSubject.next(null);
+    //   this.router.navigate(['/portfolio']);
+    // }
   }
 
   get usuarioAutenticado(){

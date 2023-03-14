@@ -39,7 +39,7 @@ export class LoginComponent{
   onEnviar(event:Event){
     event.preventDefault;
     this.authService.iniciarSesion(this.form.value).subscribe(data=>{
-      console.log(JSON.stringify(data));      
+      // console.log(JSON.stringify(data));      
       this.router.navigate(["/portfolio"]);
     });
   }

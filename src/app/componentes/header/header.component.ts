@@ -32,7 +32,7 @@ export class HeaderComponent {
     this.personaForm = this.initForm();
     this.resp='';
     this.portfolioService.logueado
-    console.log(this.portfolioService.logueado);
+    // console.log(this.portfolioService.logueado);
     
   }
   
