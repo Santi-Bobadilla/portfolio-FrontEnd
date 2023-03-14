@@ -8,7 +8,6 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 })
 
 export class PortfolioComponent{
-  recargar:number = 0;
   constructor(private portfolioService:PortfolioService) { }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -14,12 +14,9 @@ export class ProyectosComponent implements OnInit {
   proyectos: any[] = [];
   proyectoForm: any;
   resp: any;
-  code: number;
-  mes: any[] = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-  anio: any[] = [];
-  anio0: any = 1960
-  anio1: any = 2023
-  responseStatus: any
+  
+  mes:any[];
+  anio:any [];
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.proyectos, event.previousIndex, event.currentIndex);
@@ -27,14 +24,9 @@ export class ProyectosComponent implements OnInit {
 
   constructor(protected portfolioService: PortfolioService, private formBuilder: FormBuilder) { }
 
-  cargarAnio() {
-    for (let index = this.anio1; index >= this.anio0; index--) {
-      this.anio.push(index);
-    }
-    return this.anio;
-  }
-
   ngOnInit(): void {
+    this.mes=this.portfolioService.mes;
+    this.anio=this.portfolioService.anio;
     this.portfolioService.obtenerProy().subscribe(data => {
       this.proyectos = [];
       for (let i = 0; i < data.length; i++) {
@@ -43,34 +35,27 @@ export class ProyectosComponent implements OnInit {
     })
 
     this.proyectoForm = this.initForm();
-    console.log(this.portfolioService.responseStatus);
-    
-    // this.resp=this.portfolioService.responseStatus;
     this.resp = '';        
   }
-
-  // public persona = new FormArray([
-  //   new FormControl({id:1}),
-  // ]);
 
   initForm(proy?: any): FormGroup {
     return this.formBuilder.group({
       id: [proy?.id],
-      nombre: [proy?.nombre],
-      descripcion: [proy?.descripcion],
-      mes_inicio: [proy?.mes_inicio],
-      anio_inicio: [proy?.anio_inicio],
-      mes_fin: [proy?.mes_fin],
-      anio_fin: [proy?.anio_fin],
-      link: [proy?.link],
-      url_image: [proy?.url_image],
+      nombre: [proy?.nombre, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+      descripcion: [proy?.descripcion, [Validators.required, Validators.minLength(5), Validators.maxLength(20000)]],
+      mes_inicio:[proy?.mes_inicio, [Validators.required, Validators.maxLength(2)]],
+      anio_inicio:[proy?.anio_inicio, [Validators.required, Validators.maxLength(4)]],
+      mes_fin:[proy?.mes_fin, [Validators.nullValidator, Validators.maxLength(2)]],
+      anio_fin:[proy?.anio_fin, [Validators.nullValidator, Validators.maxLength(4)]],
+      link: [proy?.link, [Validators.required, Validators.minLength(10), Validators.maxLength(255)]],
+      url_image: [proy?.url_image, [Validators.required, Validators.minLength(10), Validators.maxLength(20000)]],
       persona: [proy?.persona.id]
     });
   }
 
   abrirModal(proy: any): void {
     this.proyectoForm = this.initForm(proy);
-    // console.log(this.proyectoForm.value);
+    this.portfolioService.cargarAnio();
   }
 
   reload() {
@@ -79,6 +64,7 @@ export class ProyectosComponent implements OnInit {
 
   resetForm() {
     this.proyectoForm.reset();
+    this.portfolioService.cargarAnio();
   }
 
   editarProyecto(proy: any):any {

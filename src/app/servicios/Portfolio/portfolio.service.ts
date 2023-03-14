@@ -1,8 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { AuthService } from '../Auth/auth.service';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +13,56 @@ export class PortfolioService implements OnInit {
 
   responseStatus: any
 
-  constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
+  mes:any[] = ['','01','02','03','04','05','06','07','08','09','10','11','12']
+  anio:any [] = [];
+  anio0:any=1960;
+  anio1:any=2023;
+
+  provincias:any[] = 
+  [
+    {'name':'Buenos Aires'},
+    {'name':'Catamarca'},
+    {'name':'Chaco'},
+    {'name':'Chubut'},
+    {'name':'Córdoba'},
+    {'name':'Corrientes'},
+    {'name':'Entre Rios'},
+    {'name':'Formosa'},
+    {'name':'Jujuy'},
+    {'name':'La Pampa'},
+    {'name':'La Rioja'},
+    {'name':'Mendoza'},
+    {'name':'Misiones'},
+    {'name':'Neuquen'},
+    {'name':'Rio Negro'},
+    {'name':'Salta'},
+    {'name':'San Juan'},
+    {'name':'San Luis'},
+    {'name':'Santa Cruz'},
+    {'name':'Santa Fe'},
+    {'name':'Santiago del Estero'},
+    {'name':'Tierra del Fuego'},
+    {'name':'Tucuman'},
+    {'name':'Ciudad Autonoma de Buenos Aires'}
+  ]
+
+  logueado:boolean=false;
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    
+    // this.logueado
+    // console.log(this.logueado);
+    this.cargarAnio();
+  }
+
+  // funcion cargar año
+  cargarAnio(){
+    this.anio.push('');
+    for (let index = this.anio1; index >= this.anio0; index--) {
+      this.anio.push(index);
+    }
+    return this.anio;
   }
 
   // persona

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
   styleUrls: ['./educacion.component.css']
 })
 
-export class EducacionComponent {
+export class EducacionComponent implements OnInit{
 
   educacion:any;
   educacionForm: FormGroup;
@@ -18,14 +18,14 @@ export class EducacionComponent {
     {'name': 'En curso'},
     {'name': 'Abandonado'}
   ]
-  mes:any[] = ['01','02','03','04','05','06','07','08','09','10','11','12']
-  anio:any [] = [];
-  anio0:any=1960
-  anio1:any=2023
+  mes:any[];
+  anio:any [];
  
-  constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder) {}
+  constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder) {}  
 
   ngOnInit(){
+    this.mes=this.portfolioService.mes;
+    this.anio=this.portfolioService.anio;
     this.portfolioService.obtenerEdu().subscribe(data => {
       // console.log(data);
       this.educacion = data;
@@ -34,37 +34,28 @@ export class EducacionComponent {
     this.resp='';
   }
 
-  // public persona = new FormArray([
-  //   new FormControl({id:1}),
-  // ]);
-  
-  cargarAnio(){
-    for (let index = this.anio1; index >= this.anio0; index--) {
-      this.anio.push(index);
-    }
-    return this.anio;
-  }
-
   resetForm(){
     this.educacionForm.reset();
+    this.portfolioService.cargarAnio();
   }
   
   initForm(edu?:any):FormGroup {
     return this.formBuilder.group({
       id: [edu?.id],
-      nombre: [edu?.nombre],
-      mes_inicio:[edu?.mes_inicio],
-      anio_inicio:[edu?.anio_inicio],
-      mes_fin:[edu?.mes_fin],
-      anio_fin:[edu?.anio_fin],
-      certificacion:[edu?.certificacion],
-      condicion:[edu?.condicion.id],
+      nombre: [edu?.nombre, [Validators.required, Validators.minLength(5), Validators.maxLength(255)]],
+      mes_inicio:[edu?.mes_inicio, [Validators.required, Validators.maxLength(2)]],
+      anio_inicio:[edu?.anio_inicio, [Validators.required, Validators.maxLength(4)]],
+      mes_fin:[edu?.mes_fin, [Validators.nullValidator, Validators.maxLength(2)]],
+      anio_fin:[edu?.anio_fin, [Validators.nullValidator, Validators.maxLength(4)]],
+      certificacion:[edu?.certificacion, [Validators.required, Validators.minLength(8), Validators.maxLength(100)]],
+      condicion:[edu?.condicion.id, [Validators.required]],
       persona:[edu?.persona.id],
     });
   }
 
   abrirModalEd(edu:any):void{
     this.educacionForm = this.initForm(edu);
+    this.portfolioService.cargarAnio();
   }
 
   reload() {
@@ -106,20 +97,18 @@ export class EducacionComponent {
   }
 
   eliminarEducacion(id:number){
-    let a = confirm('¿Desea realmente eliminar este proyecto?');
-    if(a==true){
-      this.portfolioService.eliminarProy(id).subscribe(data => {
-        this.resp = data
-        console.log(this.resp);
-        if(this.resp == 200){
-          this.reload();
-          return data = data;
-        } else {
-          this.resp='error';
-          return data = this.resp;
-        }
-      })
-    }
+    this.educacionForm.controls['id'].setValue(id)
+    this.portfolioService.eliminarEdu(this.educacionForm.value.id).subscribe(
+      data => {
+      this.resp = data
+      if(this.resp == 200){
+        return this.resp;
+      } else {
+        this.resp='error';
+        return data = this.resp;
+      }
+      }
+    )
   }
 
 
