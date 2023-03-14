@@ -5,7 +5,7 @@
                 <div class="col text-center">
                     <h4 class="card-title d-inline">Educación</h4>
                     <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
-                        data-bs-target="#newEducacionModal" (click)="resetForm();cargarAnio()">
+                        data-bs-target="#newEducacionModal" (click)="resetForm()" *ngIf="portfolioService.logueado===true">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
@@ -25,12 +25,12 @@
                                 <div class="col-3 text-end">
                                     <button type="button" class="btn btn-sm btn-outline-success mx-1"
                                         data-bs-toggle="modal" [attr.data-bs-target]="'#educacionModal' + edu.id"
-                                        (click)="abrirModalEd(edu); cargarAnio()">
+                                        (click)="abrirModalEd(edu)">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </button>
-
-                                    <button type="button" class="btn btn-sm btn-outline-danger mx-1"
-                                        (click)="eliminarEducacion(edu.id)">
+                                    <!-- Button modal eliminar -->
+                                    <button type="button" class="btn btn-sm btn-outline-danger mx-2"
+                                        data-bs-toggle="modal" [attr.data-bs-target]="'#educacionEliminarE'+edu.id">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -83,34 +83,88 @@
                         <div class="mb-3">
                             <label for="inputNombre" class="form-label">Nombre</label>
                             <input type="text" name="nombre" formControlName="nombre" class="form-control"
-                                id="inputNombre" aria-describedby="nombre" [defaultValue]="edu.nombre" />
+                                id="inputNombre" aria-describedby="nombre" [defaultValue]="edu.nombre"
+                                [ngClass]="{'is-invalid': educacionForm.get('nombre')?.errors && educacionForm.get('nombre')?.touched, 'is-valid': !educacionForm.get('nombre')?.errors && !educacionForm.get('nombre')?.touched}"
+                                required maxlength="255" minlength="5" />
+                            <!-- errores -->
+                            <div *ngIf="educacionForm.get('nombre')?.errors && educacionForm.get('nombre')?.touched">
+                                <p *ngIf="educacionForm.get('nombre')?.hasError('required')" class="text-danger">
+                                    El nombre es requerido.
+                                </p>
+                                <p *ngIf="educacionForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                                    El nombre debe tener al menos 5 caracteres.
+                                </p>
+                                <p *ngIf="educacionForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                                    El nombre debe tener máximo 255 caracteres.
+                                </p>
+                            </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="inputCertificacion" class="form-label">Certificacion</label>
                             <input type="text" name="certificacion" formControlName="certificacion" class="form-control"
                                 id="inputCertificacion" aria-describedby="certificacion"
-                                [defaultValue]="edu.certificacion" value="{{ edu.certificacion }}" />
+                                [defaultValue]="edu.certificacion" value="{{ edu.certificacion }}"
+                                [ngClass]="{'is-invalid': educacionForm.get('certificacion')?.errors && educacionForm.get('certificacion')?.touched, 'is-valid': !educacionForm.get('certificacion')?.errors && !educacionForm.get('certificacion')?.touched}"
+                                required maxlength="100" minlength="8" />
+                            <!-- errores -->
+                            <div
+                                *ngIf="educacionForm.get('certificacion')?.errors && educacionForm.get('certificacion')?.touched">
+                                <p *ngIf="educacionForm.get('certificacion')?.hasError('required')" class="text-danger">
+                                    El nombre de certificación es requerido.
+                                </p>
+                                <p *ngIf="educacionForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                                    El nombre de certificación debe tener al menos 8 caracteres.
+                                </p>
+                                <p *ngIf="educacionForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                                    El nombre de certificación debe tener máximo 100 caracteres.
+                                </p>
+                            </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
                             <div class="row">
                                 <div class="col">
-                                    <select class="form-select" name="mes_inicio" class="form-select"
-                                        formControlName="mes_inicio">
-                                        <option value=""></option>
+                                    <select class="form-select" name="mes_inicio" formControlName="mes_inicio"
+                                        [ngClass]="{'is-invalid': educacionForm.get('mes_inicio')?.errors && educacionForm.get('mes_inicio')?.touched, 'is-valid': !educacionForm.get('mes_inicio')?.errors && !educacionForm.get('mes_inicio')?.touched}"
+                                        required maxlength="2" id="inputFechaInicio">
                                         <option *ngFor="let m of mes; let i = index" [selected]="m === edu.mes_inicio"
                                             value="{{m}}"> {{ m }} </option>
                                     </select>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="educacionForm.get('mes_inicio')?.errors && educacionForm.get('mes_inicio')?.touched">
+                                        <p *ngIf="educacionForm.get('mes_inicio')?.hasError('required')"
+                                            class="text-danger">
+                                            El mes de inicio es requerido.
+                                        </p>
+                                        <p *ngIf="educacionForm.get('mes_inicio')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El mes de inicio debe tener máximo 2 caracteres.
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="col">
-                                    <select class="form-select" name="anio_inicio" class="form-select"
-                                        formControlName="anio_inicio">
-                                        <option value=""></option>
+                                    <select class="form-select" name="anio_inicio" formControlName="anio_inicio"
+                                        id="inputFechaInicio"
+                                        [ngClass]="{'is-invalid': educacionForm.get('anio_inicio')?.errors && educacionForm.get('anio_inicio')?.touched, 'is-valid': !educacionForm.get('anio_inicio')?.errors && !educacionForm.get('anio_inicio')?.touched}"
+                                        required maxlength="4">
                                         <option *ngFor="let a of anio; let i = index" [selected]="a === edu.anio_inicio"
                                             value="{{a}}"> {{ a }} </option>
                                     </select>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="educacionForm.get('anio_inicio')?.errors && educacionForm.get('anio_inicio')?.touched">
+                                        <p *ngIf="educacionForm.get('anio_inicio')?.hasError('required')"
+                                            class="text-danger">
+                                            El año de inicio es requerido.
+                                        </p>
+                                        <p *ngIf="educacionForm.get('anio_inicio')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El año de inicio debe tener máximo 4 caracteres.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -119,34 +173,86 @@
                             <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
                             <div class="row">
                                 <div class="col">
-                                    <select class="form-select" name="mes_fin" class="form-select"
-                                        formControlName="mes_fin">
-                                        <option value=""></option>
+                                    <div *ngIf="edu.mes_fin===null, then thenBlockMes else elseBlockMes"></div>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="educacionForm.get('mes_fin')?.errors && educacionForm.get('mes_fin')?.touched">
+                                        <p *ngIf="educacionForm.get('mes_fin')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El mes de fin debe tener máximo 2 caracteres.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- elseBlockMes -->
+                                <ng-template #elseBlockMes>
+                                    <select class="form-select" name="mes_fin" formControlName="mes_fin"
+                                        [ngClass]="{'is-invalid': educacionForm.get('mes_fin')?.errors && educacionForm.get('mes_fin')?.touched, 'is-valid': !educacionForm.get('mes_fin')?.errors && !educacionForm.get('mes_fin')?.touched}"
+                                        maxlength="2" id="inputFechaFin">
                                         <option *ngFor="let m of mes; let i = index" [selected]="m === edu.mes_fin"
                                             value="{{m}}"> {{ m }} </option>
                                     </select>
-                                </div>
+                                </ng-template>
+                                <!-- thenBlockMes -->
+                                <ng-template #thenBlockMes>
+                                    <select class="form-select" name="mes_fin" formControlName="mes_fin"
+                                        [ngClass]="{'is-invalid': educacionForm.get('mes_fin')?.errors && educacionForm.get('mes_fin')?.touched, 'is-valid': !educacionForm.get('mes_fin')?.errors && !educacionForm.get('mes_fin')?.touched}"
+                                        maxlength="2" id="inputFechaFin">
+                                        <option *ngFor="let m of mes; let i = index" value="{{m}}"> {{ m }}
+                                        </option>
+                                    </select>
+                                </ng-template>
+                                <!-- empieza año fin -->
                                 <div class="col">
-                                    <select class="form-select" name="anio_fin" class="form-select"
-                                        formControlName="anio_fin">
-                                        <option value=""></option>
+                                    <div *ngIf="edu.anio_fin===null, then thenBlock else elseBlock"></div>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="educacionForm.get('anio_fin')?.errors && educacionForm.get('anio_fin')?.touched">
+                                        <p *ngIf="educacionForm.get('anio_fin')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El año de fin debe tener máximo 4 caracteres.
+                                        </p>
+                                    </div>
+                                </div>
+                                <ng-template #thenBlock>
+                                    <select class="form-select" name="anio_fin" formControlName="anio_fin"
+                                        id="inputFechaFin"
+                                        [ngClass]="{'is-invalid': educacionForm.get('anio_fin')?.errors && educacionForm.get('anio_fin')?.touched, 'is-valid': !educacionForm.get('anio_fin')?.errors && !educacionForm.get('anio_fin')?.touched}"
+                                        maxlength="4">
+                                        <option *ngFor="let a of anio; let i = index" value="{{a}}"> {{ a }} </option>
+                                    </select>
+                                </ng-template>
+                                <ng-template #elseBlock>
+                                    <select class="form-select" name="anio_fin" formControlName="anio_fin"
+                                        id="inputFechaFin"
+                                        [ngClass]="{'is-invalid': educacionForm.get('anio_fin')?.errors && educacionForm.get('anio_fin')?.touched, 'is-valid': !educacionForm.get('anio_fin')?.errors && !educacionForm.get('anio_fin')?.touched}"
+                                        maxlength="4">
                                         <option *ngFor="let a of anio; let i = index" [selected]="a === edu.anio_fin"
                                             value="{{a}}"> {{ a }} </option>
                                     </select>
-                                </div>
+                                </ng-template>
                             </div>
                         </div>
-
+                        <!-- Condicion -->
                         <div class="mb-3">
                             <label for="inputCondicion" class="form-label">Condicion</label>
                             <select class="form-select" formControlName="condicion" name="condicion_id"
-                                class="form-select" id="inputCondicion">
+                                id="inputCondicion"
+                                [ngClass]="{'is-invalid': educacionForm.get('condicion')?.errors && educacionForm.get('condicion')?.touched, 'is-valid': !educacionForm.get('condicion')?.errors && !educacionForm.get('condicion')?.touched}"
+                                maxlength="2">
                                 <option *ngFor="let cond of condition; let i = index"
                                     [selected]="i+1 === edu.condicion.id" value="{{i+1}}"> {{ cond.name }}
                                 </option>
                             </select>
+                            <!-- errores -->
+                            <div
+                                *ngIf="educacionForm.get('condicion')?.errors && educacionForm.get('condicion')?.touched">
+                                <p *ngIf="educacionForm.get('condicion')?.hasError('required')" class="text-danger">
+                                    La condición es requerida.
+                                </p>
+                            </div>
                         </div>
-                        <div class="container overflow-hidden text-center">
+                        <!-- botones -->
+                        <div class="container text-center">
                             <div class="row gx-5">
                                 <div class="col">
                                     <div class="p-3">
@@ -156,21 +262,18 @@
                                 </div>
                                 <div class="col">
                                     <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                        <button type="submit" class="btn btn-info">Editar</button>
+                                        <button type="submit" class="btn btn-info"
+                                            [disabled]="educacionForm.invalid">Editar</button>
                                     </div>
-
                                     <div class="p-3" *ngIf="this.resp == 200">
                                         <button type="submit" class="btn btn-success" disabled>Guardado</button>
                                     </div>
-
                                     <div class="p-3" *ngIf="this.resp == 'error'">
                                         <button type="submit" class="btn btn-danger">Error</button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </form>
                     <!-- fin form editar educacion -->
                 </div>
@@ -198,31 +301,86 @@
                     <div class="mb-3">
                         <label for="inputNombre" class="form-label">Nombre</label>
                         <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
-                            aria-describedby="nombre" value="" />
+                            aria-describedby="nombre" value=""
+                            [ngClass]="{'is-invalid': educacionForm.get('nombre')?.errors && educacionForm.get('nombre')?.touched, 'is-valid': !educacionForm.get('nombre')?.errors && !educacionForm.get('nombre')?.touched}"
+                            required maxlength="255" minlength="5" />
+                        <!-- errores -->
+                        <div *ngIf="educacionForm.get('nombre')?.errors && educacionForm.get('nombre')?.touched">
+                            <p *ngIf="educacionForm.get('nombre')?.hasError('required')" class="text-danger">
+                                El nombre es requerido.
+                            </p>
+                            <p *ngIf="educacionForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                                El nombre debe tener al menos 5 caracteres.
+                            </p>
+                            <p *ngIf="educacionForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                                El nombre debe tener máximo 255 caracteres.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="inputCertificacion" class="form-label">Certificacion</label>
                         <input type="text" name="certificacion" formControlName="certificacion" class="form-control"
-                            id="inputCertificacion" aria-describedby="certificacion" value="" />
+                            id="inputCertificacion" aria-describedby="certificacion" value=""
+                            [ngClass]="{'is-invalid': educacionForm.get('certificacion')?.errors && educacionForm.get('certificacion')?.touched, 'is-valid': !educacionForm.get('certificacion')?.errors && !educacionForm.get('certificacion')?.touched}"
+                            required maxlength="100" minlength="8" />
+                        <!-- errores -->
+                        <div
+                            *ngIf="educacionForm.get('certificacion')?.errors && educacionForm.get('certificacion')?.touched">
+                            <p *ngIf="educacionForm.get('certificacion')?.hasError('required')" class="text-danger">
+                                El nombre de la certificación es requerido.
+                            </p>
+                            <p *ngIf="educacionForm.get('certificacion')?.hasError('minlength')" class="text-danger">
+                                El nombre de la certificación debe tener al menos 8 caracteres.
+                            </p>
+                            <p *ngIf="educacionForm.get('certificacion')?.hasError('maxlength')" class="text-danger">
+                                El nombre de la certificación debe tener máximo 100 caracteres.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
                         <div class="row">
                             <div class="col">
-                                <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio"
-                                    formControlName="mes_inicio">
-                                    <option value=""></option>
+                                <select class="form-select" name="mes_inicio" id="inputFechaInicio"
+                                    formControlName="mes_inicio"
+                                    [ngClass]="{'is-invalid': educacionForm.get('mes_inicio')?.errors && educacionForm.get('mes_inicio')?.touched, 'is-valid': !educacionForm.get('mes_inicio')?.errors && !educacionForm.get('mes_inicio')?.touched}"
+                                    required maxlength="2">
                                     <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="educacionForm.get('mes_inicio')?.errors && educacionForm.get('mes_inicio')?.touched">
+                                    <p *ngIf="educacionForm.get('mes_inicio')?.hasError('required')"
+                                        class="text-danger">
+                                        El mes de inicio es requerido.
+                                    </p>
+                                    <p *ngIf="educacionForm.get('mes_inicio')?.hasError('maxlength')"
+                                        class="text-danger">
+                                        El mes de inicio debe tener máximo 2 caracteres.
+                                    </p>
+                                </div>
                             </div>
                             <div class="col">
-                                <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio"
-                                    formControlName="anio_inicio">
-                                    <option value=""></option>
+                                <select class="form-select" name="anio_inicio" id="inputFechaInicio"
+                                    formControlName="anio_inicio"
+                                    [ngClass]="{'is-invalid': educacionForm.get('anio_inicio')?.errors && educacionForm.get('anio_inicio')?.touched, 'is-valid': !educacionForm.get('anio_inicio')?.errors && !educacionForm.get('anio_inicio')?.touched}"
+                                    required maxlength="4">
                                     <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="educacionForm.get('anio_inicio')?.errors && educacionForm.get('anio_inicio')?.touched">
+                                    <p *ngIf="educacionForm.get('anio_inicio')?.hasError('required')"
+                                        class="text-danger">
+                                        El año de inicio es requerido.
+                                    </p>
+                                    <p *ngIf="educacionForm.get('anio_inicio')?.hasError('maxlength')"
+                                        class="text-danger">
+                                        El año de inicio debe tener máximo 4 caracteres.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -231,32 +389,55 @@
                         <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
                         <div class="row">
                             <div class="col">
-                                <select class="form-select" name="mes_fin" class="form-select"
-                                    formControlName="mes_fin">
+                                <select class="form-select" name="mes_fin" formControlName="mes_fin" id="inputFechaFin"
+                                    [ngClass]="{'is-invalid': educacionForm.get('mes_fin')?.errors && educacionForm.get('mes_fin')?.touched, 'is-valid': !educacionForm.get('mes_fin')?.errors && !educacionForm.get('mes_fin')?.touched}"
+                                    maxlength="2">
                                     <option value=""></option>
                                     <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="educacionForm.get('mes_fin')?.errors && educacionForm.get('mes_fin')?.touched">
+                                    <p *ngIf="educacionForm.get('mes_fin')?.hasError('maxlength')" class="text-danger">
+                                        El mes de inicio debe tener máximo 2 caracteres.
+                                    </p>
+                                </div>
                             </div>
                             <div class="col">
-                                <select class="form-select" name="anio_fin" class="form-select"
-                                    formControlName="anio_fin">
+                                <select class="form-select" name="anio_fin" id="inputFechaFin"
+                                    formControlName="anio_fin"
+                                    [ngClass]="{'is-invalid': educacionForm.get('anio_fin')?.errors && educacionForm.get('anio_fin')?.touched, 'is-valid': !educacionForm.get('anio_fin')?.errors && !educacionForm.get('anio_fin')?.touched}"
+                                    maxlength="4">
                                     <option value=""></option>
                                     <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="educacionForm.get('anio_fin')?.errors && educacionForm.get('anio_fin')?.touched">
+                                    <p *ngIf="educacionForm.get('anio_fin')?.hasError('maxlength')" class="text-danger">
+                                        El año de fin debe tener máximo 4 caracteres.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="inputCondicion" class="form-label">Condicion</label>
-
-                        <select class="form-select" formControlName="condicion" name="condicion_id" class="form-select"
-                            id="inputCondicion">
+                        <select class="form-select" formControlName="condicion" name="condicion_id" id="inputCondicion"
+                            [ngClass]="{'is-invalid': educacionForm.get('condicion')?.errors && educacionForm.get('condicion')?.touched, 'is-valid': !educacionForm.get('condicion')?.errors && !educacionForm.get('condicion')?.touched}"
+                            maxlength="2">
                             <option *ngFor="let cond of condition; let i = index" value="{{i+1}}"> {{ cond.name }}
                             </option>
                         </select>
+                        <!-- errores -->
+                        <div *ngIf="educacionForm.get('condicion')?.errors && educacionForm.get('condicion')?.touched">
+                            <p *ngIf="educacionForm.get('condicion')?.hasError('required')" class="text-danger">
+                                La condición es requerida.
+                            </p>
+                        </div>
                     </div>
-                    <div class="container overflow-hidden text-center">
+                    <div class="container text-center">
                         <div class="row gx-5">
                             <div class="col">
                                 <div class="p-3">
@@ -266,15 +447,16 @@
                             </div>
                             <div class="col">
                                 <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                    <button type="submit" class="btn btn-info">Crear</button>
+                                    <button type="submit" class="btn btn-info"
+                                        [disabled]="educacionForm.invalid">Crear</button>
                                 </div>
 
                                 <div class="p-3" *ngIf="this.resp == 200">
-                                    <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                                    <button type="button" class="btn btn-success" disabled>Guardado</button>
                                 </div>
 
                                 <div class="p-3" *ngIf="this.resp == 'error'">
-                                    <button type="submit" class="btn btn-danger">Error</button>
+                                    <button type="button" class="btn btn-danger">Error</button>
                                 </div>
 
                             </div>
@@ -287,3 +469,53 @@
     </div>
 </div>
 <!-- fin modal nuevo educacion -->
+
+<!-- Modal Eliminar Proyecto -->
+<div *ngFor="let edu of educacion">
+    <div class="modal fade" id="educacionEliminarE{{edu.id}}" tabindex="-1" aria-labelledby="educacionEliminarE"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- form modal eliminar educacion -->
+                    <div class="container">
+                        <p class="text-center">
+                            ¿Seguro desea eliminar la educación <b>{{edu.nombre}}</b>?
+                        </p>
+                        <p class="text-center">
+                            Esta acción es irreversible.
+                        </p>
+                    </div>
+                    <form class="container" [formGroup]="educacionForm" (ngSubmit)="eliminarEducacion(edu.id)">
+                        <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                            aria-describedby="id" [defaultValue]="edu.id" value="edu.id" hidden />
+                        <div class="container text-center">
+                            <div class="row gx-5">
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        (click)="reload()">Cerrar</button>
+                                </div>
+                                <div class="col">
+                                    <div *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                        <button type="submit" class="btn btn-warning">Eliminar</button>
+                                    </div>
+
+                                    <div *ngIf="this.resp == 200">
+                                        <button type="submit" class="btn btn-success" disabled>Eliminado</button>
+                                    </div>
+
+                                    <div *ngIf="this.resp == 'error'">
+                                        <button type="submit" class="btn btn-danger" disabled>Error</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- fin form eliminar educacion -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal eliminar educacion -->

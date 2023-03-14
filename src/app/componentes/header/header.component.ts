@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/servicios/Auth/auth.service';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
@@ -12,91 +12,56 @@ import { __values } from 'tslib';
 })
 
 export class HeaderComponent {
-  
+
   persona:any;  
   personaForm: FormGroup;
-
-  ngSelect:any;
-  options:any[] = 
-  [
-    {'name':'Buenos Aires'},
-    {'name':'Catamarca'},
-    {'name':'Chaco'},
-    {'name':'Chubut'},
-    {'name':'Córdoba'},
-    {'name':'Corrientes'},
-    {'name':'Entre Rios'},
-    {'name':'Formosa'},
-    {'name':'Jujuy'},
-    {'name':'La Pampa'},
-    {'name':'La Rioja'},
-    {'name':'Mendoza'},
-    {'name':'Misiones'},
-    {'name':'Neuquen'},
-    {'name':'Rio Negro'},
-    {'name':'Salta'},
-    {'name':'San Juan'},
-    {'name':'San Luis'},
-    {'name':'Santa Cruz'},
-    {'name':'Santa Fe'},
-    {'name':'Santiago del Estero'},
-    {'name':'Tierra del Fuego'},
-    {'name':'Tucuman'},
-    {'name':'Ciudad Autonoma de Buenos Aires'}
-  ]
-
   resp:any;
+  provincias:any[];
 
-  constructor(protected authService: AuthService, private portfolioService:PortfolioService, private fb:FormBuilder, private router:Router) {
+  constructor(protected authService: AuthService, protected portfolioService:PortfolioService, private fb:FormBuilder, private router:Router) {
     
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
+    this.provincias = this.portfolioService.provincias;
     this.portfolioService.obtenerDatos().subscribe(data => {
-      // console.log(data);
+      console.log(data);
       this.persona = data;
     });
 
     this.personaForm = this.initForm();
     this.resp='';
+    this.portfolioService.logueado
+    console.log(this.portfolioService.logueado);
+    
   }
-
-  public nac = new FormArray([
-    new FormControl({id:1, nombre:'Argentina'}),
-  ]);
-
-  public provincia = new FormArray([
-    new FormControl({id:0,
-                    nacionalidad: this.nac.value[0]
-                  }),
-  ]);
   
   initForm(pers?:any):FormGroup {
     return this.fb.group({
-      id: [pers?.id],
-      nombre: [pers?.nombre],
-      apellido:[pers?.apellido],
-      fecha_nacimiento: [pers?.fecha_nacimiento],
-      email:[pers?.email],
-      telefono:[pers?.telefono],
-      sobre_mi:[pers?.sobre_mi],
-      ocupacion:[pers?.ocupacion],
-      image_background_header:[pers?.image_background_header],
-      image_perfil:[pers?.image_perfil],
-      provincia:[pers?.provincia.id]
+      id: [pers?.id, [Validators.required]],
+      nombre: [pers?.nombre, [Validators.required, Validators.minLength(3), Validators.maxLength(60)]],
+      apellido:[pers?.apellido, [Validators.required, Validators.minLength(3), Validators.maxLength(60)]],
+      fecha_nacimiento: [pers?.fecha_nacimiento, [Validators.required, Validators.maxLength(10)]],
+      email:[pers?.email, [Validators.required, Validators.email, Validators.minLength(10), Validators.maxLength(100)]],
+      telefono:[pers?.telefono, [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
+      sobre_mi:[pers?.sobre_mi, [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      ocupacion:[pers?.ocupacion, [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
+      image_background_header:[pers?.image_background_header, [Validators.nullValidator, Validators.minLength(10), Validators.maxLength(20000)]],
+      image_perfil:[pers?.image_perfil, [Validators.required, Validators.minLength(10), Validators.maxLength(20000)]],
+      provincia:[pers?.provincia.id, [Validators.required]]
     });
   }
   
 
   abrirModalP(pers:any):void{
     this.personaForm = this.initForm(pers);
-    this.ngSelect=pers?.provincia.id
   }
 
   editarPersona(id:number, pers:any):void{
     this.personaForm.controls['provincia'].setValue({id: Number(this.personaForm.value.provincia), nacionalidad:{id:1, nombre:'Argentina'}})
     id = this.personaForm.value.id;
     pers = this.personaForm.value;
+    // console.log(pers); 
     this.portfolioService.editarPers(id, pers).subscribe(data => {
       this.resp = data
       // console.log(this.resp);

@@ -6,7 +6,7 @@
           <h4 class="card-title d-inline">Experiencia</h4>
           <!-- Button modal new -->
           <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
-            data-bs-target="#newexperienciaModal" (click)="resetForm();cargarAnio()">
+            data-bs-target="#newexperienciaModal" (click)="resetForm()">
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
@@ -26,11 +26,12 @@
                 <div class="col-3 text-end">
                   <!-- Button modal editar -->
                   <button type="button" class="btn btn-sm btn-outline-success mx-1" data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#experienciaModal'+exp.id" (click)="abrirModal(exp);cargarAnio()">
+                    [attr.data-bs-target]="'#experienciaModal'+exp.id" (click)="abrirModal(exp)">
                     <i class="fa-regular fa-pen-to-square"></i>
                   </button>
-                  <button type="button" class="btn btn-sm btn-outline-danger mx-1"
-                    (click)="eliminarExperiencia(exp.id)">
+                  <!-- Button modal eliminar -->
+                  <button type="button" class="btn btn-sm btn-outline-danger mx-2" data-bs-toggle="modal"
+                    [attr.data-bs-target]="'#experienciaEliminarE'+exp.id">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
@@ -61,254 +62,500 @@
             </div>
           </div>
         </div>
-
-        <!-- Modal Editar -->
-        <div class="modal fade" id="experienciaModal{{exp.id}}" tabindex="-1" aria-labelledby="experienciaModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header text-center">
-                <h1 class="modal-title fs-5" id="experienciaModalLabel">Editar {{exp.nombre}}</h1>
-              </div>
-              <div class="modal-body">
-                <!-- form modal experiencia -->
-                <form class="form-control" [formGroup]="experienciaForm" (ngSubmit)="editarExperiencia(exp)"
-                  method="post">
-                  <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
-                    aria-describedby="id" [defaultValue]="exp.id" hidden>
-                  <div class="mb-3">
-                    <label for="inputNombre" class="form-label">Nombre</label>
-                    <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
-                      aria-describedby="nombre" [defaultValue]="exp.nombre">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputDescripcion" class="form-label">Descripcion</label>
-                    <input type="text" name="descripcion" formControlName="descripcion" class="form-control"
-                      id="inputDescripcion" aria-describedby="descripcion" [defaultValue]="exp.descripcion"
-                      value="{{exp.descripcion}}">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
-                    <div class="row">
-                      <div class="col">
-                        <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaFin"
-                          formControlName="mes_inicio">
-                          <option value=""></option>
-                          <option *ngFor="let m of mes; let i = index" [selected]="m === mISelect" value="{{m}}"> {{ m
-                            }}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaFin"
-                          formControlName="anio_inicio">
-                          <option value=""></option>
-                          <option *ngFor="let a of anio; let i = index" [selected]="a === aISelect" value="{{a}}"> {{ a
-                            }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
-                    <div class="row">
-                      <div class="col">
-                        <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin"
-                          formControlName="mes_fin">
-                          <option value=""></option>
-                          <option *ngFor="let m of mes; let i = index" [selected]="m === mFSelect" value="{{m}}"> {{ m
-                            }}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin"
-                          formControlName="anio_fin">
-                          <option value=""></option>
-                          <option *ngFor="let a of anio; let i = index" [selected]="a === aFSelect" value="{{a}}"> {{ a
-                            }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
-                    <select class="form-select" name="tipo_empleo" class="form-select" id="inputTipoEmpleo"
-                      formControlName="tipo_empleo">
-                      <option *ngFor="let te of tipoEmpleo; let i = index" [selected]="i === teSelect" value="{{i+1}}">
-                        {{
-                        te.name }}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
-                    <select class="form-select" name="es_trabajo_actual" class="form-select" id="inputTrabajoActual"
-                      formControlName="es_trabajo_actual">
-                      <option *ngFor="let eta of esTrabajoActual; let i = index" [selected]="i === etaSelect"
-                        value="{{i}}"> {{ eta.name }}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="container overflow-hidden text-center">
-                    <div class="row gx-5">
-                      <div class="col">
-                        <div class="p-3">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            (click)="reload()">Cerrar</button>
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                          <button type="submit" class="btn btn-info">Editar</button>
-                        </div>
-
-                        <div class="p-3" *ngIf="this.resp == 200">
-                          <button type="submit" class="btn btn-success" disabled>Guardado</button>
-                        </div>
-
-                        <div class="p-3" *ngIf="this.resp == 'error'">
-                          <button type="submit" class="btn btn-danger">Error</button>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </form>
-                <!-- fin form experiencia -->
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- fin modal experiencia -->
-
-        <!-- Modal New Experiencia -->
-        <div class="modal fade" id="newexperienciaModal" tabindex="-1" aria-labelledby="newexperienciaModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5 text-capitalize" id="newexperienciaModalLabel">Crear Nueva Experiencia</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <!-- form modal new experiencia -->
-                <form class="form-control" [formGroup]="experienciaForm" (ngSubmit)="nuevoExperiencia()" method="post">
-                  <div class="mb-3">
-                    <label for="inputNombre" class="form-label">Nombre</label>
-                    <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
-                      aria-describedby="nombre" value="">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputDescripcion" class="form-label">Descripcion</label>
-                    <input type="text" formControlName="descripcion" class="form-control" id="inputDescripcion"
-                      aria-describedby="descripcion" value="">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
-                    <div class="row">
-                      <div class="col">
-                        <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio"
-                          formControlName="mes_inicio">
-                          <option value="">Seleccione...</option>
-                          <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio"
-                          formControlName="anio_inicio">
-                          <option value="">Seleccione...</option>
-                          <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
-                    <div class="row">
-                      <div class="col">
-                        <select class="form-select" name="mes_fin" class="form-select" id="inputFechaFin"
-                          formControlName="mes_fin">
-                          <option value="">Seleccione...</option>
-                          <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <select class="form-select" name="anio_fin" class="form-select" id="inputFechaFin"
-                          formControlName="anio_fin">
-                          <option value="">Seleccione...</option>
-                          <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
-                    <select class="form-select" name="tipo_empleo" class="form-select" id="inputTipoEmpleo"
-                      formControlName="tipo_empleo">
-                      <option value="">Seleccione...</option>
-                      <option *ngFor="let te of tipoEmpleo; let i = index" value="{{i+1}}"> {{ te.name }}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
-                    <select class="form-select" name="es_trabajo_actual" class="form-select" id="inputTrabajoActual"
-                      formControlName="es_trabajo_actual">
-                      <option value="">Seleccione...</option>
-                      <option *ngFor="let eta of esTrabajoActual; let i = index" value="{{i}}"> {{ eta.name }}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="container overflow-hidden text-center">
-                    <div class="row gx-5">
-                      <div class="col">
-                        <div class="p-3">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            (click)="reload()">Cerrar</button>
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                          <button type="submit" class="btn btn-info">Crear</button>
-                        </div>
-
-                        <div class="p-3" *ngIf="this.resp == 200">
-                          <button type="submit" class="btn btn-success" disabled>Creado</button>
-                        </div>
-
-                        <div class="p-3" *ngIf="this.resp == 'error'">
-                          <button type="submit" class="btn btn-danger">Error</button>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-
-                </form>
-                <!-- fin form new experiencia -->
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- fin modal new experiencia -->
-
       </div>
       <!-- Fin Experiencias -->
     </div>
-
   </div>
+
+  <!-- Modal Editar -->
+  <div *ngFor="let exp of experiencia">
+    <div class="modal fade" id="experienciaModal{{exp.id}}" tabindex="-1" aria-labelledby="experienciaModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h1 class="modal-title fs-5" id="experienciaModalLabel">Editar {{exp.nombre}}</h1>
+          </div>
+          <div class="modal-body">
+            <!-- form modal experiencia -->
+            <form class="form-control" [formGroup]="experienciaForm" (ngSubmit)="editarExperiencia(exp)" method="post">
+              <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                aria-describedby="id" [defaultValue]="exp.id" hidden />
+              <div class="mb-3">
+                <label for="inputNombre" class="form-label">Nombre</label>
+                <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
+                  aria-describedby="nombre" [defaultValue]="exp.nombre"
+                  [ngClass]="{'is-invalid': experienciaForm.get('nombre')?.errors && experienciaForm.get('nombre')?.touched, 'is-valid': !experienciaForm.get('nombre')?.errors && !experienciaForm.get('nombre')?.touched}"
+                  required maxlength="100" minlength="5" />
+                <!-- errores -->
+                <div *ngIf="experienciaForm.get('nombre')?.errors && experienciaForm.get('nombre')?.touched">
+                  <p *ngIf="experienciaForm.get('nombre')?.hasError('required')" class="text-danger">
+                    El nombre es requerido.
+                  </p>
+                  <p *ngIf="experienciaForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                    El nombre debe tener al menos 5 caracteres.
+                  </p>
+                  <p *ngIf="experienciaForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                    El nombre debe tener máximo 100 caracteres.
+                  </p>
+                </div>
+              </div>
+              <!-- descripcion -->
+              <div class="mb-3">
+                <label for="inputDescripcion" class="form-label">Descripcion</label>
+                <input type="text" name="descripcion" formControlName="descripcion" class="form-control"
+                  id="inputDescripcion" aria-describedby="descripcion" [defaultValue]="exp.descripcion"
+                  value="{{exp.descripcion}}"
+                  [ngClass]="{'is-invalid': experienciaForm.get('descripcion')?.errors && experienciaForm.get('descripcion')?.touched, 'is-valid': !experienciaForm.get('descripcion')?.errors && !experienciaForm.get('descripcion')?.touched}"
+                  required maxlength="20000" minlength="5" />
+                <!-- errores -->
+                <div *ngIf="experienciaForm.get('descripcion')?.errors && experienciaForm.get('descripcion')?.touched">
+                  <p *ngIf="experienciaForm.get('descripcion')?.hasError('required')" class="text-danger">
+                    La descripción es requerida.
+                  </p>
+                  <p *ngIf="experienciaForm.get('descripcion')?.hasError('minlength')" class="text-danger">
+                    La descripción debe tener al menos 5 caracteres.
+                  </p>
+                  <p *ngIf="experienciaForm.get('descripcion')?.hasError('maxlength')" class="text-danger">
+                    La descripción debe tener máximo 20000 caracteres.
+                  </p>
+                </div>
+              </div>
+              <!-- fecha inicio -->
+              <div class="mb-3">
+                <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+                <div class="row">
+                  <!-- mes inicio -->
+                  <div class="col">
+                    <select class="form-select" name="mes_inicio" id="inputFechaFin" formControlName="mes_inicio"
+                      [ngClass]="{'is-invalid': experienciaForm.get('mes_inicio')?.errors && experienciaForm.get('mes_inicio')?.touched, 'is-valid': !experienciaForm.get('mes_inicio')?.errors && !experienciaForm.get('mes_inicio')?.touched}"
+                      required maxlength="2">
+                      <option *ngFor="let m of mes; let i = index" [selected]="m === exp.mes_inicio" value="{{m}}"> {{ m
+                        }}
+                      </option>
+                    </select>
+                    <!-- errores -->
+                    <div
+                      *ngIf="experienciaForm.get('mes_inicio')?.errors && experienciaForm.get('mes_inicio')?.touched">
+                      <p *ngIf="experienciaForm.get('mes_inicio')?.hasError('required')" class="text-danger">
+                        El mes de inicio es requerido.
+                      </p>
+                      <p *ngIf="experienciaForm.get('mes_inicio')?.hasError('maxlength')" class="text-danger">
+                        El mes de inicio debe tener máximo 2 caracteres.
+                      </p>
+                    </div>
+                  </div>
+                  <!-- año inicio -->
+                  <div class="col">
+                    <select class="form-select" name="anio_inicio" id="inputFechaFin" formControlName="anio_inicio"
+                      [ngClass]="{'is-invalid': experienciaForm.get('anio_inicio')?.errors && experienciaForm.get('anio_inicio')?.touched, 'is-valid': !experienciaForm.get('anio_inicio')?.errors && !experienciaForm.get('anio_inicio')?.touched}"
+                      required maxlength="4">
+                      <option *ngFor="let a of anio; let i = index" [selected]="a === exp.anio_inicio" value="{{a}}"> {{
+                        a }}
+                      </option>
+                    </select>
+                    <!-- errores -->
+                    <div
+                      *ngIf="experienciaForm.get('anio_inicio')?.errors && experienciaForm.get('anio_inicio')?.touched">
+                      <p *ngIf="experienciaForm.get('anio_inicio')?.hasError('required')" class="text-danger">
+                        El año de inicio es requerido.
+                      </p>
+                      <p *ngIf="experienciaForm.get('anio_inicio')?.hasError('maxlength')" class="text-danger">
+                        El año de inicio debe tener máximo 4 caracteres.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- fecha fin -->
+              <div class="mb-3">
+                <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
+                <div class="row">
+                  <!-- mes fin -->
+                  <div class="col">
+                    <div *ngIf="exp.mes_fin===null, then thenBlockMes else elseBlockMes"></div>
+                    <!-- errores -->
+                    <div *ngIf="experienciaForm.get('mes_fin')?.errors && experienciaForm.get('mes_fin')?.touched">
+                      <p *ngIf="experienciaForm.get('mes_fin')?.hasError('maxlength')" class="text-danger">
+                        El mes de fin debe tener máximo 2 caracteres.
+                      </p>
+                    </div>
+                  </div>
+                  <!-- thenBlockMes -->
+                  <ng-template #elseBlockMes>
+                    <select class="form-select" name="mes_fin" id="inputFechaFin" formControlName="mes_fin"
+                      [ngClass]="{'is-invalid': experienciaForm.get('mes_fin')?.errors && experienciaForm.get('mes_fin')?.touched, 'is-valid': !experienciaForm.get('mes_fin')?.errors && !experienciaForm.get('mes_fin')?.touched}"
+                      maxlength="2">
+                      <option *ngFor="let m of mes; let i = index" [selected]="m === exp.mes_fin" value="{{m}}"> {{ m
+                        }}
+                      </option>
+                    </select>
+                  </ng-template>
+                  <!-- elseBlockMes -->
+                  <ng-template #thenBlockMes>
+                    <select class="form-select" name="mes_fin" formControlName="mes_fin" id="inputFechaFin"
+                      [ngClass]="{'is-invalid': experienciaForm.get('mes_fin')?.errors && experienciaForm.get('mes_fin')?.touched, 'is-valid': !experienciaForm.get('mes_fin')?.errors && !experienciaForm.get('mes_fin')?.touched}"
+                      maxlength="2">
+                      <option *ngFor="let m of mes; let i = index" value="{{m}}"> {{ m }}
+                      </option>
+                    </select>
+                  </ng-template>
+                  <!-- año fin -->
+                  <div class="col">
+                    <div *ngIf="exp.anio_fin===null, then thenBlock else elseBlock"></div>
+                    <!-- errores -->
+                    <div *ngIf="experienciaForm.get('anio_fin')?.errors && experienciaForm.get('anio_fin')?.touched">
+                      <p *ngIf="experienciaForm.get('anio_fin')?.hasError('maxlength')" class="text-danger">
+                        El año de fin debe tener máximo 4 caracteres.
+                      </p>
+                    </div>
+                  </div>
+                  <!-- thenBlock -->
+                  <ng-template #thenBlock>
+                    <select class="form-select" name="anio_fin" formControlName="anio_fin" id="inputFechaFin"
+                      [ngClass]="{'is-invalid': experienciaForm.get('anio_fin')?.errors && experienciaForm.get('anio_fin')?.touched, 'is-valid': !experienciaForm.get('anio_fin')?.errors && !experienciaForm.get('anio_fin')?.touched}"
+                      maxlength="4">
+                      <option *ngFor="let a of anio; let i = index" value="{{a}}"> {{ a }} </option>
+                    </select>
+                  </ng-template>
+                  <!-- elseBlock -->
+                  <ng-template #elseBlock>
+                    <select class="form-select" name="anio_fin" formControlName="anio_fin" id="inputFechaFin"
+                      [ngClass]="{'is-invalid': experienciaForm.get('anio_fin')?.errors && experienciaForm.get('anio_fin')?.touched, 'is-valid': !experienciaForm.get('anio_fin')?.errors && !experienciaForm.get('anio_fin')?.touched}"
+                      maxlength="4">
+                      <option *ngFor="let a of anio; let i = index" [selected]="a === exp.anio_fin" value="{{a}}"> {{ a
+                        }} </option>
+                    </select>
+                  </ng-template>
+                </div>
+              </div>
+              <!-- tipo empleo -->
+              <div class="mb-3">
+                <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
+                <div *ngIf="exp.tipo_empleo!==null, then thenBlockTE else elseBlockTE"></div>
+                <!-- errores -->
+                <div *ngIf="experienciaForm.get('tipo_empleo')?.errors && experienciaForm.get('tipo_empleo')?.touched">
+                  <p *ngIf="experienciaForm.get('tipo_empleo')?.hasError('required')" class="text-danger">
+                    El tipo de empleo es requerido.
+                  </p>
+                </div>
+              </div>
+              <!-- thenBlockTE -->
+              <ng-template #thenBlockTE>
+                <select class="form-select" name="tipo_empleo" id="inputTipoEmpleo" formControlName="tipo_empleo"
+                  [ngClass]="{'is-invalid': experienciaForm.get('tipo_empleo')?.errors && experienciaForm.get('tipo_empleo')?.touched, 'is-valid': !experienciaForm.get('tipo_empleo')?.errors && !experienciaForm.get('tipo_empleo')?.touched}"
+                  required>
+                  <option *ngFor="let te of tipoEmpleo; let i = index" [selected]="i === exp.tipo_empleo"
+                    value="{{i+1}}"> {{ te.name }} </option>
+                </select>
+              </ng-template>
+              <!-- elseBlockTE -->
+              <ng-template #elseBlockTE>
+                <select class="form-select" name="tipo_empleo" id="inputTipoEmpleo" formControlName="tipo_empleo"
+                  [ngClass]="{'is-invalid': experienciaForm.get('tipo_empleo')?.errors && experienciaForm.get('tipo_empleo')?.touched, 'is-valid': !experienciaForm.get('tipo_empleo')?.errors && !experienciaForm.get('tipo_empleo')?.touched}"
+                  required>
+                  <option *ngFor="let te of tipoEmpleo; let i = index" value="{{i+1}}"> {{ te.name }} </option>
+                </select>
+              </ng-template>
+              <!-- trabajo actual -->
+              <div class="mb-3">
+                <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
+                <div *ngIf="exp.es_trabajo_actual!==null, then thenBlockETA else elseBlockETA"></div>
+                <!-- errores -->
+                <div
+                  *ngIf="experienciaForm.get('es_trabajo_actual')?.errors && experienciaForm.get('es_trabajo_actual')?.touched">
+                  <p *ngIf="experienciaForm.get('es_trabajo_actual')?.hasError('required')" class="text-danger">
+                    Es trabajo actual es requerido.
+                  </p>
+                </div>
+              </div>
+              <!-- thenBlockETA -->
+              <ng-template #thenBlockETA>
+                <select class="form-select" name="es_trabajo_actual" id="inputTrabajoActual"
+                  formControlName="es_trabajo_actual"
+                  [ngClass]="{'is-invalid': experienciaForm.get('es_trabajo_actual')?.errors && experienciaForm.get('es_trabajo_actual')?.touched, 'is-valid': !experienciaForm.get('es_trabajo_actual')?.errors && !experienciaForm.get('es_trabajo_actual')?.touched}"
+                  required>
+                  <option *ngFor="let eta of esTrabajoActual; let i = index" [selected]="i === exp.es_trabajo_actual"
+                    value="{{i}}"> {{ eta.name }} </option>
+                </select>
+              </ng-template>
+              <!-- elseBlockETA -->
+              <ng-template #elseBlockETA>
+                <select class="form-select" name="es_trabajo_actual" id="inputTrabajoActual"
+                  formControlName="es_trabajo_actual"
+                  [ngClass]="{'is-invalid': experienciaForm.get('es_trabajo_actual')?.errors && experienciaForm.get('es_trabajo_actual')?.touched, 'is-valid': !experienciaForm.get('es_trabajo_actual')?.errors && !experienciaForm.get('es_trabajo_actual')?.touched}"
+                  required>
+                  <option *ngFor="let eta of esTrabajoActual; let i = index" value="{{i}}"> {{ eta.name }} </option>
+                </select>
+              </ng-template>
+              <!-- botones -->
+              <div class="container text-center">
+                <div class="row gx-5">
+                  <div class="col">
+                    <div class="p-3">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        (click)="reload()">Cerrar</button>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                      <button type="submit" class="btn btn-info" [disabled]="experienciaForm.invalid">Editar</button>
+                    </div>
+                    <div class="p-3" *ngIf="this.resp == 200">
+                      <button type="button" class="btn btn-success" disabled>Guardado</button>
+                    </div>
+                    <div class="p-3" *ngIf="this.resp == 'error'">
+                      <button type="button" class="btn btn-danger" disabled>Error</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <!-- fin form experiencia -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fin modal experiencia -->
+
+  <!-- Modal New Experiencia -->
+  <div class="modal fade" id="newexperienciaModal" tabindex="-1" aria-labelledby="newexperienciaModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-capitalize" id="newexperienciaModalLabel">Crear Nueva Experiencia</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- form modal new experiencia -->
+          <form class="form-control" [formGroup]="experienciaForm" (ngSubmit)="nuevoExperiencia()" method="post">
+            <!-- nombre -->
+            <div class="mb-3">
+              <label for="inputNombre" class="form-label">Nombre</label>
+              <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
+                aria-describedby="nombre" value=""
+                [ngClass]="{'is-invalid': experienciaForm.get('nombre')?.errors && experienciaForm.get('nombre')?.touched, 'is-valid': !experienciaForm.get('nombre')?.errors && !experienciaForm.get('nombre')?.touched}"
+                required maxlength="100" minlength="5" />
+              <!-- errores -->
+              <div *ngIf="experienciaForm.get('nombre')?.errors && experienciaForm.get('nombre')?.touched">
+                <p *ngIf="experienciaForm.get('nombre')?.hasError('required')" class="text-danger">
+                  El nombre es requerido.
+                </p>
+                <p *ngIf="experienciaForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                  El nombre debe tener al menos 5 caracteres.
+                </p>
+                <p *ngIf="experienciaForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                  El nombre debe tener máximo 100 caracteres.
+                </p>
+              </div>
+            </div>
+            <!-- descripcion -->
+            <div class="mb-3">
+              <label for="inputDescripcion" class="form-label">Descripcion</label>
+              <input type="text" formControlName="descripcion" class="form-control" id="inputDescripcion"
+                aria-describedby="descripcion" value=""
+                [ngClass]="{'is-invalid': experienciaForm.get('descripcion')?.errors && experienciaForm.get('descripcion')?.touched, 'is-valid': !experienciaForm.get('descripcion')?.errors && !experienciaForm.get('descripcion')?.touched}"
+                required maxlength="20000" minlength="5" />
+              <!-- errores -->
+              <div *ngIf="experienciaForm.get('descripcion')?.errors && experienciaForm.get('descripcion')?.touched">
+                <p *ngIf="experienciaForm.get('descripcion')?.hasError('required')" class="text-danger">
+                  La descripción es requerida.
+                </p>
+                <p *ngIf="experienciaForm.get('descripcion')?.hasError('minlength')" class="text-danger">
+                  La descripción debe tener al menos 5 caracteres.
+                </p>
+                <p *ngIf="experienciaForm.get('descripcion')?.hasError('maxlength')" class="text-danger">
+                  La descripción debe tener máximo 20000 caracteres.
+                </p>
+              </div>
+            </div>
+            <!-- fecha inicio -->
+            <div class="mb-3">
+              <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
+              <div class="row">
+                <!-- mes inicio -->
+                <div class="col">
+                  <select class="form-select" name="mes_inicio" id="inputFechaInicio" formControlName="mes_inicio"
+                    [ngClass]="{'is-invalid': experienciaForm.get('mes_inicio')?.errors && experienciaForm.get('mes_inicio')?.touched, 'is-valid': !experienciaForm.get('mes_inicio')?.errors && !experienciaForm.get('mes_inicio')?.touched}"
+                    required maxlength="4">
+                    <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                  </select>
+                  <!-- errores -->
+                  <div *ngIf="experienciaForm.get('mes_inicio')?.errors && experienciaForm.get('mes_inicio')?.touched">
+                    <p *ngIf="experienciaForm.get('mes_inicio')?.hasError('required')" class="text-danger">
+                      El mes de inicio es requerido.
+                    </p>
+                    <p *ngIf="experienciaForm.get('mes_inicio')?.hasError('maxlength')" class="text-danger">
+                      El mes de inicio debe tener máximo 2 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- año inicio -->
+                <div class="col">
+                  <select class="form-select" name="anio_inicio" id="inputFechaInicio" formControlName="anio_inicio"
+                    [ngClass]="{'is-invalid': experienciaForm.get('anio_inicio')?.errors && experienciaForm.get('anio_inicio')?.touched, 'is-valid': !experienciaForm.get('anio_inicio')?.errors && !experienciaForm.get('anio_inicio')?.touched}"
+                    required maxlength="4">
+                    <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                  </select>
+                  <!-- errores -->
+                  <div
+                    *ngIf="experienciaForm.get('anio_inicio')?.errors && experienciaForm.get('anio_inicio')?.touched">
+                    <p *ngIf="experienciaForm.get('anio_inicio')?.hasError('required')" class="text-danger">
+                      El año de inicio es requerido.
+                    </p>
+                    <p *ngIf="experienciaForm.get('anio_inicio')?.hasError('maxlength')" class="text-danger">
+                      El año de inicio debe tener máximo 4 caracteres.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- fecha fin -->
+            <div class="mb-3">
+              <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
+              <div class="row">
+                <!-- mes fin -->
+                <div class="col">
+                  <select class="form-select" name="mes_fin" id="inputFechaFin" formControlName="mes_fin"
+                    [ngClass]="{'is-invalid': experienciaForm.get('mes_fin')?.errors && experienciaForm.get('mes_fin')?.touched, 'is-valid': !experienciaForm.get('mes_fin')?.errors && !experienciaForm.get('mes_fin')?.touched}"
+                    maxlength="2">
+                    <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
+                  </select>
+                  <!-- errores -->
+                  <div *ngIf="experienciaForm.get('mes_fin')?.errors && experienciaForm.get('mes_fin')?.touched">
+                    <p *ngIf="experienciaForm.get('mes_fin')?.hasError('maxlength')" class="text-danger">
+                      El mes de fin debe tener máximo 2 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- año fin -->
+                <div class="col">
+                  <select class="form-select" name="anio_fin" id="inputFechaFin" formControlName="anio_fin"
+                    [ngClass]="{'is-invalid': experienciaForm.get('anio_fin')?.errors && experienciaForm.get('anio_fin')?.touched, 'is-valid': !experienciaForm.get('anio_fin')?.errors && !experienciaForm.get('anio_fin')?.touched}"
+                    maxlength="4">
+                    <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
+                  </select>
+                  <!-- errores -->
+                  <div *ngIf="experienciaForm.get('anio_fin')?.errors && experienciaForm.get('anio_fin')?.touched">
+                    <p *ngIf="experienciaForm.get('anio_fin')?.hasError('maxlength')" class="text-danger">
+                      El año de fin debe tener máximo 4 caracteres.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- tipo empleo -->
+            <div class="mb-3">
+              <label for="inputTipoEmpleo" class="form-label">Tipo de Empleo</label>
+              <select class="form-select" name="tipo_empleo" id="inputTipoEmpleo" formControlName="tipo_empleo"
+                [ngClass]="{'is-invalid': experienciaForm.get('tipo_empleo')?.errors && experienciaForm.get('tipo_empleo')?.touched, 'is-valid': !experienciaForm.get('tipo_empleo')?.errors && !experienciaForm.get('tipo_empleo')?.touched}"
+                required>
+                <option *ngFor="let te of tipoEmpleo; let i = index" value="{{i+1}}"> {{ te.name }}
+                </option>
+              </select>
+              <!-- errores -->
+              <div *ngIf="experienciaForm.get('tipo_empleo')?.errors && experienciaForm.get('tipo_empleo')?.touched">
+                <p *ngIf="experienciaForm.get('tipo_empleo')?.hasError('required')" class="text-danger">
+                  El tipo de empleo es requerido.
+                </p>
+              </div>
+            </div>
+            <!-- trabajo actual -->
+            <div class="mb-3">
+              <label for="inputTrabajoActual" class="form-label">Trabajo Actual</label>
+              <select class="form-select" name="es_trabajo_actual" id="inputTrabajoActual"
+                formControlName="es_trabajo_actual"
+                [ngClass]="{'is-invalid': experienciaForm.get('es_trabajo_actual')?.errors && experienciaForm.get('es_trabajo_actual')?.touched, 'is-valid': !experienciaForm.get('es_trabajo_actual')?.errors && !experienciaForm.get('es_trabajo_actual')?.touched}"
+                required>
+                <option *ngFor="let eta of esTrabajoActual; let i = index" value="{{i}}"> {{ eta.name }}
+                </option>
+              </select>
+              <!-- errores -->
+              <div
+                *ngIf="experienciaForm.get('es_trabajo_actual')?.errors && experienciaForm.get('es_trabajo_actual')?.touched">
+                <p *ngIf="experienciaForm.get('es_trabajo_actual')?.hasError('required')" class="text-danger">
+                  Es trabajo actual es requerido.
+                </p>
+              </div>
+            </div>
+            <!-- botones -->
+            <div class="container text-center">
+              <div class="row gx-5">
+                <div class="col">
+                  <div class="p-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                      (click)="reload()">Cerrar</button>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                    <button type="submit" class="btn btn-info" [disabled]="experienciaForm.invalid">Crear</button>
+                  </div>
+                  <div class="p-3" *ngIf="this.resp == 200">
+                    <button type="button" class="btn btn-success" disabled>Creado</button>
+                  </div>
+                  <div class="p-3" *ngIf="this.resp == 'error'">
+                    <button type="button" class="btn btn-danger" disabled>Error</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- fin form new experiencia -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fin modal new experiencia -->
+
+  <!-- Modal Eliminar Experiencia -->
+  <div *ngFor="let exp of experiencia">
+    <div class="modal fade" id="experienciaEliminarE{{exp.id}}" tabindex="-1" aria-labelledby="experienciaEliminarE"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <!-- form modal eliminar experiencia -->
+            <div class="container">
+              <p class="text-center">
+                ¿Seguro desea eliminar la educación <b>{{exp.nombre}}</b>?
+              </p>
+              <p class="text-center">
+                Esta acción es irreversible.
+              </p>
+            </div>
+            <form class="container" [formGroup]="experienciaForm" (ngSubmit)="eliminarExperiencia(exp.id)">
+              <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                aria-describedby="id" [defaultValue]="exp.id" value="exp.id" hidden />
+              <div class="container text-center">
+                <div class="row gx-5">
+                  <div class="col">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                      (click)="reload()">Cerrar</button>
+                  </div>
+                  <div class="col">
+                    <div *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                      <button type="submit" class="btn btn-warning">Eliminar</button>
+                    </div>
+
+                    <div *ngIf="this.resp == 200">
+                      <button type="submit" class="btn btn-success" disabled>Eliminado</button>
+                    </div>
+
+                    <div *ngIf="this.resp == 'error'">
+                      <button type="submit" class="btn btn-danger" disabled>Error</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+            <!-- fin form eliminar experiencia -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fin modal eliminar experiencia -->

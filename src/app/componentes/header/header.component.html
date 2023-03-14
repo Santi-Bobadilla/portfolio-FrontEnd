@@ -1,214 +1,396 @@
-<div class="container-fluid">
+<div class="">
   <nav class="navbar navbar-expand-lg bg-light">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <!-- <span class="navbar-toggler-icon"></span> -->
-      <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" width="100"> <span>Santiago Bobadilla</span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand d-none d-lg-block" href="#">
-        <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" width="150">
-      </a>
-      
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://www.linkedin.com/in/santiago-bobadilla/"><i class="fa-brands fa-linkedin"></i></a>
-        </li>
-        
-        <li class="nav-item dropdown">
+    <!-- logo xs -->
+    <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" height="30"
+      class="float-start d-block d-lg-none">
+    <!-- logo sm -->
+    <a class="navbar-brand d-none d-lg-block" href="#">
+      <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" height="50">
+    </a>
+    <!-- nombre -->
+    <span class="align-middle text-center">Santiago Bobadilla</span>
+
+    <!-- botones lg -->
+    <div class="navbar-nav ms-auto px-2 d-none d-lg-block">
+      <div class="row rows-col-3">
+        <div class="col">
+          <a class="nav-link nav-item" href="https://instagram.com/santi_bobadilla1"><i
+              class="fa-brands fa-instagram"></i></a>
+        </div>
+        <div class="col">
+          <a class="nav-link nav-item" href="https://www.linkedin.com/in/santiago-bobadilla/"><i
+              class="fa-brands fa-linkedin"></i></a>
+        </div>
+        <div class="col">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-user"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active" *ngIf="!authService.iniciarSesion">Registrarse</a></li>
-            <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active" *ngIf="!authService.iniciarSesion">Iniciar Sesión</a></li>
-            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" *ngIf="authService.iniciarSesion" (click)="authService.logOut()">Cerrar Sesión</a></li>
+            <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active"
+                *ngIf="portfolioService.logueado===false">Registrarse</a></li>
+            <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active"
+                *ngIf="portfolioService.logueado===false">Iniciar Sesión</a></li>
+            <li><a class="dropdown-item" routerLink="/loguot" routerLinkActive="active"
+                *ngIf="portfolioService.logueado===true" (click)="authService.logOut()">Cerrar Sesión</a></li>
           </ul>
-        </li>
-      </ul>
-    </div>
-</nav>
-<div class="card mb-3 pb-2" *ngFor="let pers of persona">
-  <div class="position-relative">
-    <img src="{{pers.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
-    <img src="{{pers.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil" id="img_perfil" height="100" width="100">
-  </div>
-
-  <div class="card-body mt-5">
-    <div class="row">
-      <div class="col-10">
-        <h5 class="card-title">{{pers.nombre+' '+pers.apellido}}</h5>
+        </div>
       </div>
-      <div class="col-2 text-end" *ngIf="authService.iniciarSesion">
-        <button type="button" class="btn btn-sm btn-outline-success mx-1" data-bs-toggle="modal" data-bs-target="#personaModal" (click)="abrirModalP(pers)">
-          <i class="fa-regular fa-pen-to-square"></i>
+    </div>
+
+
+
+    <!-- prueba hasta md -->
+    <button mat-button [matMenuTriggerFor]="menu" class="navbar-toggler float-end d-block d-lg-none" type="button">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <mat-menu #menu="matMenu" class="d-block d-lg-none">
+      <button mat-menu-item >
+        <a class="nav-link" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i> Instagram </a>
+      </button>
+      <button mat-menu-item >
+        <a class="nav-link" href="https://www.linkedin.com/in/santiago-bobadilla/"><i
+            class="fa-brands fa-linkedin"></i> LinkedIn </a>
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="sesion" >
+        <i class="fa-solid fa-user"></i>
+      </button>
+    </mat-menu>
+
+    <mat-menu #sesion="matMenu" class="d-block d-lg-none">
+      <div *ngIf="portfolioService.logueado===false; then trueBlock else falseBlock"></div>
+      <ng-template #trueBlock>
+        <button mat-menu-item>
+          <a class="dropdown-item" routerLink="/register" routerLinkActive="active">Registrarse</a>
         </button>
-      </div>
+        <button mat-menu-item>
+          <a class="dropdown-item" routerLink="/login" routerLinkActive="active">Iniciar Sesión</a>
+        </button>
+      </ng-template>
+      <ng-template #falseBlock>
+        <button mat-menu-item>
+          <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()">Cerrar
+            Sesión</a>
+        </button>
+      </ng-template>
+    </mat-menu>
+  </nav>
+  <!-- fin -->
+  <div class="card mb-3 pb-2" *ngFor="let pers of persona">
+    <div class="position-relative">
+      <img src="{{pers.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%"
+        height="350">
+      <img src="{{pers.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil"
+        id="img_perfil" height="100" width="100">
     </div>
-    <p class="card-text my-0">{{pers.ocupacion}}</p>
-    <p class="card-text my-0">{{pers.provincia.nombre}} ({{pers.provincia.nacionalidad.nombre}}) <span>
-      <button type="button" class="btn btn-link px-0" data-bs-toggle="modal" data-bs-target="#exampleModal">Información de contacto</button>
-    </span> </p>
-  </div>
 
-  <!-- <div>
+    <div class="card-body mt-5">
+      <div class="row">
+        <div class="col-10">
+          <h5 class="card-title">{{pers.nombre+' '+pers.apellido}}</h5>
+        </div>
+        <div class="col-2 text-end" *ngIf="portfolioService.logueado===true">
+          <button type="button" class="btn btn-sm btn-outline-success mx-1" data-bs-toggle="modal"
+            data-bs-target="#personaModal" (click)="abrirModalP(pers)">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+        </div>
+      </div>
+      <p class="card-text my-0">{{pers.ocupacion}}</p>
+      <p class="card-text my-0">{{pers.provincia.nombre}} ({{pers.provincia.nacionalidad.nombre}}) <span>
+          <button type="button" class="btn btn-link px-0" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">Información de contacto</button>
+        </span> </p>
+    </div>
+
+    <!-- <div>
     <button type="button" class="btn btn-primary btn-sm mx-2">Tengo interes en</button>
     <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Añadir sección</button>
     <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Más</button>
   </div> -->
-  <hr class="border border-dark border-1 opacity-50">
+    <hr class="border border-dark border-1 opacity-50">
     <div class="card-body py-2">
       <div class="row">
-          <div class="col-10">
-              <h5 class="card-title text-start">Acerca de</h5>
-          </div>
+        <div class="col-10">
+          <h5 class="card-title text-start">Acerca de</h5>
+        </div>
       </div>
-              
+
       <p class="card-text my-0">{{pers.sobre_mi}}</p>
     </div>
-    
-  <!-- Modal Contacto -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Contacto</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- modal body -->
-          <div class="row row-cols-2 align-items-center">
-            <div class="col d-grid gap-2 mx-auto">
-              <button class="btn btn-success">
-                <a class="btn-link text-white" href="https://wa.me/+549{{pers.telefono}}"> <i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
-              </button>
 
-              <button class="btn btn-danger">
-                <a class="btn-link text-white" href = "mailto: {{pers.email}}"> <i class="fa-regular fa-envelope"></i> Email</a>
-              </button>
-            </div>
-            <div class="col d-grid gap-2 mx-auto">
-              <button class="btn btn-primary">
-                <a class="btn-link text-white" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i> Instagram</a>
-              </button>
+    <!-- Modal Contacto -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Contacto</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- modal body -->
+            <div class="row row-cols-2 align-items-center">
+              <div class="col d-grid gap-2 mx-auto">
+                <button class="btn btn-success">
+                  <a class="btn-link text-white" href="https://wa.me/+549{{pers.telefono}}"> <i
+                      class="fa-brands fa-whatsapp"></i> Whatsapp</a>
+                </button>
 
-              <button class="btn btn-dark">
-                <a class="btn-link text-white" href="https://www.linkedin.com/in/santiago-bobadilla/"><i class="fa-brands fa-linkedin"></i> Linkedin</a>
-              </button>
+                <button class="btn btn-danger">
+                  <a class="btn-link text-white" href="mailto: {{pers.email}}"> <i class="fa-regular fa-envelope"></i>
+                    Email</a>
+                </button>
+              </div>
+              <div class="col d-grid gap-2 mx-auto">
+                <button class="btn btn-primary">
+                  <a class="btn-link text-white" href="https://instagram.com/santi_bobadilla1"><i
+                      class="fa-brands fa-instagram"></i> Instagram</a>
+                </button>
+
+                <button class="btn btn-dark">
+                  <a class="btn-link text-white" href="https://www.linkedin.com/in/santiago-bobadilla/"><i
+                      class="fa-brands fa-linkedin"></i> Linkedin</a>
+                </button>
+              </div>
             </div>
-          </div>        
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- fin modal body -->
+    <!-- fin modal body -->
 
-  <!-- Modal Editar -->
-  <ng-container>
-    <div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
+    <!-- Modal Editar -->
+    <ng-container>
+      <div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="personaModalLabel">Editar {{pers.nombre}}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="personaModalLabel">Editar {{pers.nombre}} {{pers.apellido}}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- form modal persona -->
+              <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers.id, pers)"
+                method="patch">
+                <!-- id -->
+                <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                  aria-describedby="id" [defaultValue]="pers.id" hidden required />
+                <!-- Nombre -->
+                <div class="mb-3">
+                  <label for="inputNombre" class="form-label">Nombre</label>
+                  <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
+                    aria-describedby="nombre" [defaultValue]="pers.nombre"
+                    [ngClass]="{'is-invalid': personaForm.get('nombre')?.errors && personaForm.get('nombre')?.touched, 'is-valid': !personaForm.get('nombre')?.errors && !personaForm.get('nombre')?.touched}"
+                    maxlength="60" minlength="3" required />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('nombre')?.errors && personaForm.get('nombre')?.touched">
+                    <p *ngIf="personaForm.get('nombre')?.hasError('required')" class="text-danger">
+                      El nombre es requerido.
+                    </p>
+                    <p *ngIf="personaForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                      El nombre debe tener al menos 3 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                      El nombre debe tener máximo 60 caracteres.
+                    </p>
+                  </div>
                 </div>
-                <div class="modal-body">
-                    <!-- form modal persona -->
-                    <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers.id, pers)"
-                        method="patch">
-                        <input type="number" name="id" formControlName="id" class="form-control"
-                            id="inputId" aria-describedby="id" [defaultValue]="pers.id" hidden>
-                        <div class="mb-3">
-                            <label for="inputNombre" class="form-label">Nombre</label>
-                            <input type="text" name="nombre" formControlName="nombre" class="form-control"
-                                id="inputNombre" aria-describedby="nombre" [defaultValue]="pers.nombre">
-                        </div>
+                <!-- apellido -->
+                <div class="mb-3">
+                  <label for="inputApellido" class="form-label">Apellido</label>
+                  <input type="text" name="apellido" formControlName="apellido" class="form-control" id="inputApellido"
+                    aria-describedby="apellido" [defaultValue]="pers.apellido"
+                    [ngClass]="{'is-invalid': personaForm.get('apellido')?.errors && personaForm.get('apellido')?.touched, 'is-valid': !personaForm.get('apellido')?.errors && !personaForm.get('apellido')?.touched}"
+                    maxlength="60" minlength="3" required />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('apellido')?.errors && personaForm.get('apellido')?.touched">
+                    <p *ngIf="personaForm.get('apellido')?.hasError('required')" class="text-danger">
+                      El apellido es requerido.
+                    </p>
+                    <p *ngIf="personaForm.get('apellido')?.hasError('minlength')" class="text-danger">
+                      El apellido debe tener al menos 3 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('apellido')?.hasError('maxlength')" class="text-danger">
+                      El apellido debe tener máximo 60 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- sobre mi -->
+                <div class="mb-3">
+                  <label for="form-floating" class="form-label">Sobre mi</label>
+                  <div class="form-floating">
+                    <textarea class="form-control p-2" placeholder="Leave a comment here" id="floatingTextarea"
+                      [defaultValue]="pers.sobre_mi" value="{{pers.sobre_mi}}"
+                      [ngClass]="{'is-invalid': personaForm.get('sobre_mi')?.errors && personaForm.get('sobre_mi')?.touched, 'is-valid': !personaForm.get('sobre_mi')?.errors && !personaForm.get('sobre_mi')?.touched}"
+                      maxlength="500" minlength="10" required></textarea>
+                    <!-- <label for="floatingTextarea">Sobre mi</label> -->
+                  </div>
 
-                        <div class="mb-3">
-                          <label for="inputApellido" class="form-label">Apellido</label>
-                          <input type="text" name="apellido" formControlName="apellido" class="form-control"
-                              id="inputApellido" aria-describedby="apellido" [defaultValue]="pers.apellido">
+                  <!-- <input type="text" name="sobre_mi" formControlName="sobre_mi" class="form-control" id="inputOcupacion"
+                    aria-describedby="sobre_mi" [defaultValue]="pers.sobre_mi" value="{{pers.sobre_mi}}" [ngClass]="{'is-invalid': personaForm.get('sobre_mi')?.errors && personaForm.get('sobre_mi')?.touched, 'is-valid': !personaForm.get('sobre_mi')?.errors && !personaForm.get('sobre_mi')?.touched}"
+                    maxlength="500" minlength="10" required /> -->
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('sobre_mi')?.errors && personaForm.get('sobre_mi')?.touched">
+                    <p *ngIf="personaForm.get('sobre_mi')?.hasError('required')" class="text-danger">
+                      La sección sobre mi es requerida.
+                    </p>
+                    <p *ngIf="personaForm.get('sobre_mi')?.hasError('minlength')" class="text-danger">
+                      La sección sobre mi debe tener al menos 3 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('sobre_mi')?.hasError('maxlength')" class="text-danger">
+                      La sección sobre mi debe tener máximo 60 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- telefono -->
+                <div class="mb-3">
+                  <label for="inputTelefono" class="form-label">Telefono</label>
+                  <input type="text" formControlName="telefono" name="telefono" class="form-control" id="inputTelefono"
+                    aria-describedby="telefono" [defaultValue]="pers.telefono"
+                    [ngClass]="{'is-invalid': personaForm.get('telefono')?.errors && personaForm.get('telefono')?.touched, 'is-valid': !personaForm.get('telefono')?.errors && !personaForm.get('telefono')?.touched}"
+                    maxlength="20" minlength="7" required />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('telefono')?.errors && personaForm.get('telefono')?.touched">
+                    <p *ngIf="personaForm.get('telefono')?.hasError('required')" class="text-danger">
+                      El telefono es requerido.
+                    </p>
+                    <p *ngIf="personaForm.get('telefono')?.hasError('minlength')" class="text-danger">
+                      El telefono debe tener al menos 7 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('telefono')?.hasError('maxlength')" class="text-danger">
+                      El telefono debe tener máximo 20 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- email -->
+                <div class="mb-3">
+                  <label for="inputEmail" class="form-label">Email</label>
+                  <input type="email" formControlName="email" name="email" class="form-control" id="inputEmail"
+                    aria-describedby="email" [defaultValue]="pers.email"
+                    [ngClass]="{'is-invalid': personaForm.get('email')?.errors && personaForm.get('email')?.touched, 'is-valid': !personaForm.get('email')?.errors && !personaForm.get('email')?.touched}"
+                    maxlength="100" minlength="10" required />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('email')?.errors && personaForm.get('email')?.touched">
+                    <p *ngIf="personaForm.get('email')?.hasError('required')" class="text-danger">
+                      El email es requerido.
+                    </p>
+                    <p *ngIf="personaForm.get('email')?.hasError('minlength')" class="text-danger">
+                      El email debe tener al menos 10 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('email')?.hasError('maxlength')" class="text-danger">
+                      El email debe tener máximo 20 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('email')?.hasError('email')" class="text-danger">
+                      El formato del email no es válido.
+                    </p>
+                  </div>
+                </div>
+                <!-- provincia -->
+                <div class="mb-3">
+                  <label for="inputProvinciaId" class="form-label">Provincia</label>
+                  <select class="form-select" formControlName="provincia" name="provincia_id" class="form-select"
+                    id="inputProvinciaId"
+                    [ngClass]="{'is-invalid': personaForm.get('provincia')?.errors && personaForm.get('provincia')?.touched, 'is-valid': !personaForm.get('provincia')?.errors && !personaForm.get('provincia')?.touched}"
+                    required>
+                    <option *ngFor="let prov of provincias; let i = index" [selected]="i+1 === pers.provincia.id"
+                      value="{{i+1}}"> {{ prov.name }} </option>
+                  </select>
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('provincia')?.errors && personaForm.get('provincia')?.touched">
+                    <p *ngIf="personaForm.get('provincia')?.hasError('required')" class="text-danger">
+                      La provincia es requerida.
+                    </p>
+                  </div>
+                </div>
+                <!-- imagen fondo -->
+                <div class="mb-3">
+                  <label for="inputImageBackground" class="form-label">Url imagen de fondo</label>
+                  <input type="text" formControlName="image_background_header" name="image_background_header"
+                    class="form-control" id="inputImageBackground" aria-describedby="image_background_header"
+                    [defaultValue]="pers.image_background_header"
+                    [ngClass]="{'is-invalid': personaForm.get('image_background_header')?.errors && personaForm.get('image_background_header')?.touched, 'is-valid': !personaForm.get('image_background_header')?.errors && !personaForm.get('image_background_header')?.touched}"
+                    maxlength="20000" minlength="10" />
+                  <!-- errores -->
+                  <div
+                    *ngIf="personaForm.get('image_background_header')?.errors && personaForm.get('image_background_header')?.touched">
+                    <p *ngIf="personaForm.get('image_background_header')?.hasError('minlength')" class="text-danger">
+                      El link debe tener al menos 10 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('image_background_header')?.hasError('maxlength')" class="text-danger">
+                      El link debe tener máximo 20000 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- imagen perfil -->
+                <div class="mb-3">
+                  <label for="inputImagePerfil" class="form-label">Url imagen de perfil</label>
+                  <input type="text" formControlName="image_perfil" name="image_perfil" class="form-control"
+                    id="inputImagePerfil" aria-describedby="image_perfil" [defaultValue]="pers.image_perfil"
+                    [ngClass]="{'is-invalid': personaForm.get('image_perfil')?.errors && personaForm.get('image_perfil')?.touched, 'is-valid': !personaForm.get('image_perfil')?.errors && !personaForm.get('image_perfil')?.touched}"
+                    maxlength="20000" minlength="10" required />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('image_perfil')?.errors && personaForm.get('image_perfil')?.touched">
+                    <p *ngIf="personaForm.get('image_perfil')?.hasError('minlength')" class="text-danger">
+                      El link es requerido.
+                    </p>
+                    <p *ngIf="personaForm.get('image_perfil')?.hasError('minlength')" class="text-danger">
+                      El link debe tener al menos 10 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('image_perfil')?.hasError('maxlength')" class="text-danger">
+                      El link debe tener máximo 20000 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- fecha nac -->
+                <div class="mb-3">
+                  <label for="inputFechaNacimiento" class="form-label">fecha de nacimiento</label>
+                  <input type="date" formControlName="fecha_nacimiento" name="fecha_nacimiento" class="form-control"
+                    id="inputFechaNacimiento" aria-describedby="fecha_nacimiento" [defaultValue]="pers.fecha_nacimiento"
+                    value="{{pers.fecha_nacimiento}}"
+                    [ngClass]="{'is-invalid': personaForm.get('fecha_nacimiento')?.errors && personaForm.get('fecha_nacimiento')?.touched, 'is-valid': !personaForm.get('fecha_nacimiento')?.errors && !personaForm.get('fecha_nacimiento')?.touched}"
+                    maxlength="10" required />
+                  <!-- errores -->
+                  <div
+                    *ngIf="personaForm.get('fecha_nacimiento')?.errors && personaForm.get('fecha_nacimiento')?.touched">
+                    <p *ngIf="personaForm.get('fecha_nacimiento')?.hasError('minlength')" class="text-danger">
+                      La fecha de nacimiento es requerida.
+                    </p>
+                    <p *ngIf="personaForm.get('fecha_nacimiento')?.hasError('maxlength')" class="text-danger">
+                      La fecha de nacimiento debe tener máximo 10 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- botones -->
+                <div class="container text-center">
+                  <div class="row row-cols-2">
+                    <div class="col">
+                      <div class="p-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                          (click)="reload()">Cerrar</button>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                        <button type="submit" class="btn btn-info" [disabled]="personaForm.invalid">Editar</button>
+                      </div>
+                      <div class="p-3" *ngIf="this.resp == 200">
+                        <button type="submit" class="btn btn-success" disabled>Guardado</button>
+                      </div>
+                      <div class="p-3" *ngIf="this.resp == 'error'">
+                        <button type="submit" class="btn btn-danger" disabled>Error</button>
                       </div>
 
-                        <div class="mb-3">
-                            <label for="inputOcupacion" class="form-label">Sobre mi</label>
-                            <input type="text" name="sobre_mi" formControlName="sobre_mi"
-                                class="form-control" id="inputOcupacion" aria-describedby="sobre_mi"
-                                [defaultValue]="pers.sobre_mi" value="{{pers.sobre_mi}}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="inputTelefono" class="form-label">Telefono</label>
-                            <input type="text" formControlName="telefono" name="telefono"
-                                class="form-control" id="inputTelefono" aria-describedby="telefono"
-                                [defaultValue]="pers.telefono">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="inputEmail" class="form-label">Email</label>
-                            <input type="text" formControlName="email" name="email"
-                                class="form-control" id="inputEmail" aria-describedby="email"
-                                [defaultValue]="pers.email">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputProvinciaId" class="form-label">Provincia</label>
-                          <select class="form-select" formControlName="provincia" name="provincia_id" class="form-select" id="inputProvinciaId">
-                            <option *ngFor="let opt of options; let i = index" [selected]="i+1 === ngSelect" value="{{i+1}}"> {{ opt.name }} </option>
-                          </select>
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputImageBackground" class="form-label">Url imagen de fondo</label>
-                          <input type="text" formControlName="image_background_header" name="image_background_header" class="form-control" id="inputImageBackground" aria-describedby="image_background_header" [defaultValue]="pers.image_background_header">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputImagePerfil" class="form-label">Url imagen de perfil</label>
-                          <input type="text" formControlName="image_perfil" name="image_perfil" class="form-control" id="inputImagePerfil" aria-describedby="image_perfil" [defaultValue]="pers.image_perfil">
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="inputFechaNacimiento" class="form-label">fecha de nacimiento</label>
-                          <input type="text" formControlName="fecha_nacimiento" name="fecha_nacimiento" class="form-control" id="inputFechaNacimiento" aria-describedby="fecha_nacimiento" [defaultValue]="pers.fecha_nacimiento">
-                        </div>
-
-                        <div class="container overflow-hidden text-center">
-                          <div class="row gx-5">
-                            <div class="col">
-                             <div class="p-3">
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reload()">Cerrar</button>
-                             </div>
-                            </div>
-                            <div class="col">
-                              <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                  <button type="submit" class="btn btn-info">Editar</button>
-                              </div>
-                              
-                              <div class="p-3" *ngIf="this.resp == 200">
-                                  <button type="submit" class="btn btn-success" disabled>Guardado</button>
-                              </div>
-
-                              <div class="p-3" *ngIf="this.resp == 'error'">
-                                  <button type="submit" class="btn btn-danger">Error</button>
-                              </div>
-
-                            </div>
-                          </div>
-                        </div>
-                        
-                    </form>
-                    <!-- fin form proyectos -->
+                    </div>
+                  </div>
                 </div>
+
+              </form>
+              <!-- fin form proyectos -->
             </div>
+          </div>
         </div>
-    </div>
-    <!-- fin modal proyectos -->
-</ng-container>
+      </div>
+      <!-- fin modal proyectos -->
+    </ng-container>
 
   </div>
 </div>
-
-
