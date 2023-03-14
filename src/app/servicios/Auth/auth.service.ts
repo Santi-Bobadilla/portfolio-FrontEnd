@@ -11,8 +11,8 @@ import { PortfolioService } from '../Portfolio/portfolio.service';
 
 export class AuthService {
 
-  // api = 'https://backend-6hbb.onrender.com/api/login';
-  api = 'http://localhost:8080/api/login';
+  api = 'https://backend-6hbb.onrender.com/api/login';
+  // api = 'http://localhost:8080/api/login';
   b:any=false;
   currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>({'currentUser':null});
 

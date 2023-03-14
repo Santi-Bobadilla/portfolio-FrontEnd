@@ -8,8 +8,8 @@ import { map, Observable } from 'rxjs';
 
 export class PortfolioService implements OnInit {
 
-  // private url:string = "https://backend-6hbb.onrender.com/api/";
-  private url: string = "http://localhost:8080/api/";
+  private url:string = "https://backend-6hbb.onrender.com/api/";
+  // private url: string = "http://localhost:8080/api/";
 
   responseStatus: any
 
@@ -52,7 +52,7 @@ export class PortfolioService implements OnInit {
 
   ngOnInit(): void {
     // this.logueado
-    console.log(this.logueado);
+    // console.log(this.logueado);
     this.cargarAnio();
   }
 
