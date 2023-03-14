@@ -6,29 +6,28 @@
                     <h5 class="card-title d-inline">Proyectos</h5>
                     <!-- Button modal new -->
                     <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
-                        data-bs-target="#newProyectosModal" (click)="resetForm();cargarAnio()">
+                        data-bs-target="#newProyectosModal" (click)="resetForm()">
                         <i class="fa-solid fa-plus"></i>
                     </button>
-
                 </div>
             </div>
             <!-- Proyectos -->
             <div class="container-fluid">
-                
                 <div class="container-fluid" cdkDropList (cdkDropListDropped)="drop($event)">
-                    
                     <div *ngFor="let proy of proyectos" cdkDrag>
                         <hr class="border border-dark border-1 opacity-50">
                         <div class="row">
                             <div class="col">
                                 <div class="card mb-3">
                                     <div class="row">
+                                        <!-- imagen -->
                                         <div class="col-4 d-flex justify-content-center align-self-center">
                                             <img src="{{proy.url_image}}" class="img-fluid p-0" alt="{{proy.url_image}}"
                                                 width="150px" height="150px">
                                         </div>
                                         <div class="col-8 align-self-center">
                                             <div class="row">
+                                                <!-- nombre -->
                                                 <div class="col-sm-9">
                                                     <div class="card-body">
                                                         <h5 class="card-title">{{proy.nombre}}</h5>
@@ -41,12 +40,12 @@
                                                             class="btn btn-sm btn-outline-success mx-2"
                                                             data-bs-toggle="modal"
                                                             [attr.data-bs-target]="'#proyectosModal'+proy.id"
-                                                            (click)="abrirModal(proy);cargarAnio()">
+                                                            (click)="abrirModal(proy)">
                                                             <i class="fa-regular fa-pen-to-square"></i>
                                                         </button>
                                                         <!-- Button modal eliminar -->
                                                         <button type="button" class="btn btn-sm btn-outline-danger mx-2"
-                                                        data-bs-toggle="modal"
+                                                            data-bs-toggle="modal"
                                                             [attr.data-bs-target]="'#proyectosEliminarP'+proy.id">
                                                             <i class="fa-solid fa-trash"></i>
                                                         </button>
@@ -56,41 +55,41 @@
                                         </div>
                                         <div class="container mb-2">
                                             <ul class="list-group mx-2">
+                                                <!-- descripcion -->
                                                 <li class="list-group-item">
                                                     <b>Descripción:</b> {{proy.descripcion}}
                                                 </li>
+                                                <!-- fecha Inicio -->
                                                 <li class="list-group-item">
                                                     <b>Fecha de Inicio:</b> {{ proy.mes_inicio+'-'+proy.anio_inicio}}
                                                 </li>
-
+                                                <!-- fecha fin -->
                                                 <li class="list-group-item"
                                                     *ngIf="proy.mes_fin!==null && proy.anio_fin!==null ">
                                                     <b>Fecha de Fin:</b> {{ proy.mes_fin+'-'+proy.anio_fin}}
                                                 </li>
-
+                                                <!-- fecha fin -->
                                                 <li class="list-group-item"
                                                     *ngIf="proy.mes_fin===null || proy.anio_fin===null">
                                                     <b>Fecha de Fin:</b> en proceso
                                                 </li>
-
+                                                <!-- link proyecto -->
                                                 <li class="list-group-item"
                                                     *ngIf="proy.link.includes('http://') || proy.link.includes('https://')">
                                                     <b>Link: </b> <a href="{{proy.link}}"
                                                         target="_blank">{{proy.link}}</a>
                                                 </li>
-
+                                                <!-- fecha fin -->
                                                 <li class="list-group-item" *ngIf="proy.link.indexOf('http')==-1">
                                                     <b>Link: </b> <a href="{{'https://'+proy.link}}"
                                                         target="_blank">{{'https://'+proy.link}}</a>
                                                 </li>
-
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -112,79 +111,221 @@
                     <!-- form editar proyectos -->
                     <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="editarProyecto(proy)"
                         method="post">
+                        <!-- id -->
                         <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
-                            aria-describedby="id" [defaultValue]="proy.id" hidden>
+                            aria-describedby="id" [defaultValue]="proy.id" hidden />
+                        <!-- nombre -->
                         <div class="mb-3">
                             <label for="inputNombre" class="form-label">Nombre</label>
                             <input type="text" name="nombre" formControlName="nombre" class="form-control"
                                 id="inputNombre" aria-describedby="nombre" [defaultValue]="proy.nombre"
-                                value="{{proy.nombre}}">
+                                value="{{proy.nombre}}"
+                                [ngClass]="{'is-invalid': proyectoForm.get('nombre')?.errors && proyectoForm.get('nombre')?.touched, 'is-valid': !proyectoForm.get('nombre')?.errors && !proyectoForm.get('nombre')?.touched}"
+                                required maxlength="100" minlength="5" />
+                            <!-- errores -->
+                            <div *ngIf="proyectoForm.get('nombre')?.errors && proyectoForm.get('nombre')?.touched">
+                                <p *ngIf="proyectoForm.get('nombre')?.hasError('required')" class="text-danger">
+                                    El nombre es requerido.
+                                </p>
+                                <p *ngIf="proyectoForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                                    El nombre debe tener al menos 5 caracteres.
+                                </p>
+                                <p *ngIf="proyectoForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                                    El nombre debe tener máximo 100 caracteres.
+                                </p>
+                            </div>
                         </div>
-
+                        <!-- descripcion -->
                         <div class="mb-3">
                             <label for="inputDescripcion" class="form-label">Descripcion</label>
                             <input type="text" name="descripcion" formControlName="descripcion" class="form-control"
                                 id="inputDescripcion" aria-describedby="descripcion" [defaultValue]="proy.descripcion"
-                                value="{{proy.descripcion}}">
+                                value="{{proy.descripcion}}"
+                                [ngClass]="{'is-invalid': proyectoForm.get('descripcion')?.errors && proyectoForm.get('descripcion')?.touched, 'is-valid': !proyectoForm.get('descripcion')?.errors && !proyectoForm.get('descripcion')?.touched}"
+                                required maxlength="20000" minlength="5" />
+                            <!-- errores -->
+                            <div
+                                *ngIf="proyectoForm.get('descripcion')?.errors && proyectoForm.get('descripcion')?.touched">
+                                <p *ngIf="proyectoForm.get('descripcion')?.hasError('required')" class="text-danger">
+                                    La descripción es requerida.
+                                </p>
+                                <p *ngIf="proyectoForm.get('descripcion')?.hasError('minlength')" class="text-danger">
+                                    La descripción debe tener al menos 5 caracteres.
+                                </p>
+                                <p *ngIf="proyectoForm.get('descripcion')?.hasError('maxlength')" class="text-danger">
+                                    La descripción debe tener máximo 20000 caracteres.
+                                </p>
+                            </div>
                         </div>
-
+                        <!-- fecha inicio -->
                         <div class="mb-3">
                             <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
                             <div class="row">
+                                <!-- mes inicio -->
                                 <div class="col">
-                                    <select class="form-select" name="mes_inicio" class="form-select"
-                                        formControlName="mes_inicio">
-                                        <option value=""></option>
-                                        <option *ngFor="let m of mes; let i = index" [selected]="m===proy.mes_inicio"
-                                            value="{{m}}"> {{ m }} </option>
+                                    <select class="form-select" name="mes_inicio" id="inputFechaFin"
+                                        formControlName="mes_inicio"
+                                        [ngClass]="{'is-invalid': proyectoForm.get('mes_inicio')?.errors && proyectoForm.get('mes_inicio')?.touched, 'is-valid': !proyectoForm.get('mes_inicio')?.errors && !proyectoForm.get('mes_inicio')?.touched}"
+                                        required maxlength="2">
+                                        <option *ngFor="let m of mes; let i = index" [selected]="m === proy.mes_inicio"
+                                            value="{{m}}"> {{ m
+                                            }}
+                                        </option>
                                     </select>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="proyectoForm.get('mes_inicio')?.errors && proyectoForm.get('mes_inicio')?.touched">
+                                        <p *ngIf="proyectoForm.get('mes_inicio')?.hasError('required')"
+                                            class="text-danger">
+                                            El mes de inicio es requerido.
+                                        </p>
+                                        <p *ngIf="proyectoForm.get('mes_inicio')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El mes de inicio debe tener máximo 2 caracteres.
+                                        </p>
+                                    </div>
                                 </div>
+                                <!-- año inicio -->
                                 <div class="col">
-                                    <select class="form-select" name="anio_inicio" class="form-select"
-                                        formControlName="anio_inicio">
-                                        <option value=""></option>
-                                        <option *ngFor="let a of anio; let i = index" [selected]="a===proy.anio_inicio"
-                                            value="{{a}}"> {{ a }} </option>
+                                    <select class="form-select" name="anio_inicio" id="inputFechaFin"
+                                        formControlName="anio_inicio"
+                                        [ngClass]="{'is-invalid': proyectoForm.get('anio_inicio')?.errors && proyectoForm.get('anio_inicio')?.touched, 'is-valid': !proyectoForm.get('anio_inicio')?.errors && !proyectoForm.get('anio_inicio')?.touched}"
+                                        required maxlength="4">
+                                        <option *ngFor="let a of anio; let i = index"
+                                            [selected]="a === proy.anio_inicio" value="{{a}}"> {{
+                                            a }}
+                                        </option>
                                     </select>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="proyectoForm.get('anio_inicio')?.errors && proyectoForm.get('anio_inicio')?.touched">
+                                        <p *ngIf="proyectoForm.get('anio_inicio')?.hasError('required')"
+                                            class="text-danger">
+                                            El año de inicio es requerido.
+                                        </p>
+                                        <p *ngIf="proyectoForm.get('anio_inicio')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El año de inicio debe tener máximo 4 caracteres.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
+                        <!-- fecha fin -->
                         <div class="mb-3">
                             <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
                             <div class="row">
+                                <!-- mes fin -->
                                 <div class="col">
-                                    <select class="form-select" name="mes_fin" class="form-select"
-                                        formControlName="mes_fin">
-                                        <option value=""></option>
-                                        <option *ngFor="let m of mes; let i = index" [selected]="m===proy.mes_fin"
-                                            value="{{m}}"> {{ m }} </option>
-                                    </select>
+                                    <div *ngIf="proy.mes_fin===null, then thenBlockMes else elseBlockMes"></div>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="proyectoForm.get('mes_fin')?.errors && proyectoForm.get('mes_fin')?.touched">
+                                        <p *ngIf="proyectoForm.get('mes_fin')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El mes de fin debe tener máximo 2 caracteres.
+                                        </p>
+                                    </div>
                                 </div>
+                                <!-- thenBlockMes -->
+                                <ng-template #elseBlockMes>
+                                    <select class="form-select" name="mes_fin" id="inputFechaFin"
+                                        formControlName="mes_fin"
+                                        [ngClass]="{'is-invalid': proyectoForm.get('mes_fin')?.errors && proyectoForm.get('mes_fin')?.touched, 'is-valid': !proyectoForm.get('mes_fin')?.errors && !proyectoForm.get('mes_fin')?.touched}"
+                                        maxlength="2">
+                                        <option *ngFor="let m of mes; let i = index" [selected]="m === proy.mes_fin"
+                                            value="{{m}}"> {{ m
+                                            }}
+                                        </option>
+                                    </select>
+                                </ng-template>
+                                <!-- elseBlockMes -->
+                                <ng-template #thenBlockMes>
+                                    <select class="form-select" name="mes_fin" formControlName="mes_fin"
+                                        id="inputFechaFin"
+                                        [ngClass]="{'is-invalid': proyectoForm.get('mes_fin')?.errors && proyectoForm.get('mes_fin')?.touched, 'is-valid': !proyectoForm.get('mes_fin')?.errors && !proyectoForm.get('mes_fin')?.touched}"
+                                        maxlength="2">
+                                        <option *ngFor="let m of mes; let i = index" value="{{m}}"> {{ m }}
+                                        </option>
+                                    </select>
+                                </ng-template>
+                                <!-- año fin -->
                                 <div class="col">
-                                    <select class="form-select" name="anio_fin" class="form-select"
-                                        formControlName="anio_fin">
-                                        <option value=""></option>
-                                        <option *ngFor="let a of anio; let i = index" [selected]="a===proy.anio_fin"
-                                            value="{{a}}"> {{ a }} </option>
-                                    </select>
+                                    <div *ngIf="proy.anio_fin===null, then thenBlock else elseBlock"></div>
+                                    <!-- errores -->
+                                    <div
+                                        *ngIf="proyectoForm.get('anio_fin')?.errors && proyectoForm.get('anio_fin')?.touched">
+                                        <p *ngIf="proyectoForm.get('anio_fin')?.hasError('maxlength')"
+                                            class="text-danger">
+                                            El año de fin debe tener máximo 4 caracteres.
+                                        </p>
+                                    </div>
                                 </div>
+                                <!-- thenBlock -->
+                                <ng-template #thenBlock>
+                                    <select class="form-select" name="anio_fin" formControlName="anio_fin"
+                                        id="inputFechaFin"
+                                        [ngClass]="{'is-invalid': proyectoForm.get('anio_fin')?.errors && proyectoForm.get('anio_fin')?.touched, 'is-valid': !proyectoForm.get('anio_fin')?.errors && !proyectoForm.get('anio_fin')?.touched}"
+                                        maxlength="4">
+                                        <option *ngFor="let a of anio; let i = index" value="{{a}}"> {{ a }} </option>
+                                    </select>
+                                </ng-template>
+                                <!-- elseBlock -->
+                                <ng-template #elseBlock>
+                                    <select class="form-select" name="anio_fin" formControlName="anio_fin"
+                                        id="inputFechaFin"
+                                        [ngClass]="{'is-invalid': proyectoForm.get('anio_fin')?.errors && proyectoForm.get('anio_fin')?.touched, 'is-valid': !proyectoForm.get('anio_fin')?.errors && !proyectoForm.get('anio_fin')?.touched}"
+                                        maxlength="4">
+                                        <option *ngFor="let a of anio; let i = index" [selected]="a === proy.anio_fin"
+                                            value="{{a}}"> {{ a
+                                            }} </option>
+                                    </select>
+                                </ng-template>
                             </div>
                         </div>
-
+                        <!-- link -->
                         <div class="mb-3">
                             <label for="inputLink" class="form-label">Link</label>
                             <input type="text" name="link" formControlName="link" class="form-control" id="inputLink"
-                                aria-describedby="link" [defaultValue]="proy.link">
+                                aria-describedby="link" [defaultValue]="proy.link"
+                                [ngClass]="{'is-invalid': proyectoForm.get('link')?.errors && proyectoForm.get('link')?.touched, 'is-valid': !proyectoForm.get('link')?.errors && !proyectoForm.get('link')?.touched}"
+                                maxlength="255" minlength="10" required />
+                            <!-- errores -->
+                            <div *ngIf="proyectoForm.get('link')?.errors && proyectoForm.get('link')?.touched">
+                                <p *ngIf="proyectoForm.get('link')?.hasError('required')" class="text-danger">
+                                    El link es requerido.
+                                </p>
+                                <p *ngIf="proyectoForm.get('link')?.hasError('minlength')" class="text-danger">
+                                    El link debe tener al menos 10 caracteres.
+                                </p>
+                                <p *ngIf="proyectoForm.get('link')?.hasError('maxlength')" class="text-danger">
+                                    El link debe tener máximo 255 caracteres.
+                                </p>
+                            </div>
                         </div>
-
+                        <!-- url imagen -->
                         <div class="mb-3">
                             <label for="inputUrlImage" class="form-label">Url imagen</label>
                             <input type="text" name="url_image" formControlName="url_image" class="form-control"
-                                id="inputUrlImage" aria-describedby="url_image" [defaultValue]="proy.url_image">
+                                id="inputUrlImage" aria-describedby="url_image" [defaultValue]="proy.url_image"
+                                [ngClass]="{'is-invalid': proyectoForm.get('url_image')?.errors && proyectoForm.get('url_image')?.touched, 'is-valid': !proyectoForm.get('url_image')?.errors && !proyectoForm.get('url_image')?.touched}"
+                                maxlength="64000" minlength="10" required />
+                            <!-- errores -->
+                            <div
+                                *ngIf="proyectoForm.get('url_image')?.errors && proyectoForm.get('url_image')?.touched">
+                                <p *ngIf="proyectoForm.get('url_image')?.hasError('required')" class="text-danger">
+                                    La url de la imagen es requerida.
+                                </p>
+                                <p *ngIf="proyectoForm.get('url_image')?.hasError('minlength')" class="text-danger">
+                                    La url de la imagen debe tener al menos 10 caracteres.
+                                </p>
+                                <p *ngIf="proyectoForm.get('url_image')?.hasError('maxlength')" class="text-danger">
+                                    La url de la imagen debe tener máximo 64000 caracteres.
+                                </p>
+                            </div>
                         </div>
-
-                        <div class="container overflow-hidden text-center">
+                        <!-- botones -->
+                        <div class="container text-center">
                             <div class="row gx-5">
                                 <div class="col">
                                     <div class="p-3">
@@ -194,17 +335,15 @@
                                 </div>
                                 <div class="col">
                                     <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                        <button type="submit" class="btn btn-info">Editar</button>
+                                        <button type="submit" class="btn btn-info"
+                                            [disabled]="proyectoForm.invalid">Editar</button>
                                     </div>
-
                                     <div class="p-3" *ngIf="this.resp == 200">
                                         <button type="submit" class="btn btn-success" disabled>Guardado</button>
                                     </div>
-
                                     <div class="p-3" *ngIf="this.resp == 'error'">
                                         <button type="submit" class="btn btn-danger">Error</button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -229,92 +368,195 @@
             </div>
             <div class="modal-body">
                 <!-- form modal new proyectos -->
-                <form class="form-control" [formGroup]="proyectoForm" (ngSubmit)="nuevoProyecto()" method="post">
+                <form class="" [formGroup]="proyectoForm" (ngSubmit)="nuevoProyecto()" method="post">
+                    <!-- nombre -->
                     <div class="mb-3">
                         <label for="inputNombre" class="form-label">Nombre</label>
-                        <input type="text" formControlName="nombre" class="form-control" id="inputNombre"
-                            aria-describedby="nombre" value="">
+                        <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
+                            aria-describedby="nombre" value=""
+                            [ngClass]="{'is-invalid': proyectoForm.get('nombre')?.errors && proyectoForm.get('nombre')?.touched, 'is-valid': !proyectoForm.get('nombre')?.errors && !proyectoForm.get('nombre')?.touched}"
+                            required maxlength="100" minlength="5" />
+                        <!-- errores -->
+                        <div *ngIf="proyectoForm.get('nombre')?.errors && proyectoForm.get('nombre')?.touched">
+                            <p *ngIf="proyectoForm.get('nombre')?.hasError('required')" class="text-danger">
+                                El nombre es requerido.
+                            </p>
+                            <p *ngIf="proyectoForm.get('nombre')?.hasError('minlength')" class="text-danger">
+                                El nombre debe tener al menos 5 caracteres.
+                            </p>
+                            <p *ngIf="proyectoForm.get('nombre')?.hasError('maxlength')" class="text-danger">
+                                El nombre debe tener máximo 100 caracteres.
+                            </p>
+                        </div>
                     </div>
-
+                    <!-- descripcion -->
                     <div class="mb-3">
                         <label for="inputDescripcion" class="form-label">Descripcion</label>
-                        <input type="text" formControlName="descripcion" class="form-control" id="inputDescripcion"
-                            aria-describedby="descripcion" value="">
+                        <input type="text" name="descripcion" formControlName="descripcion" class="form-control"
+                            id="inputDescripcion" aria-describedby="descripcion" value=""
+                            [ngClass]="{'is-invalid': proyectoForm.get('descripcion')?.errors && proyectoForm.get('descripcion')?.touched, 'is-valid': !proyectoForm.get('descripcion')?.errors && !proyectoForm.get('descripcion')?.touched}"
+                            required maxlength="20000" minlength="5" />
+                        <!-- errores -->
+                        <div
+                            *ngIf="proyectoForm.get('descripcion')?.errors && proyectoForm.get('descripcion')?.touched">
+                            <p *ngIf="proyectoForm.get('descripcion')?.hasError('required')" class="text-danger">
+                                La descripción es requerida.
+                            </p>
+                            <p *ngIf="proyectoForm.get('descripcion')?.hasError('minlength')" class="text-danger">
+                                La descripción debe tener al menos 5 caracteres.
+                            </p>
+                            <p *ngIf="proyectoForm.get('descripcion')?.hasError('maxlength')" class="text-danger">
+                                La descripción debe tener máximo 20000 caracteres.
+                            </p>
+                        </div>
                     </div>
-
+                    <!-- fecha inicio -->
                     <div class="mb-3">
                         <label for="inputFechaInicio" class="form-label">Fecha de Inicio</label>
                         <div class="row">
+                            <!-- mes inicio -->
                             <div class="col">
-                                <select class="form-select" name="mes_inicio" class="form-select" id="inputFechaInicio"
-                                    formControlName="mes_inicio">
+                                <select class="form-select" name="mes_inicio" id="inputFechaInicio"
+                                    formControlName="mes_inicio"
+                                    [ngClass]="{'is-invalid': proyectoForm.get('mes_inicio')?.errors && proyectoForm.get('mes_inicio')?.touched, 'is-valid': !proyectoForm.get('mes_inicio')?.errors && !proyectoForm.get('mes_inicio')?.touched}"
+                                    required maxlength="4">
                                     <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="proyectoForm.get('mes_inicio')?.errors && proyectoForm.get('mes_inicio')?.touched">
+                                    <p *ngIf="proyectoForm.get('mes_inicio')?.hasError('required')" class="text-danger">
+                                        El mes de inicio es requerido.
+                                    </p>
+                                    <p *ngIf="proyectoForm.get('mes_inicio')?.hasError('maxlength')"
+                                        class="text-danger">
+                                        El mes de inicio debe tener máximo 2 caracteres.
+                                    </p>
+                                </div>
                             </div>
+                            <!-- año inicio -->
                             <div class="col">
-                                <select class="form-select" name="anio_inicio" class="form-select" id="inputFechaInicio"
-                                    formControlName="anio_inicio">
+                                <select class="form-select" name="anio_inicio" id="inputFechaInicio"
+                                    formControlName="anio_inicio"
+                                    [ngClass]="{'is-invalid': proyectoForm.get('anio_inicio')?.errors && proyectoForm.get('anio_inicio')?.touched, 'is-valid': !proyectoForm.get('anio_inicio')?.errors && !proyectoForm.get('anio_inicio')?.touched}"
+                                    required maxlength="4">
                                     <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="proyectoForm.get('anio_inicio')?.errors && proyectoForm.get('anio_inicio')?.touched">
+                                    <p *ngIf="proyectoForm.get('anio_inicio')?.hasError('required')"
+                                        class="text-danger">
+                                        El año de inicio es requerido.
+                                    </p>
+                                    <p *ngIf="proyectoForm.get('anio_inicio')?.hasError('maxlength')"
+                                        class="text-danger">
+                                        El año de inicio debe tener máximo 4 caracteres.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-
+                    <!-- fecha fin -->
                     <div class="mb-3">
                         <label for="inputFechaFin" class="form-label">Fecha de Fin</label>
                         <div class="row">
+                            <!-- mes fin -->
                             <div class="col">
-                                <select class="form-select" name="mes_fin" class="form-select"
-                                    formControlName="mes_fin">
+                                <select class="form-select" name="mes_fin" id="inputFechaFin" formControlName="mes_fin"
+                                    [ngClass]="{'is-invalid': proyectoForm.get('mes_fin')?.errors && proyectoForm.get('mes_fin')?.touched, 'is-valid': !proyectoForm.get('mes_fin')?.errors && !proyectoForm.get('mes_fin')?.touched}"
+                                    maxlength="2">
                                     <option *ngFor="let m of mes" value="{{m}}">{{m}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="proyectoForm.get('mes_fin')?.errors && proyectoForm.get('mes_fin')?.touched">
+                                    <p *ngIf="proyectoForm.get('mes_fin')?.hasError('maxlength')" class="text-danger">
+                                        El mes de fin debe tener máximo 2 caracteres.
+                                    </p>
+                                </div>
                             </div>
+                            <!-- año fin -->
                             <div class="col">
-                                <select class="form-select" name="anio_fin" class="form-select"
-                                    formControlName="anio_fin">
+                                <select class="form-select" name="anio_fin" id="inputFechaFin"
+                                    formControlName="anio_fin"
+                                    [ngClass]="{'is-invalid': proyectoForm.get('anio_fin')?.errors && proyectoForm.get('anio_fin')?.touched, 'is-valid': !proyectoForm.get('anio_fin')?.errors && !proyectoForm.get('anio_fin')?.touched}"
+                                    maxlength="4">
                                     <option *ngFor="let a of anio" value="{{a}}">{{a}}</option>
                                 </select>
+                                <!-- errores -->
+                                <div
+                                    *ngIf="proyectoForm.get('anio_fin')?.errors && proyectoForm.get('anio_fin')?.touched">
+                                    <p *ngIf="proyectoForm.get('anio_fin')?.hasError('maxlength')" class="text-danger">
+                                        El año de fin debe tener máximo 4 caracteres.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-
+                    <!-- link -->
                     <div class="mb-3">
                         <label for="inputLink" class="form-label">Link</label>
-                        <input type="text" formControlName="link" class="form-control" id="inputLink"
-                            aria-describedby="link" value="">
+                        <input type="text" name="link" formControlName="link" class="form-control" id="inputLink"
+                            aria-describedby="link"
+                            [ngClass]="{'is-invalid': proyectoForm.get('link')?.errors && proyectoForm.get('link')?.touched, 'is-valid': !proyectoForm.get('link')?.errors && !proyectoForm.get('link')?.touched}"
+                            maxlength="255" minlength="10" required />
+                        <!-- errores -->
+                        <div *ngIf="proyectoForm.get('link')?.errors && proyectoForm.get('link')?.touched">
+                            <p *ngIf="proyectoForm.get('link')?.hasError('required')" class="text-danger">
+                                El link es requerido.
+                            </p>
+                            <p *ngIf="proyectoForm.get('link')?.hasError('minlength')" class="text-danger">
+                                El link debe tener al menos 10 caracteres.
+                            </p>
+                            <p *ngIf="proyectoForm.get('link')?.hasError('maxlength')" class="text-danger">
+                                El link debe tener máximo 255 caracteres.
+                            </p>
+                        </div>
                     </div>
-
+                    <!-- url imagen -->
                     <div class="mb-3">
                         <label for="inputUrlImage" class="form-label">Url imagen</label>
-                        <input type="text" formControlName="url_image" class="form-control" id="inputUrlImage"
-                            aria-describedby="url_image" value="">
+                        <input type="text" name="url_image" formControlName="url_image" class="form-control"
+                            id="inputUrlImage" aria-describedby="url_image"
+                            [ngClass]="{'is-invalid': proyectoForm.get('url_image')?.errors && proyectoForm.get('url_image')?.touched, 'is-valid': !proyectoForm.get('url_image')?.errors && !proyectoForm.get('url_image')?.touched}"
+                            maxlength="64000" minlength="10" required />
+                        <!-- errores -->
+                        <div *ngIf="proyectoForm.get('url_image')?.errors && proyectoForm.get('url_image')?.touched">
+                            <p *ngIf="proyectoForm.get('url_image')?.hasError('required')" class="text-danger">
+                                La url de la imagen es requerida.
+                            </p>
+                            <p *ngIf="proyectoForm.get('url_image')?.hasError('minlength')" class="text-danger">
+                                La url de la imagen debe tener al menos 10 caracteres.
+                            </p>
+                            <p *ngIf="proyectoForm.get('url_image')?.hasError('maxlength')" class="text-danger">
+                                La url de la imagen debe tener máximo 64000 caracteres.
+                            </p>
+                        </div>
                     </div>
-
-                    <div class="container overflow-hidden text-center">
+                    <!-- botones -->
+                    <div class="container text-center">
                         <div class="row gx-5">
                             <div class="col">
-                                <div class="p-3">
+                                <div class="">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                         (click)="reload()">Cerrar</button>
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="p-3" *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                    <button type="submit" class="btn btn-info">Crear</button>
+                                <div class="" *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                    <button type="submit" class="btn btn-info"
+                                        [disabled]="proyectoForm.invalid">Crear</button>
                                 </div>
-
-                                <div class="p-3" *ngIf="this.resp == 200">
-                                    <button type="submit" class="btn btn-success" disabled>Creado</button>
+                                <div class="" *ngIf="this.resp == 200">
+                                    <button type="button" class="btn btn-success" disabled>Creado</button>
                                 </div>
-
-                                <div class="p-3" *ngIf="this.resp == 'error'">
-                                    <button type="submit" class="btn btn-danger">Error</button>
+                                <div class="" *ngIf="this.resp == 'error'">
+                                    <button type="button" class="btn btn-danger">Error</button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </form>
                 <!-- fin form new proyectos -->
             </div>
@@ -326,46 +568,49 @@
 <!-- Modal Eliminar Proyecto -->
 <div *ngFor="let proy of proyectos">
     <div class="modal fade" id="proyectosEliminarP{{proy.id}}" tabindex="-1" aria-labelledby="proyectosEliminarP"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- form modal eliminar proyectos -->
-                <div class="container">
-                    <p class="text-center">
-                        ¿Seguro desea eliminar el proyecto {{proy.nombre}}?
-                    </p>
-                </div>
-                <form class="container" [formGroup]="proyectoForm" (ngSubmit)="eliminarProyecto(proy.id)">
-                    <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
-                            aria-describedby="id" [defaultValue]="proy.id" value="proy.id" hidden>
-                    <div class="container text-center">
-                        <div class="row gx-5">
-                            <div class="col">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reload()">Cerrar</button>
-                            </div>
-                            <div class="col">
-                                <div *ngIf="this.resp !== 200 && this.resp !== 'error'">
-                                    <button type="submit" class="btn btn-warning">Eliminar</button>
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- form modal eliminar proyectos -->
+                    <div class="container">
+                        <p class="text-center">
+                            ¿Seguro desea eliminar el proyecto <b>{{proy.nombre}}</b>?
+                        </p>
+                        <p class="text-center">
+                            Esta acción es irreversible.
+                        </p>
+                    </div>
+                    <form class="container" [formGroup]="proyectoForm" (ngSubmit)="eliminarProyecto(proy.id)">
+                        <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
+                            aria-describedby="id" [defaultValue]="proy.id" value="proy.id" hidden />
+                        <!-- botones -->
+                        <div class="container text-center">
+                            <div class="row gx-5">
+                                <div class="col">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        (click)="reload()">Cerrar</button>
                                 </div>
-
-                                <div *ngIf="this.resp == 200">
-                                    <button type="submit" class="btn btn-success" disabled>Eliminado</button>
+                                <div class="col">
+                                    <div *ngIf="this.resp !== 200 && this.resp !== 'error'">
+                                        <button type="submit" class="btn btn-warning">Eliminar</button>
+                                    </div>
+                                    <div *ngIf="this.resp == 200">
+                                        <button type="submit" class="btn btn-success" disabled>Eliminado</button>
+                                    </div>
+                                    <div *ngIf="this.resp == 'error'">
+                                        <button type="submit" class="btn btn-danger" disabled>Error</button>
+                                    </div>
                                 </div>
-
-                                <div *ngIf="this.resp == 'error'">
-                                    <button type="submit" class="btn btn-danger" disabled>Error {{this.code}}</button>
-                                </div>
-
                             </div>
                         </div>
-                    </div>
-                </form>
-                <!-- fin form eliminar proyectos -->
+                    </form>
+                    <!-- fin form eliminar proyectos -->
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-</div>
 <!-- fin modal eliminar proyectos -->
+
+<!-- terminar header con validaciones y formularios, pasar option de header a portfolioservice, agregar campos redes sociales en persona (back-front), hacer register/ modal cerrar sesion/ configurar si esta logueado que ver... -->

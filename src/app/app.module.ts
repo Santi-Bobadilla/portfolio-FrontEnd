@@ -23,6 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
+import {MatMenuModule} from '@angular/material/menu';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,12 +48,14 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,
+      outerStrokeLinecap: 'butt',
       outerStrokeWidth: 16,
       innerStrokeWidth: 8,
       outerStrokeColor: "#78C000",
       innerStrokeColor: "#C7E596",
-      animationDuration: 300,
+      animationDuration: 100,
       responsive: true,
+      unitsFontSize: '36',
       titleFontSize:'36',
       titleColor:'black',
       unitsColor:'black',
@@ -59,7 +63,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     }),
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
-    DragDropModule
+    DragDropModule,
+    MatMenuModule
   ],
   providers: [PortfolioService,
     {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true}
