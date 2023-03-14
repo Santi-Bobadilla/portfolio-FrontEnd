@@ -25,7 +25,7 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.provincias = this.portfolioService.provincias;
     this.portfolioService.obtenerDatos().subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.persona = data;
     });
 

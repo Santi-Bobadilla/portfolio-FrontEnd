@@ -34,7 +34,7 @@ export class AuthService {
   }
   
   getToken() {
-    console.log(sessionStorage.getItem('currentUser'));
+    // console.log(sessionStorage.getItem('currentUser'));
     return sessionStorage.getItem('currentUser');
   }
 
@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   get usuarioAutenticado(){
-    console.log(this.currentUserSubject.value);
+    // console.log(this.currentUserSubject.value);
     return this.currentUserSubject.value;
   }
   

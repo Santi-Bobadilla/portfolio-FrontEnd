@@ -37,6 +37,9 @@ export class HardSoftSkillComponent implements OnInit {
         }
       }      
     })
+    console.log(this.skills);
+    console.log(this.hard);
+    console.log(this.soft);
     this.skillForm = this.initForm();
     this.resp='';
   }
@@ -59,8 +62,11 @@ export class HardSoftSkillComponent implements OnInit {
     this.skillForm.reset();
   }
 
-  abrirModal(skill:any):void{    
+  abrirModal(skill:any):void{
+    console.log(skill);
     this.skillForm = this.initForm(skill);
+    console.log(this.skillForm);
+    
   }
 
   editarSkills(skill:any){
