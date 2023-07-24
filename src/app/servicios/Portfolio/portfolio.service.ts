@@ -1,6 +1,7 @@
-import { Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { delay, map, Observable } from 'rxjs';
+import { AuthService } from '../Auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +9,16 @@ import { map, Observable } from 'rxjs';
 
 export class PortfolioService implements OnInit {
 
-  private url:string = "https://backend-6hbb.onrender.com/api/";
-  // private url: string = "http://localhost:8080/api/";
-
+  // private url:string = "https://backend-6hbb.onrender.com/api/";
+  private url: string = "http://localhost:8080/api/";
   responseStatus: any
 
   mes:any[] = ['','01','02','03','04','05','06','07','08','09','10','11','12']
   anio:any [] = [];
   anio0:any=1960;
   anio1:any=2023;
+  user:any;
+  userI:any;
 
   provincias:any[] = 
   [
@@ -45,15 +47,25 @@ export class PortfolioService implements OnInit {
     {'name':'Tucuman'},
     {'name':'Ciudad Autonoma de Buenos Aires'}
   ]
+  
+  loggIn: boolean = false;
 
-  logueado:boolean=false;
+  educacion: any;
+
+  uId:number;
 
   constructor(private http: HttpClient) { }
-
+  
   ngOnInit(): void {
-    // this.logueado
-    // console.log(this.logueado);
     this.cargarAnio();
+  }
+
+  getLoggIn() {
+    // console.log(sessionStorage.getItem('loggIn'));
+    if(sessionStorage.getItem('loggIn')!==null){
+      this.loggIn=true;
+    }
+    return sessionStorage.getItem('loggIn');    
   }
 
   // funcion cargar año
@@ -65,10 +77,41 @@ export class PortfolioService implements OnInit {
     return this.anio;
   }
 
-  // persona
-  obtenerDatos(): Observable<any> {
-    return this.http.get<any>(this.url + "ver/personas");
+  // obtener user
+  obtenerUserActual(email:string): Observable<any> {
+    // console.log(email);
+    return this.http.get<any>(this.url + "ver/user/"+email);
   }
+
+  // obtener email
+  userE(){
+    if(sessionStorage.getItem('userE')!==null){
+      this.user = sessionStorage.getItem('userE')
+      // console.log(this.user);
+      this.userId(this.user)
+    }
+    return this.user;
+  }
+
+  // obtener id
+  userId(email:string){
+    this.obtenerUserActual(email).subscribe(data => {
+      sessionStorage.setItem('userId', data[0].id);
+      // console.log(sessionStorage.getItem('userId'));
+      this.userI = sessionStorage.getItem('userId');
+      return this.userI;
+    })
+  }
+
+  // persona
+
+  obtenerDatos(email:string): Observable<any> {
+    return this.http.get<any>(this.url + "ver/persona/"+email);
+  }
+
+  // obtenerDatos(): Observable<any> {
+  //   return this.http.get<any>(this.url + "ver/personas");
+  // }
 
   editarPers(id: number, body: any): Observable<void> {
     // console.log(body);
@@ -80,8 +123,10 @@ export class PortfolioService implements OnInit {
   }
 
   // educacion
-  obtenerEdu(): Observable<any> {
-    return this.http.get<any>(this.url + "ver/edu");
+  obtenerEdu(id:number): Observable<any> {
+    console.log('entre obtenerEdu');
+    console.log(id);
+    return this.http.get<any>(this.url + "ver/edu/"+id);
   }
 
   nuevoEdu(body: any): Observable<any> {

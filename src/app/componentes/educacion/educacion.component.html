@@ -1,64 +1,77 @@
 <div class="container-fluid">
-    <div class="card mb-3 pb-2">
-        <div class="card-body">
-            <div class="row">
-                <div class="col text-center">
-                    <h4 class="card-title d-inline">Educación</h4>
-                    <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
-                        data-bs-target="#newEducacionModal" (click)="resetForm()" *ngIf="portfolioService.logueado===true">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-            <!-- Educacion -->
-            <div class="container-fluid" *ngFor="let edu of educacion">
-                <hr class="border border-dark border-1 opacity-50">
+    <!-- <button class="btn btn-success" (click)="">ver educacion {{userId}}</button> -->
+    <div *ngIf="(userId|async)!==0;else educa ">
+        cargando... 
+        <!-- {{userId}} -->
+        <!-- <div *ngFor="let u of (userId|async)">
+            {{u?.id}}
+        </div> -->
+        <!-- {{traerTodo2()}} -->
+    </div>
+    <ng-template #educa>        
+        <!-- {{this.traerEdu(userId)}} -->
+        <div class="card mb-3 pb-2">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col">
-                        <div class="card mb-3">
-                            <div class="row">
-                                <div class="col-9">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ edu.nombre }}</h5>
+                    <div class="col text-center">
+                        <h4 class="card-title d-inline">Educación</h4>
+                        <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
+                            data-bs-target="#newEducacionModal" (click)="resetForm()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Educacion -->
+                <div class="container-fluid" *ngFor="let edu of educacion">
+                    <hr class="border border-dark border-1 opacity-50">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card mb-3">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ edu.nombre }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        <button type="button" class="btn btn-sm btn-outline-success mx-1"
+                                            data-bs-toggle="modal" [attr.data-bs-target]="'#educacionModal' + edu.id"
+                                            (click)="abrirModalEd(edu)">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
+                                        <!-- Button modal eliminar -->
+                                        <button type="button" class="btn btn-sm btn-outline-danger mx-2"
+                                            data-bs-toggle="modal" [attr.data-bs-target]="'#educacionEliminarE'+edu.id">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-3 text-end">
-                                    <button type="button" class="btn btn-sm btn-outline-success mx-1"
-                                        data-bs-toggle="modal" [attr.data-bs-target]="'#educacionModal' + edu.id"
-                                        (click)="abrirModalEd(edu)">
-                                        <i class="fa-regular fa-pen-to-square"></i>
-                                    </button>
-                                    <!-- Button modal eliminar -->
-                                    <button type="button" class="btn btn-sm btn-outline-danger mx-2"
-                                        data-bs-toggle="modal" [attr.data-bs-target]="'#educacionEliminarE'+edu.id">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                <div class="container-fluid mb-2">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <b>Condición Actual:</b> {{ edu.condicion.nombre }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>Fecha de Inicio:</b> {{ edu.mes_inicio+'-'+edu.anio_inicio}}
+                                        </li>
+                                        <li class="list-group-item" *ngIf="edu.condicion.id!==2">
+                                            <b>Fecha de Fin:</b> {{ edu.mes_fin+'-'+edu.anio_fin}}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>Certificación:</b> {{ edu.certificacion }}
+                                        </li>
+    
+                                    </ul>
                                 </div>
-                            </div>
-                            <div class="container-fluid mb-2">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <b>Condición Actual:</b> {{ edu.condicion.nombre }}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Fecha de Inicio:</b> {{ edu.mes_inicio+'-'+edu.anio_inicio}}
-                                    </li>
-                                    <li class="list-group-item" *ngIf="edu.condicion.id!==2">
-                                        <b>Fecha de Fin:</b> {{ edu.mes_fin+'-'+edu.anio_fin}}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Certificación:</b> {{ edu.certificacion }}
-                                    </li>
-
-                                </ul>
                             </div>
                         </div>
                     </div>
+                    <!-- Fin Educacion -->
                 </div>
-                <!-- Fin Educacion -->
             </div>
         </div>
-    </div>
+    </ng-template>
+    
 </div>
 
 <!-- Modal Editar Educacion -->

@@ -17,23 +17,25 @@ export class HeaderComponent {
   personaForm: FormGroup;
   resp:any;
   provincias:any[];
-
+  userId:any;
+  
   constructor(protected authService: AuthService, protected portfolioService:PortfolioService, private fb:FormBuilder, private router:Router) {
     
   }
 
   ngOnInit(): void {
     this.provincias = this.portfolioService.provincias;
-    this.portfolioService.obtenerDatos().subscribe(data => {
-      // console.log(data);
+    this.portfolioService.obtenerDatos(this.portfolioService.user).subscribe(data=>{
+      console.log(data);
       this.persona = data;
-    });
-
+      console.log(this.persona);
+    })
     this.personaForm = this.initForm();
     this.resp='';
-    this.portfolioService.logueado
-    // console.log(this.portfolioService.logueado);
-    
+    this.portfolioService.getLoggIn();
+    // console.log(this.authService.getLoggIn());
+    // this.userId = sessionStorage.getItem('userId')
+    // console.log(this.userId)
   }
   
   initForm(pers?:any):FormGroup {

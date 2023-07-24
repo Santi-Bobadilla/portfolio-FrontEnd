@@ -27,11 +27,24 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active"
-                *ngIf="portfolioService.logueado===false">Registrarse</a></li>
+              *ngIf="portfolioService.loggIn==false">Registrarse</a></li>
             <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active"
-                *ngIf="portfolioService.logueado===false">Iniciar Sesión</a></li>
+              *ngIf="portfolioService.loggIn==false">Iniciar Sesión</a></li>
             <li>
-              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
+              <div *ngFor="let pers of persona">
+                <div *ngIf="pers.id!=null; then editBlock else createBlock"></div>
+                <ng-template #editBlock>
+                  <button class="dropdown-item" routerLink="/editar" routerLinkActive="active" (click)="authService.editar()">
+                    Editar Portfolio
+                  </button>
+                </ng-template>
+                <ng-template #createBlock>
+                  <button class="dropdown-item" routerLink="/editar" routerLinkActive="active" (click)="authService.editar()">
+                    Crear Portfolio
+                  </button>
+                </ng-template>
+              </div>              
+              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion" *ngIf="portfolioService.loggIn!==false">
                 Cerrar Sesión
               </button>
             </li>
@@ -59,7 +72,7 @@
     </mat-menu>
 
     <mat-menu #sesion="matMenu" class="d-block d-lg-none">
-      <div *ngIf="portfolioService.logueado===false; then trueBlock else falseBlock"></div>
+      <div *ngIf="portfolioService.loggIn==false; then trueBlock else falseBlock"></div>
       <ng-template #trueBlock>
         <button mat-menu-item>
           <a class="dropdown-item" routerLink="/register" routerLinkActive="active">Registrarse</a>
@@ -70,6 +83,11 @@
       </ng-template>
       <ng-template #falseBlock>
         <button mat-menu-item>
+          <button class="dropdown-item" routerLink="/editar" routerLinkActive="active" (click)="authService.editar()">
+            Editar Portfolio
+          </button>
+        </button>
+        <button mat-menu-item>
           <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
             Cerrar Sesión
           </button>
@@ -78,6 +96,7 @@
     </mat-menu>
   </nav>
   <!-- fin -->
+
   <div class="card mb-3 pb-2" *ngFor="let pers of persona">
     <div class="position-relative">
       <img src="{{pers.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%"
@@ -91,7 +110,7 @@
         <div class="col-10">
           <h5 class="card-title">{{pers.nombre+' '+pers.apellido}}</h5>
         </div>
-        <div class="col-2 text-end" *ngIf="portfolioService.logueado===true">
+        <div class="col-2 text-end" *ngIf="portfolioService.getLoggIn">
           <button type="button" class="btn btn-sm btn-outline-success mx-1" data-bs-toggle="modal"
             data-bs-target="#personaModal" (click)="abrirModalP(pers)">
             <i class="fa-regular fa-pen-to-square"></i>
@@ -415,7 +434,7 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
             </div>
             <div class="col">
-              <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()">
+              <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()" data-bs-dismiss="modal">
                 <button type="button" class="btn btn-warning">
                   Sí
                 </button>

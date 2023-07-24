@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { User } from 'src/app/modelo/modelo';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -8,8 +10,9 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
   styleUrls: ['./educacion.component.css']
 })
 
-export class EducacionComponent implements OnInit{
+export class EducacionComponent implements OnInit, AfterViewInit{
 
+  // educacion$:Observable<any>;
   educacion:any;
   educacionForm: FormGroup;
   resp:any;
@@ -20,25 +23,68 @@ export class EducacionComponent implements OnInit{
   ]
   mes:any[];
   anio:any [];
+  userId:any;
  
   constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder) {}  
-
+  ngAfterViewInit(): void {
+    // this.portfolioService.userE();
+    // this.portfolioService.userId(this.portfolioService.user);
+    // this.userId = sessionStorage.getItem('userId')
+    // console.log(this.userId)
+    // throw new Error('Method not implemented.');
+    // this.traerTodo2()
+  }
+    
   ngOnInit(){
+    // this.portfolioService.userE();
+    // this.portfolioService.userId(this.portfolioService.user);
     this.mes=this.portfolioService.mes;
     this.anio=this.portfolioService.anio;
-    this.portfolioService.obtenerEdu().subscribe(data => {
-      // console.log(data);
-      this.educacion = data;
-    });
+    // this.userId = sessionStorage.getItem('userId')
+    // this.userId thisportfolioService.userId(this.portfolioService.user);
+    console.log(this.portfolioService.user)
+    // this.portfolioService.obtenerUserActual(this.portfolioService.user).subscribe(userId => {
+    //   this.userId = userId[0].id
+    //   console.log(this.userId)
+    //   console.log('entre subscribe')
+    // })
+    
+    
+    // consolelog(typeof this.userId);
+    
+    // this.cargarEducacion(this.userId)
     this.educacionForm = this.initForm();
     this.resp='';
+    this.userId=this.portfolioService.uId
+    console.log(this.userId)
+    console.log('entre a oninit');
+    this.traerEdu(this.portfolioService.uId)
+    
   }
 
+  traerEdu(id: number){
+    console.log(id);    
+    this.portfolioService.obtenerEdu(id).subscribe(data=>{
+      console.log(data);
+      this.educacion = data;
+      console.log(this.educacion);
+    })
+  }
+  
   resetForm(){
     this.educacionForm.reset();
     this.portfolioService.cargarAnio();
   }
-  
+
+  // cargarEducacion(id:number){
+  //   console.log('entre cargar Educacion');
+  //   this.educacion$ = this.portfolioService.obtenerEdu(id);
+  // }
+
+  cargarEducacion2(id:number){
+    this.portfolioService.obtenerEdu(id).subscribe()
+  }
+
   initForm(edu?:any):FormGroup {
     return this.formBuilder.group({
       id: [edu?.id],

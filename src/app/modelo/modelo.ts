@@ -28,4 +28,18 @@ export interface Credentials {
 //     ocupacion?: string;
 // }
 
+export interface User{
+apellido?:string;
+email?:string;
+fecha_nacimiento?:string;
+id?:number;
+image_background_header?:string;
+image_perfil?:string;
+nombre?:string;
+ocupacion?:string;
+provincia?:number;
+sobre_mi?:string;
+telefono?:string;
+}
+
 
