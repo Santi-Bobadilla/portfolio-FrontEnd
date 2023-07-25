@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { mergeMap } from 'rxjs';
 
 @Component({
   selector: 'app-proyectos',
@@ -17,6 +18,7 @@ export class ProyectosComponent implements OnInit {
   
   mes:any[];
   anio:any [];
+  loadProy:boolean=false;
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.proyectos, event.previousIndex, event.currentIndex);
@@ -27,15 +29,20 @@ export class ProyectosComponent implements OnInit {
   ngOnInit(): void {
     this.mes=this.portfolioService.mes;
     this.anio=this.portfolioService.anio;
-    this.portfolioService.obtenerProy().subscribe(data => {
-      this.proyectos = [];
-      for (let i = 0; i < data.length; i++) {
-        this.proyectos.push(data[i])
-      }
-    })
-
     this.proyectoForm = this.initForm();
-    this.resp = '';        
+    this.resp = '';
+
+    // obtener proyectos
+    this.portfolioService.obtenerDatos(this.portfolioService.user).pipe(
+      mergeMap((res:any)=>
+        this.portfolioService.obtenerProy(res[0].id)
+      ),
+    ).subscribe(data=>{
+      // console.log(data);
+      this.proyectos = data;
+      // console.log(this.proyectos);
+      this.loadProy=true;
+    })
   }
 
   initForm(proy?: any): FormGroup {

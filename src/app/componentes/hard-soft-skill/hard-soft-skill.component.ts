@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { mergeMap } from 'rxjs';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -19,13 +20,22 @@ export class HardSoftSkillComponent implements OnInit {
     {name:'Soft Skill'}
   ]
   skills:any[]=[];
+  loadSk:boolean=false;
 
   constructor(private portfolioService:PortfolioService, private formBuilder:FormBuilder){}
 
   ngOnInit():void {
     this.hard = [],
     this.soft = [],
-    this.portfolioService.obtenerSkill().subscribe(data=>{
+    this.skillForm = this.initForm();
+    this.resp='';
+    // obtener skills
+    this.portfolioService.obtenerDatos(this.portfolioService.user).pipe(
+      mergeMap((res:any)=>
+        this.portfolioService.obtenerSkill(res[0].id)
+      ),
+    ).subscribe(data=>{
+      // console.log(data);
       for (let i = 0; i < data.length; i++) {
         this.skills.push(data[i]);
         if(data[i].tipo_skill.id===1){
@@ -35,12 +45,12 @@ export class HardSoftSkillComponent implements OnInit {
           data[i].color=this.colorHEX();
           this.soft.push(data[i])
         }
-      }      
+      }
+      this.loadSk=true;
     })
-    this.skillForm = this.initForm();
-    this.resp='';
   }
 
+  // init form
   initForm(skill?:any):FormGroup {
     return this.formBuilder.group({
       id: [skill?.id],

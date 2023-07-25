@@ -12,14 +12,10 @@ export class PortfolioService implements OnInit {
   // private url:string = "https://backend-6hbb.onrender.com/api/";
   private url: string = "http://localhost:8080/api/";
   responseStatus: any
-
   mes:any[] = ['','01','02','03','04','05','06','07','08','09','10','11','12']
   anio:any [] = [];
   anio0:any=1960;
   anio1:any=2023;
-  user:any;
-  userI:any;
-
   provincias:any[] = 
   [
     {'name':'Buenos Aires'},
@@ -47,17 +43,32 @@ export class PortfolioService implements OnInit {
     {'name':'Tucuman'},
     {'name':'Ciudad Autonoma de Buenos Aires'}
   ]
-  
+
   loggIn: boolean = false;
-
-  educacion: any;
-
-  uId:number;
+  user:any;
+  userI:any;
+  header:any;
+  educacion:any;
 
   constructor(private http: HttpClient) { }
   
   ngOnInit(): void {
-    this.cargarAnio();
+    // //trae mail e id
+    // this.userE()
+    // // carga año para formulario
+    // this.cargarAnio();
+    // // header
+    // this.obtenerDatos(this.user).subscribe(data=>{
+    //   console.log(data);
+    //   this.header = data;
+    //   console.log(this.header);
+    // })
+    // //educacion
+    // this.obtenerEdu(this.userI).subscribe(data=>{
+    //   console.log(data);
+    //   this.educacion = data;
+    //   console.log(this.educacion);
+    // })
   }
 
   getLoggIn() {
@@ -158,8 +169,8 @@ export class PortfolioService implements OnInit {
   }
 
   // proyectos
-  obtenerProy(): Observable<any> {
-    return this.http.get<any>(this.url + "ver/proy");
+  obtenerProy(id:number): Observable<any> {
+    return this.http.get<any>(this.url + "ver/proy/"+id);
   }
 
   nuevoProy(body: any): Observable<any> {
@@ -196,8 +207,9 @@ export class PortfolioService implements OnInit {
   }
 
   // Experiencia    
-  obtenerExp(): Observable<any> {
-    return this.http.get<any>(this.url + "ver/exp");
+  obtenerExp(id:number): Observable<any> {
+    console.log('entre obtenerExp');
+    return this.http.get<any>(this.url + "ver/exp/"+id);
   }
 
   nuevoExp(body: any): Observable<any> {
@@ -228,8 +240,9 @@ export class PortfolioService implements OnInit {
   }
 
   // skills
-  obtenerSkill(): Observable<any> {
-    return this.http.get<any>(this.url + "ver/skill");
+  obtenerSkill(id:number): Observable<any> {
+    console.log('entre obtenerSkill');
+    return this.http.get<any>(this.url + "ver/skill/"+id);
   }
 
   nuevoSkill(body: any): Observable<any> {

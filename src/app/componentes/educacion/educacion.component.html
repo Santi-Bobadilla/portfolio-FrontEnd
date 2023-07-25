@@ -1,15 +1,17 @@
 <div class="container-fluid">
-    <!-- <button class="btn btn-success" (click)="">ver educacion {{userId}}</button> -->
-    <div *ngIf="(userId|async)!==0;else educa ">
-        cargando... 
-        <!-- {{userId}} -->
-        <!-- <div *ngFor="let u of (userId|async)">
-            {{u?.id}}
-        </div> -->
-        <!-- {{traerTodo2()}} -->
+    <div class="card mb-3 pb-2" *ngIf="loadEd==false;else educa">
+        <div class="card-body">
+            <div class="row">
+                <div class="col text-center">
+                    <h4 class="card-title d-inline">Educación</h4>
+                    <p>
+                        Recuperando datos... por favor espere
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-    <ng-template #educa>        
-        <!-- {{this.traerEdu(userId)}} -->
+    <ng-template #educa>
         <div class="card mb-3 pb-2">
             <div class="card-body">
                 <div class="row">

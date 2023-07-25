@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { User } from 'src/app/modelo/modelo';
+import { mergeMap, Observable, Subject } from 'rxjs';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -10,7 +9,7 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
   styleUrls: ['./educacion.component.css']
 })
 
-export class EducacionComponent implements OnInit, AfterViewInit{
+export class EducacionComponent implements OnInit{
 
   // educacion$:Observable<any>;
   educacion:any;
@@ -24,44 +23,30 @@ export class EducacionComponent implements OnInit, AfterViewInit{
   mes:any[];
   anio:any [];
   userId:any;
+  loadEd:boolean=false;
  
   constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder) {}  
-  ngAfterViewInit(): void {
-    // this.portfolioService.userE();
-    // this.portfolioService.userId(this.portfolioService.user);
-    // this.userId = sessionStorage.getItem('userId')
-    // console.log(this.userId)
-    // throw new Error('Method not implemented.');
-    // this.traerTodo2()
-  }
     
   ngOnInit(){
-    // this.portfolioService.userE();
-    // this.portfolioService.userId(this.portfolioService.user);
+    // console.log(this.portfolioService.user);    
     this.mes=this.portfolioService.mes;
     this.anio=this.portfolioService.anio;
-    // this.userId = sessionStorage.getItem('userId')
-    // this.userId thisportfolioService.userId(this.portfolioService.user);
-    console.log(this.portfolioService.user)
-    // this.portfolioService.obtenerUserActual(this.portfolioService.user).subscribe(userId => {
-    //   this.userId = userId[0].id
-    //   console.log(this.userId)
-    //   console.log('entre subscribe')
-    // })
-    
-    
-    // consolelog(typeof this.userId);
-    
-    // this.cargarEducacion(this.userId)
     this.educacionForm = this.initForm();
     this.resp='';
-    this.userId=this.portfolioService.uId
-    console.log(this.userId)
-    console.log('entre a oninit');
-    this.traerEdu(this.portfolioService.uId)
-    
+    // obtener educacion
+    this.portfolioService.obtenerDatos(this.portfolioService.user).pipe(
+      mergeMap((res:any)=>
+        this.portfolioService.obtenerEdu(res[0].id)
+      ),
+    ).subscribe(data=>{
+      // console.log(data);
+      this.educacion = data;
+      // console.log(this.educacion);
+      this.loadEd=true;
+    })
   }
 
+  // traer educacion id
   traerEdu(id: number){
     console.log(id);    
     this.portfolioService.obtenerEdu(id).subscribe(data=>{

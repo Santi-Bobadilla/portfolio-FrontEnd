@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { mergeMap } from 'rxjs';
 import { AuthService } from 'src/app/servicios/Auth/auth.service';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 import { __values } from 'tslib';
@@ -13,7 +14,7 @@ import { __values } from 'tslib';
 
 export class HeaderComponent {
 
-  persona:any;  
+  persona:any;
   personaForm: FormGroup;
   resp:any;
   provincias:any[];
@@ -26,16 +27,28 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.provincias = this.portfolioService.provincias;
     this.portfolioService.obtenerDatos(this.portfolioService.user).subscribe(data=>{
-      console.log(data);
+      console.log(data.length);
       this.persona = data;
       console.log(this.persona);
     })
+
+    this.persona=this.portfolioService.header;
     this.personaForm = this.initForm();
     this.resp='';
     this.portfolioService.getLoggIn();
     // console.log(this.authService.getLoggIn());
     // this.userId = sessionStorage.getItem('userId')
     // console.log(this.userId)
+    // // header
+    // this.portfolioService.obtenerDatos(this.portfolioService.user).pipe(
+    //   mergeMap((res:any)=>
+    //     this.portfolioService.obtenerEdu(res[0].id),
+    //   )
+    // ).subscribe(data=>{
+    //   console.log(data);
+    //   this.portfolioService.educacion = data;
+    //   console.log(this.portfolioService.educacion);
+    // })
   }
   
   initForm(pers?:any):FormGroup {

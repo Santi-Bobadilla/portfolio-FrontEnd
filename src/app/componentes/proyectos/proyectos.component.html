@@ -1,90 +1,104 @@
 <div class="container-fluid">
-    <div class="card mb-3 pb-2">
+    <div class="card mb-3 pb-2" *ngIf="loadProy==false;else proy">
         <div class="card-body">
             <div class="row">
                 <div class="col text-center">
-                    <h5 class="card-title d-inline">Proyectos</h5>
-                    <!-- Button modal new -->
-                    <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
-                        data-bs-target="#newProyectosModal" (click)="resetForm()">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
+                    <h4 class="card-title d-inline">Proyectos</h4>
+                    <p>
+                        Recuperando datos... por favor espere
+                    </p>
                 </div>
             </div>
-            <!-- Proyectos -->
-            <div class="container-fluid">
-                <div class="container-fluid" cdkDropList (cdkDropListDropped)="drop($event)">
-                    <div *ngFor="let proy of proyectos" cdkDrag>
-                        <hr class="border border-dark border-1 opacity-50">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card mb-3">
-                                    <div class="row">
-                                        <!-- imagen -->
-                                        <div class="col-4 d-flex justify-content-center align-self-center">
-                                            <img src="{{proy.url_image}}" class="img-fluid p-0" alt="{{proy.url_image}}"
-                                                width="150px" height="150px">
-                                        </div>
-                                        <div class="col-8 align-self-center">
-                                            <div class="row">
-                                                <!-- nombre -->
-                                                <div class="col-sm-9">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">{{proy.nombre}}</h5>
+        </div>
+    </div>
+    <ng-template #proy>
+        <div class="card mb-3 pb-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col text-center">
+                        <h5 class="card-title d-inline">Proyectos</h5>
+                        <!-- Button modal new -->
+                        <button type="button" class="btn btn-sm btn-outline-dark mx-2" data-bs-toggle="modal"
+                            data-bs-target="#newProyectosModal" (click)="resetForm()">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Proyectos -->
+                <div class="container-fluid">
+                    <div class="container-fluid" cdkDropList (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let proy of proyectos" cdkDrag>
+                            <hr class="border border-dark border-1 opacity-50">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mb-3">
+                                        <div class="row">
+                                            <!-- imagen -->
+                                            <div class="col-4 d-flex justify-content-center align-self-center">
+                                                <img src="{{proy.url_image}}" class="img-fluid p-0" alt="{{proy.url_image}}"
+                                                    width="150px" height="150px">
+                                            </div>
+                                            <div class="col-8 align-self-center">
+                                                <div class="row">
+                                                    <!-- nombre -->
+                                                    <div class="col-sm-9">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">{{proy.nombre}}</h5>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-3 text-end">
-                                                    <div class="card-body">
-                                                        <!-- Button modal editar -->
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-outline-success mx-2"
-                                                            data-bs-toggle="modal"
-                                                            [attr.data-bs-target]="'#proyectosModal'+proy.id"
-                                                            (click)="abrirModal(proy)">
-                                                            <i class="fa-regular fa-pen-to-square"></i>
-                                                        </button>
-                                                        <!-- Button modal eliminar -->
-                                                        <button type="button" class="btn btn-sm btn-outline-danger mx-2"
-                                                            data-bs-toggle="modal"
-                                                            [attr.data-bs-target]="'#proyectosEliminarP'+proy.id">
-                                                            <i class="fa-solid fa-trash"></i>
-                                                        </button>
+                                                    <div class="col-sm-3 text-end">
+                                                        <div class="card-body">
+                                                            <!-- Button modal editar -->
+                                                            <button type="button"
+                                                                class="btn btn-sm btn-outline-success mx-2"
+                                                                data-bs-toggle="modal"
+                                                                [attr.data-bs-target]="'#proyectosModal'+proy.id"
+                                                                (click)="abrirModal(proy)">
+                                                                <i class="fa-regular fa-pen-to-square"></i>
+                                                            </button>
+                                                            <!-- Button modal eliminar -->
+                                                            <button type="button" class="btn btn-sm btn-outline-danger mx-2"
+                                                                data-bs-toggle="modal"
+                                                                [attr.data-bs-target]="'#proyectosEliminarP'+proy.id">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="container mb-2">
-                                            <ul class="list-group mx-2">
-                                                <!-- descripcion -->
-                                                <li class="list-group-item">
-                                                    <b>Descripción:</b> {{proy.descripcion}}
-                                                </li>
-                                                <!-- fecha Inicio -->
-                                                <li class="list-group-item">
-                                                    <b>Fecha de Inicio:</b> {{ proy.mes_inicio+'-'+proy.anio_inicio}}
-                                                </li>
-                                                <!-- fecha fin -->
-                                                <li class="list-group-item"
-                                                    *ngIf="proy.mes_fin!==null && proy.anio_fin!==null ">
-                                                    <b>Fecha de Fin:</b> {{ proy.mes_fin+'-'+proy.anio_fin}}
-                                                </li>
-                                                <!-- fecha fin -->
-                                                <li class="list-group-item"
-                                                    *ngIf="proy.mes_fin===null || proy.anio_fin===null">
-                                                    <b>Fecha de Fin:</b> en proceso
-                                                </li>
-                                                <!-- link proyecto -->
-                                                <li class="list-group-item"
-                                                    *ngIf="proy.link.includes('http://') || proy.link.includes('https://')">
-                                                    <b>Link: </b> <a href="{{proy.link}}"
-                                                        target="_blank">{{proy.link}}</a>
-                                                </li>
-                                                <!-- fecha fin -->
-                                                <li class="list-group-item" *ngIf="proy.link.indexOf('http')==-1">
-                                                    <b>Link: </b> <a href="{{'https://'+proy.link}}"
-                                                        target="_blank">{{'https://'+proy.link}}</a>
-                                                </li>
-                                            </ul>
+                                            <div class="container mb-2">
+                                                <ul class="list-group mx-2">
+                                                    <!-- descripcion -->
+                                                    <li class="list-group-item">
+                                                        <b>Descripción:</b> {{proy.descripcion}}
+                                                    </li>
+                                                    <!-- fecha Inicio -->
+                                                    <li class="list-group-item">
+                                                        <b>Fecha de Inicio:</b> {{ proy.mes_inicio+'-'+proy.anio_inicio}}
+                                                    </li>
+                                                    <!-- fecha fin -->
+                                                    <li class="list-group-item"
+                                                        *ngIf="proy.mes_fin!==null && proy.anio_fin!==null ">
+                                                        <b>Fecha de Fin:</b> {{ proy.mes_fin+'-'+proy.anio_fin}}
+                                                    </li>
+                                                    <!-- fecha fin -->
+                                                    <li class="list-group-item"
+                                                        *ngIf="proy.mes_fin===null || proy.anio_fin===null">
+                                                        <b>Fecha de Fin:</b> en proceso
+                                                    </li>
+                                                    <!-- link proyecto -->
+                                                    <li class="list-group-item"
+                                                        *ngIf="proy.link.includes('http://') || proy.link.includes('https://')">
+                                                        <b>Link: </b> <a href="{{proy.link}}"
+                                                            target="_blank">{{proy.link}}</a>
+                                                    </li>
+                                                    <!-- fecha fin -->
+                                                    <li class="list-group-item" *ngIf="proy.link.indexOf('http')==-1">
+                                                        <b>Link: </b> <a href="{{'https://'+proy.link}}"
+                                                            target="_blank">{{'https://'+proy.link}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,10 +106,10 @@
                         </div>
                     </div>
                 </div>
+                <!-- Fin Proyectos -->
             </div>
-            <!-- Fin Proyectos -->
         </div>
-    </div>
+    </ng-template>
 </div>
 
 <!-- Modal Editar Proyecto -->

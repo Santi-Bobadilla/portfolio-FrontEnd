@@ -20,7 +20,6 @@ export class AuthService {
   }
 
   iniciarSesion(credentials:any): Observable<any> {
-    // console.log(credentials);
     return this.http.post(this.api+'/login',credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
       console.log('entre a iniciarSesion');      
       const headers = response.headers;
@@ -65,8 +64,9 @@ export class AuthService {
     let result = Object.entries(t);
     if(sessionStorage.getItem('userE')==null){
       sessionStorage.setItem('userE', result[0][1]);
-      // this.portfolioService.user=result[0][1]
+      this.portfolioService.user=result[0][1]
       // this.decode2(result[0][1])
+      return result[0][1]
     }
     this.portfolioService.user=result[0][1]
     this.decode2(result[0][1])
@@ -78,11 +78,7 @@ export class AuthService {
     this.portfolioService.obtenerUserActual(email).subscribe(data => {
       sessionStorage.setItem('userId', data[0].id);
       console.log(sessionStorage.getItem('userId'));
-      this.portfolioService.uId=data[0].id
       console.log(data[0].id);
-      console.log(this.portfolioService.uId);
-      
-      // return this.portfolioService.uId=data[0].id
       return sessionStorage.getItem('userId');
     })
   }

@@ -12,20 +12,22 @@ export class PortfolioComponent implements OnInit{
   constructor(private portfolioService:PortfolioService) { }
   
   ngOnInit(): void {
-      // this.portfolioService.userE();
-      // this.portfolioService.obtenerUserActual(this.portfolioService.user).subscribe(data => {
-      //   if(sessionStorage.getItem('userId')==null){        
-      //     sessionStorage.setItem('userId', data[0].id);
-      //   }
-      //   return sessionStorage.getItem('userId');
-      // })
-      // this.portfolioService.userE();
-      // this.portfolioService.userId(this.portfolioService.user);
-
-      // this.portfolioService.obtenerEdu(this.portfolioService.userI).subscribe(data => {
-      //   console.log(data);
-      //   this.portfolioService.educacion = data;
-      // });
+    //trae mail e id
+    this.portfolioService.userE()
+    // // carga año para formulario
+    // this.portfolioService.cargarAnio();
+    // // header
+    // this.portfolioService.obtenerDatos(this.portfolioService.user).subscribe(data=>{
+    //   console.log(data);
+    //   this.portfolioService.header = data;
+    //   console.log(this.portfolioService.header);
+    // })
+    // //educacion
+    // this.portfolioService.obtenerEdu(this.portfolioService.userI).subscribe(data=>{
+    //   console.log(data);
+    //   this.portfolioService.educacion = data;
+    //   console.log(this.portfolioService.educacion);
+    // })
 
   }
 
