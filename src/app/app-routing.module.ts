@@ -10,13 +10,12 @@ import { InicioComponent } from './componentes/inicio/inicio.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/inicio', pathMatch: 'full'},
-  // { path: 'portfolio', component: PortfolioComponent, canActivate: [AuthGuard] },
   { path: 'inicio', component: InicioComponent },
-  { path: 'portfolio/:id', component: PortfolioComponent },
-  { path: 'portfolio', component: PortfolioComponent},
-  { path: 'editar/:id', component: EditarPerfilComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  // { path: 'portfolio', component: PortfolioComponent, canActivate: [AuthGuard] },
+  { path: ':username', component: PortfolioComponent},
+  { path: ':username/editar', component: EditarPerfilComponent},
   { path: '**', component: PageNotFoundComponent }
 ];
 

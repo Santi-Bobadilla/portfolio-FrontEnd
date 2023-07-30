@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute} from '@angular/router';
+import { mergeMap } from 'rxjs';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -9,26 +11,23 @@ import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service'
 
 export class PortfolioComponent implements OnInit{
 
-  constructor(private portfolioService:PortfolioService) { }
+  constructor(private portfolioService:PortfolioService, private router:Router, private route: ActivatedRoute) { }
   
   ngOnInit(): void {
     //trae mail e id
     this.portfolioService.userE()
-    // // carga año para formulario
-    // this.portfolioService.cargarAnio();
-    // // header
-    // this.portfolioService.obtenerDatos(this.portfolioService.user).subscribe(data=>{
-    //   console.log(data);
-    //   this.portfolioService.header = data;
-    //   console.log(this.portfolioService.header);
-    // })
-    // //educacion
-    // this.portfolioService.obtenerEdu(this.portfolioService.userI).subscribe(data=>{
-    //   console.log(data);
-    //   this.portfolioService.educacion = data;
-    //   console.log(this.portfolioService.educacion);
-    // })
-
+    this.urlActual();
+    this.portfolioService.obtenerDatosPorUsername(this.portfolioService.currentRoute)
+    if (this.portfolioService.user!=null) {
+      this.portfolioService.verifyEdit();
+      this.portfolioService.redes(this.portfolioService.user); 
+    }
   }
 
+  urlActual(){
+    this.route.url.subscribe((event) => {
+      this.portfolioService.currentRoute=event[0].path;
+    });
+  }
+  
 }

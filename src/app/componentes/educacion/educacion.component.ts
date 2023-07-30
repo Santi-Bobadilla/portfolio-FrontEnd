@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { mergeMap, Observable, Subject } from 'rxjs';
+import { map, mergeMap, Observable, Subject } from 'rxjs';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -24,25 +24,36 @@ export class EducacionComponent implements OnInit{
   anio:any [];
   userId:any;
   loadEd:boolean=false;
+  sinData:number=0;
+  errorMessage:string = ''
  
   constructor(protected portfolioService:PortfolioService, private formBuilder:FormBuilder) {}  
     
   ngOnInit(){
-    // console.log(this.portfolioService.user);    
+    this.sinData=0
     this.mes=this.portfolioService.mes;
     this.anio=this.portfolioService.anio;
     this.educacionForm = this.initForm();
     this.resp='';
     // obtener educacion
-    this.portfolioService.obtenerDatos(this.portfolioService.user).pipe(
+    this.portfolioService.obtenerDatosPorUsername(this.portfolioService.currentRoute).pipe(
       mergeMap((res:any)=>
         this.portfolioService.obtenerEdu(res[0].id)
       ),
     ).subscribe(data=>{
-      // console.log(data);
-      this.educacion = data;
-      // console.log(this.educacion);
       this.loadEd=true;
+      // console.log(data);
+      if(data.length>0){
+        data.sort((a:any,b:any)=>b.id-a.id);
+        // console.log(data);
+        this.educacion = data;
+        // console.log(this.educacion);
+      } else{
+        // console.log('entre a else');
+        this.sinData=1
+        this.educacion=Array({anio_fin:"", anio_inicio: '', certificacion:'', condicion:{id: 1, nombre: ''}, mes_fin:"", mes_inicio:"", nombre:'no hay educacion cargada'})
+        console.log(this.educacion);
+      }
     })
   }
 
@@ -61,14 +72,9 @@ export class EducacionComponent implements OnInit{
     this.portfolioService.cargarAnio();
   }
 
-  // cargarEducacion(id:number){
-  //   console.log('entre cargar Educacion');
-  //   this.educacion$ = this.portfolioService.obtenerEdu(id);
+  // cargarEducacion2(id:number){
+  //   this.portfolioService.obtenerEdu(id).subscribe()
   // }
-
-  cargarEducacion2(id:number){
-    this.portfolioService.obtenerEdu(id).subscribe()
-  }
 
   initForm(edu?:any):FormGroup {
     return this.formBuilder.group({
@@ -97,7 +103,7 @@ export class EducacionComponent implements OnInit{
     this.educacionForm.controls['condicion'].setValue({id: Number(this.educacionForm.value.condicion)})
     this.educacionForm.controls['persona'].setValue({id: Number(this.educacionForm.value.persona)})
     edu=this.educacionForm.value;
-    // console.log(edu);    
+    // console.log(edu);
     this.portfolioService.editarEdu(edu).subscribe(data => {
       this.resp = data
       console.log(this.resp);
@@ -112,9 +118,9 @@ export class EducacionComponent implements OnInit{
 
   nuevoEducacion():void{
     this.educacionForm.controls['condicion'].setValue({id: Number(this.educacionForm.value.condicion)})
-    this.educacionForm.controls['persona'].setValue({id: Number(1)})
-    // console.log('entre nuevoEducacion Educacions');
-    // console.log('Form->', this.educacionForm.value);
+    this.educacionForm.controls['persona'].setValue({id: Number(this.portfolioService.userI)})
+    console.log('entre nuevoEducacion Educacions');
+    console.log('Form->', this.educacionForm.value);
     this.portfolioService.nuevoEdu(this.educacionForm.value).subscribe(data => {
       this.resp = data
       // console.log(this.resp);

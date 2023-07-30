@@ -19,8 +19,8 @@ export class AuthService {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem('currentUser') || "{}"));
   }
 
-  iniciarSesion(credentials:any): Observable<any> {
-    return this.http.post(this.api+'/login',credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
+  iniciarSesion(email:string, password:string): Observable<any> {
+    return this.http.post(this.api+'/login',{email,password}, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
       console.log('entre a iniciarSesion');      
       const headers = response.headers;
       const bearerToken = headers.get('Authorization');
@@ -45,7 +45,7 @@ export class AuthService {
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('userE');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
+    this.router.navigate(['/inicio']);
   }
 
   get usuarioAutenticado(){
@@ -83,27 +83,13 @@ export class AuthService {
     })
   }
 
-  editar(){
-    let user = sessionStorage.getItem('userId');
-    this.router.navigateByUrl('/editar/'+user)
-  }
-
   registrarse(credentials:any) {
     return this.http.post(this.api+'/new/user',credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
       console.log(response);
       console.log('entre a registrarse');
       // this.iniciarSesion(credentials)
       // sessionStorage.setItem('currentUser', '');
-      this.router.navigate(['/login']);
-    }))
-
-    return this.http.post(this.api+'/new/user',credentials, {observe: 'response'}).pipe(map((response: HttpResponse<any>) => {
-      console.log(credentials);
-      console.log(response);
-      console.log('entre a registrarse');
-      // return this.http.post(this.api+'/check/user', credentials.email);
-      // console.log(this.http.post(this.api+'/check/user', credentials));
-      // this.iniciarSesion(credentials);
+      // this.router.navigate(['/login']);
     }))
   }
   

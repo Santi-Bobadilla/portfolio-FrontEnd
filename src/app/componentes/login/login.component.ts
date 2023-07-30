@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/servicios/Auth/auth.service';
 import { Router } from '@angular/router';
 import { Credentials } from 'src/app/modelo/modelo';
+import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
+import { mergeMap } from 'rxjs';
 
 
 @Component({
@@ -20,7 +22,7 @@ export class LoginComponent{
 
   form: FormGroup;
 
-  constructor(private formBuilder:FormBuilder, private authService:AuthService, private router:Router)
+  constructor(private formBuilder:FormBuilder, private authService:AuthService, private portfolioService:PortfolioService, private router:Router)
  {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,10 +40,16 @@ export class LoginComponent{
 
   onEnviar(event:Event){
     event.preventDefault;
-    this.authService.iniciarSesion(this.form.value).subscribe(data=>{
+    this.authService.iniciarSesion(this.form.value.email, this.form.value.password)
+    .pipe(
+      mergeMap(()=>
+      this.portfolioService.obtenerUserActual(this.form.value.email)
+      ),
+    )
+    .subscribe(data=>{
       console.log(JSON.stringify(data));
-      this.router.navigate(["/portfolio"]);
-    });
+      this.router.navigate(["/"+data[0].username]);
+    });    
   }
 
 }

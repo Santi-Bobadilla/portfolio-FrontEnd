@@ -1,8 +1,7 @@
-import { AfterViewInit, Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { delay, map, Observable } from 'rxjs';
-import { AuthService } from '../Auth/auth.service';
-
+import { map, mergeMap, Observable, of } from 'rxjs';
+import { Router, ActivatedRoute} from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -47,28 +46,17 @@ export class PortfolioService implements OnInit {
   loggIn: boolean = false;
   user:any;
   userI:any;
-  header:any;
-  educacion:any;
+  currentRoute:string;
+  un:string;
+  edit:boolean=false;
+  facebook:string;
+  instagram:string;
+  linkedin:string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router:Router, private route: ActivatedRoute) { }
   
   ngOnInit(): void {
-    // //trae mail e id
-    // this.userE()
-    // // carga año para formulario
-    // this.cargarAnio();
-    // // header
-    // this.obtenerDatos(this.user).subscribe(data=>{
-    //   console.log(data);
-    //   this.header = data;
-    //   console.log(this.header);
-    // })
-    // //educacion
-    // this.obtenerEdu(this.userI).subscribe(data=>{
-    //   console.log(data);
-    //   this.educacion = data;
-    //   console.log(this.educacion);
-    // })
+    console.log('entre port serv');
   }
 
   getLoggIn() {
@@ -78,6 +66,9 @@ export class PortfolioService implements OnInit {
     }
     return sessionStorage.getItem('loggIn');    
   }
+
+  // verificar user
+
 
   // funcion cargar año
   cargarAnio(){
@@ -90,7 +81,7 @@ export class PortfolioService implements OnInit {
 
   // obtener user
   obtenerUserActual(email:string): Observable<any> {
-    // console.log(email);
+    console.log(email);
     return this.http.get<any>(this.url + "ver/user/"+email);
   }
 
@@ -107,6 +98,7 @@ export class PortfolioService implements OnInit {
   // obtener id
   userId(email:string){
     this.obtenerUserActual(email).subscribe(data => {
+      console.log(data);
       sessionStorage.setItem('userId', data[0].id);
       // console.log(sessionStorage.getItem('userId'));
       this.userI = sessionStorage.getItem('userId');
@@ -114,15 +106,59 @@ export class PortfolioService implements OnInit {
     })
   }
 
+  // verificar editar
+  verifyEdit(){
+    this.obtenerUserActual(this.user)
+    .subscribe(data=>{
+      if (data[0].username===this.currentRoute) {
+        return this.edit=true;
+      } 
+      return of(data[0].username===this.currentRoute);
+    })
+  }
+
+  // boton editar perfil
+  editar(){
+    this.obtenerUserActual(this.user).subscribe(data => {
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate(['/'+data[0].username])
+    })
+  }
+
+  // redes
+  redes(user:string){
+    this.obtenerDatos(user).subscribe(data => {
+      // console.log(data);
+      this.facebook = data[0].facebook;
+      this.instagram = data[0].instagram;
+      this.linkedin = data[0].linkedin;
+    })
+  }
+
+  // // ordenar por año
+  // ordenar(datos:any){
+  //   console.log('entre a ordenar');
+  //   datos.sort(function(a:any,b:any){a.anio_fin-b.anio_inicio})
+  // }
+
   // persona
+  nuevaPersona(id:number, nombre:string, apellido:string, email:string){
+    let body={'id':id, 'nombre':nombre, 'apellido':apellido, 'email':email}
+    console.log(body);    
+    return this.http.post<any>(this.url + "new/persona", body, { observe: 'response' }).pipe(map(res => {
+      this.responseStatus = res.status;
+      return this.responseStatus;
+    }));
+  }
 
   obtenerDatos(email:string): Observable<any> {
     return this.http.get<any>(this.url + "ver/persona/"+email);
   }
 
-  // obtenerDatos(): Observable<any> {
-  //   return this.http.get<any>(this.url + "ver/personas");
-  // }
+  obtenerDatosPorUsername(username:string): Observable<any> {
+    return this.http.get<any>(this.url + "ver/username/"+username);
+  }
 
   editarPers(id: number, body: any): Observable<void> {
     // console.log(body);
@@ -135,8 +171,6 @@ export class PortfolioService implements OnInit {
 
   // educacion
   obtenerEdu(id:number): Observable<any> {
-    console.log('entre obtenerEdu');
-    console.log(id);
     return this.http.get<any>(this.url + "ver/edu/"+id);
   }
 
