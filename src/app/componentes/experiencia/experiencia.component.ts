@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { mergeMap } from 'rxjs';
 import { PortfolioService } from 'src/app/servicios/Portfolio/portfolio.service';
 
 @Component({
@@ -30,17 +31,27 @@ export class ExperienciaComponent implements OnInit{
     {'name':'Informal'}
   ]
 
+  loadExp:boolean=false;
+
   constructor(private portfolioService:PortfolioService, private formBuilder:FormBuilder){}
 
   ngOnInit():void {
     this.mes=this.portfolioService.mes;
     this.anio=this.portfolioService.anio;
-    this.portfolioService.obtenerExp().subscribe(data => {    
-      // console.log(data);
-      this.experiencia = data;
-    })
     this.experienciaForm = this.initForm();    
     this.resp='';
+
+    // obtener experiencia
+    this.portfolioService.obtenerDatos(this.portfolioService.user).pipe(
+      mergeMap((res:any)=>
+        this.portfolioService.obtenerExp(res[0].id)
+      ),
+    ).subscribe(data=>{
+      // console.log(data);
+      this.experiencia = data;
+      // console.log(this.experiencia);
+      this.loadExp=true;
+    })
   }
 
   initForm(exp?:any):FormGroup {

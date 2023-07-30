@@ -1,26 +1,68 @@
 <div class="container-fluid">
-    <div class="card my-5 position-absolute top-50 start-50 translate-middle" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title text-center">Crear cuenta</h5>
-          <form>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div class="card my-5 position-absolute top-50 start-50 translate-middle" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title text-center">Crear cuenta</h5>
+        <form [formGroup]="form" (ngSubmit)="onEnviarReg($event)">
+          <!-- nombre -->
+          <div class="mb-3">
+            <label for="exampleInputNombre1" class="form-label">Nombre</label>
+            <input type="text" formControlName="nombre" [ngClass]="{'is-invalid': Nombre?.errors && Nombre?.touched, 'is-valid': !Nombre?.errors && !Nombre?.touched}" class="form-control" id="exampleInputNombre1" required/>
+              <div *ngIf="Nombre?.errors && Nombre?.touched">
+                <p *ngIf="Nombre?.hasError('required')" class="text-danger">
+                  El nombre es requerido.
+                </p>
+                <p *ngIf="Nombre?.hasError('minlength')" class="text-danger">
+                  El nombre debe tener al menos 3 caracteres
+                </p>
+              </div>
+          </div>
+          <!-- apellido -->
+          <div class="mb-3">
+            <label for="exampleInputApellido1" class="form-label">Apellido</label>
+            <input type="text" formControlName="apellido" [ngClass]="{'is-invalid': Apellido?.errors && Apellido?.touched, 'is-valid': !Apellido?.errors && !Apellido?.touched}" class="form-control" id="exampleInputApellido1" required/>
+              <div *ngIf="Apellido?.errors && Apellido?.touched">
+                <p *ngIf="Apellido?.hasError('required')" class="text-danger">
+                  El apellido es requerido.
+                </p>
+                <p *ngIf="Apellido?.hasError('minlength')" class="text-danger">
+                  El apellido debe tener al menos 3 caracteres
+                </p>
+              </div>
+          </div>
+          <!-- email -->
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" formControlName="email" [ngClass]="{'is-invalid': Email?.errors && Email?.touched, 'is-valid': !Email?.errors && !Email?.touched}" class="form-control" id="exampleInputEmail1"
+              aria-describedby="emailHelp" required/>
+              <div *ngIf="Email?.errors && Email?.touched">
+                <p *ngIf="Email?.hasError('required')" class="text-danger">
+                  El email es requerido.
+                </p>
+                <p *ngIf="Email?.hasError('email')" class="text-danger">
+                  El formato de email es incorrecto.
+                </p>
+              </div>
+          </div>
+          <!-- password -->
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" formControlName="password" [ngClass]="{'is-invalid': Password?.errors && Password?.touched, 'is-valid': !Password?.errors && !Password?.touched}" class="form-control" id="exampleInputPassword1" required/>
+            <div *ngIf="Password?.errors && Password?.touched">
+              <p *ngIf="Password?.hasError('required')" class="text-danger">
+                La contraseña es requerida
+              </p>
+              <p *ngIf="Password?.errors?.['minlength']" class="text-danger">
+                La contraseña debe tener por lo menos 8 caracteres.
+              </p>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword2" class="form-label">Confirme su Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword2">
-            </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Registrarse</button>
-            </div>
-            
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Registrarse</button>
+          </div>
         </form>
-        </div>
+      </div>
+      <div class="d-grid gap-2 text-center">
+        <small class="text-danger"> {{errorMessage}} </small>
+      </div>
     </div>
-    
-</div>
+  </div>

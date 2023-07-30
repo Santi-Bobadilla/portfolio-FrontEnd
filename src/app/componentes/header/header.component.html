@@ -8,18 +8,22 @@
       <img src="https://www.concordia.gob.ar/sites/all/themes/programar/images/arg-programa.png" alt="logo" height="50">
     </a>
     <!-- nombre -->
-    <span class="align-middle text-center">Santiago Bobadilla</span>
+    <span class="align-middle text-center text-capitalize">{{nombreCompleto}}</span>
 
     <!-- botones lg -->
     <div class="navbar-nav ms-auto px-2 d-none d-lg-block">
       <div class="row rows-col-3">
-        <div class="col">
-          <a class="nav-link nav-item" href="https://instagram.com/santi_bobadilla1"><i
+        <div class="col" *ngIf="portfolioService.instagram!=null">
+          <a class="nav-link nav-item" href="{{portfolioService.instagram}}"><i
               class="fa-brands fa-instagram"></i></a>
         </div>
-        <div class="col">
-          <a class="nav-link nav-item" href="https://www.linkedin.com/in/santiago-bobadilla/"><i
+        <div class="col" *ngIf="portfolioService.linkedin!=null">
+          <a class="nav-link nav-item" href="{{portfolioService.linkedin}}"><i
               class="fa-brands fa-linkedin"></i></a>
+        </div>
+        <div class="col" *ngIf="portfolioService.facebook!=null">
+          <a class="nav-link nav-item" href="{{portfolioService.facebook}}"><i
+              class="fa-brands fa-facebook"></i></a>
         </div>
         <div class="col">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -27,11 +31,16 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" routerLink="/register" routerLinkActive="active"
-                *ngIf="portfolioService.logueado===false">Registrarse</a></li>
+              *ngIf="portfolioService.loggIn==false">Registrarse</a></li>
             <li><a class="dropdown-item" routerLink="/login" routerLinkActive="active"
-                *ngIf="portfolioService.logueado===false">Iniciar Sesión</a></li>
+              *ngIf="portfolioService.loggIn==false">Iniciar Sesión</a></li>
             <li>
-              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
+              <div *ngFor="let pers of persona">
+                <button class="dropdown-item" routerLink="/{{pers?.username}}" routerLinkActive="active" (click)="portfolioService.editar()">
+                  Editar Portfolio
+                </button>
+              </div>              
+              <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion" *ngIf="portfolioService.loggIn!=false">
                 Cerrar Sesión
               </button>
             </li>
@@ -45,13 +54,17 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <mat-menu #menu="matMenu" class="d-block d-lg-none">
-      <button mat-menu-item>
-        <a class="nav-link" href="https://instagram.com/santi_bobadilla1"><i class="fa-brands fa-instagram"></i>
+      <button mat-menu-item *ngIf="portfolioService.instagram!=null">
+        <a class="nav-link" href="{{portfolioService.instagram}}"><i class="fa-brands fa-instagram"></i>
           Instagram </a>
       </button>
-      <button mat-menu-item>
-        <a class="nav-link" href="https://www.linkedin.com/in/santiago-bobadilla/"><i class="fa-brands fa-linkedin"></i>
+      <button mat-menu-item *ngIf="portfolioService.linkedin!=null">
+        <a class="nav-link" href="{{portfolioService.linkedin}}"><i class="fa-brands fa-linkedin"></i>
           LinkedIn </a>
+      </button>
+      <button mat-menu-item *ngIf="portfolioService.facebook!=null">
+        <a class="nav-link" href="{{portfolioService.facebook}}"><i class="fa-brands fa-facebook"></i>
+          Facebook </a>
       </button>
       <button mat-menu-item [matMenuTriggerFor]="sesion">
         <i class="fa-solid fa-user"></i>
@@ -59,7 +72,7 @@
     </mat-menu>
 
     <mat-menu #sesion="matMenu" class="d-block d-lg-none">
-      <div *ngIf="portfolioService.logueado===false; then trueBlock else falseBlock"></div>
+      <div *ngIf="portfolioService.loggIn==false; then trueBlock else falseBlock"></div>
       <ng-template #trueBlock>
         <button mat-menu-item>
           <a class="dropdown-item" routerLink="/register" routerLinkActive="active">Registrarse</a>
@@ -69,42 +82,76 @@
         </button>
       </ng-template>
       <ng-template #falseBlock>
-        <button mat-menu-item>
-          <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
-            Cerrar Sesión
+        <div *ngFor="let pers of persona">
+          <button mat-menu-item>
+            <button class="dropdown-item" routerLinkActive="active" (click)="portfolioService.editar()">
+              Editar Portfolio
+            </button>
           </button>
-        </button>
+          <button mat-menu-item>
+            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cerrarSesion">
+              Cerrar Sesión
+            </button>
+          </button>
+        </div>        
       </ng-template>
     </mat-menu>
   </nav>
   <!-- fin -->
+  <!-- back y perfil img != null-->
   <div class="card mb-3 pb-2" *ngFor="let pers of persona">
-    <div class="position-relative">
-      <img src="{{pers.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%"
-        height="350">
-      <img src="{{pers.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil"
+    <div class="position-relative" *ngIf="pers?.image_background_header!=null && pers?.image_perfil!=null">
+      <img src="{{pers?.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
+      <img src="{{pers?.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil"
+        id="img_perfil" height="100" width="100">
+    </div>
+    <!-- back img == null-->
+    <div class="position-relative" *ngIf="pers?.image_background_header==null && pers?.image_perfil!=null">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRydxVK2qqK8F6GCCjngq1ItVp1YwAPnsdzjQ&usqp=CAU" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
+      <img src="{{pers?.image_perfil}}" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil"
+        id="img_perfil" height="100" width="100">
+    </div>
+    <!-- perfil img == null-->
+    <div class="position-relative" *ngIf="pers?.image_background_header!=null && pers?.image_perfil==null">
+      <img src="{{pers?.image_background_header}}" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQLHZh0aF5Og2DF4G19yPVx_QGjXfaBByFZA&usqp=CAU" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil"
+        id="img_perfil" height="100" width="100">
+    </div>
+    <!-- back y perfil img == null -->
+    <div class="position-relative" *ngIf="pers?.image_background_header==null && pers?.image_perfil==null">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRydxVK2qqK8F6GCCjngq1ItVp1YwAPnsdzjQ&usqp=CAU" class="image-fluid position-relative" alt="img_portfolio" width="100%" height="350">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQLHZh0aF5Og2DF4G19yPVx_QGjXfaBByFZA&usqp=CAU" class="rounded-circle ms-3 position-absolute start-0" alt="img_perfil"
         id="img_perfil" height="100" width="100">
     </div>
 
     <div class="card-body mt-5">
       <div class="row">
         <div class="col-10">
-          <h5 class="card-title">{{pers.nombre+' '+pers.apellido}}</h5>
+          <h5 class="card-title">{{pers?.nombre+' '+pers?.apellido}}</h5>
         </div>
-        <div class="col-2 text-end" *ngIf="portfolioService.logueado===true">
+        <div class="col-2 text-end" *ngIf="portfolioService.edit==true">
           <button type="button" class="btn btn-sm btn-outline-success mx-1" data-bs-toggle="modal"
             data-bs-target="#personaModal" (click)="abrirModalP(pers)">
             <i class="fa-regular fa-pen-to-square"></i>
           </button>
         </div>
       </div>
-      <p class="card-text my-0">{{pers.ocupacion}}</p>
-      <p class="card-text my-0">{{pers.provincia.nombre}} ({{pers.provincia.nacionalidad.nombre}}) <span>
+      <p class="card-text my-0" *ngIf="pers?.ocupacion==null">No hay ocupación cargada</p>
+      <p class="card-text my-0" *ngIf="pers?.ocupacion!=null">{{pers?.ocupacion}}</p>
+
+      <p class="card-text my-0" *ngIf="pers?.provincia?.nombre!=null">{{pers?.provincia?.nombre}} ({{pers?.provincia?.nacionalidad?.nombre}})
+        <span>  
           <button type="button" class="btn btn-link px-0" data-bs-toggle="modal"
             data-bs-target="#exampleModal">Información de contacto</button>
-        </span> </p>
+        </span>
+      </p>
+      <p class="card-text my-0" *ngIf="pers?.provincia?.nombre==null">No hay provincia cargada
+        <span>
+          <button type="button" class="btn btn-link px-0" data-bs-toggle="modal"
+          data-bs-target="#exampleModal">Información de contacto</button>
+        </span>
+      </p>
     </div>
-
     <!-- <div>
     <button type="button" class="btn btn-primary btn-sm mx-2">Tengo interes en</button>
     <button type="button" class="btn btn-outline-light text-dark btn-sm mx-2">Añadir sección</button>
@@ -114,11 +161,11 @@
     <div class="card-body py-2">
       <div class="row">
         <div class="col-10">
-          <h5 class="card-title text-start">Acerca de</h5>
+          <h5 class="card-title text-start">Sobre mí</h5>
         </div>
       </div>
-
-      <p class="card-text my-0">{{pers.sobre_mi}}</p>
+      <p class="card-text my-0" *ngIf="pers?.sobre_mi==null">No hay descripción</p>
+      <p class="card-text my-0" *ngIf="pers?.sobre_mi!=null">{{pers?.sobre_mi}}</p>
     </div>
 
     <!-- Modal Contacto -->
@@ -132,27 +179,37 @@
           <div class="modal-body">
             <!-- modal body -->
             <div class="row row-cols-2 align-items-center">
-              <div class="col d-grid gap-2 mx-auto">
-                <button class="btn btn-success">
-                  <a class="btn-link text-white" href="https://wa.me/+549{{pers.telefono}}"> <i
+              <div class="col d-grid gap-2 mx-auto py-2" *ngIf="pers?.telefono!=null">
+                <button class="btn btn-success border border-dark">
+                  <a class="btn-link text-white" href="https://wa.me/+549{{pers?.telefono}}"> <i
                       class="fa-brands fa-whatsapp"></i> Whatsapp</a>
                 </button>
-
-                <button class="btn btn-danger">
-                  <a class="btn-link text-white" href="mailto: {{pers.email}}"> <i class="fa-regular fa-envelope"></i>
-                    Email</a>
+              </div>
+              <div class="col d-grid gap-2 mx-auto py-2" *ngIf="pers?.email!=null">
+                <button class="btn btn-danger border border-dark">
+                  <a class="btn-link text-white" href="mailto: {{pers?.email}}"> <i class="fa-regular fa-envelope"></i> Email</a>
                 </button>
               </div>
-              <div class="col d-grid gap-2 mx-auto">
-                <button class="btn btn-primary">
-                  <a class="btn-link text-white" href="https://instagram.com/santi_bobadilla1"><i
+              <div class="col d-grid gap-2 mx-auto py-2" *ngIf="pers?.instagram!=null">
+                <button class="btn btn-light border border-dark">
+                  <a class="btn-link text-dark" href="{{pers?.instagram}}"><i
                       class="fa-brands fa-instagram"></i> Instagram</a>
                 </button>
-
-                <button class="btn btn-dark">
-                  <a class="btn-link text-white" href="https://www.linkedin.com/in/santiago-bobadilla/"><i
+              </div>
+              <div class="col d-grid gap-2 mx-auto py-2" *ngIf="pers?.linkedin!=null">
+                <button class="btn btn-dark border border-dark">
+                  <a class="btn-link text-white" href="{{pers?.linkedin}}"><i
                       class="fa-brands fa-linkedin"></i> Linkedin</a>
                 </button>
+              </div>
+              <div class="col d-grid gap-2 mx-auto py-2" *ngIf="pers?.facebook!=null">
+                <button class="btn btn-primary border border-dark">
+                  <a class="btn-link text-white" href="{{pers?.facebook}}"><i
+                      class="fa-brands fa-facebook"></i> Facebook</a>
+                </button>
+              </div>
+              <div class="col d-grid gap-2 mx-auto py-2">
+                <!-- vacio para emparejar -->
               </div>
             </div>
           </div>
@@ -162,26 +219,26 @@
     <!-- fin modal body -->
 
     <!-- Modal Editar -->
-    <ng-container>
+    <ng-container *ngIf="portfolioService.edit==true">
       <div class="modal fade" id="personaModal" tabindex="-1" aria-labelledby="personaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="personaModalLabel">Editar {{pers.nombre}} {{pers.apellido}}</h1>
+              <h1 class="modal-title fs-5" id="personaModalLabel">Editar {{pers?.nombre}} {{pers?.apellido}}</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <!-- form modal persona -->
-              <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers.id, pers)"
+              <form class="form-control" [formGroup]="personaForm" (ngSubmit)="editarPersona(pers?.id, pers)"
                 method="patch">
                 <!-- id -->
                 <input type="number" name="id" formControlName="id" class="form-control" id="inputId"
-                  aria-describedby="id" [defaultValue]="pers.id" hidden required />
+                  aria-describedby="id" [defaultValue]="pers?.id" hidden required />
                 <!-- Nombre -->
                 <div class="mb-3">
                   <label for="inputNombre" class="form-label">Nombre</label>
                   <input type="text" name="nombre" formControlName="nombre" class="form-control" id="inputNombre"
-                    aria-describedby="nombre" [defaultValue]="pers.nombre"
+                    aria-describedby="nombre" [defaultValue]="pers?.nombre"
                     [ngClass]="{'is-invalid': personaForm.get('nombre')?.errors && personaForm.get('nombre')?.touched, 'is-valid': !personaForm.get('nombre')?.errors && !personaForm.get('nombre')?.touched}"
                     maxlength="60" minlength="3" required />
                   <!-- errores -->
@@ -201,7 +258,7 @@
                 <div class="mb-3">
                   <label for="inputApellido" class="form-label">Apellido</label>
                   <input type="text" name="apellido" formControlName="apellido" class="form-control" id="inputApellido"
-                    aria-describedby="apellido" [defaultValue]="pers.apellido"
+                    aria-describedby="apellido" [defaultValue]="pers?.apellido"
                     [ngClass]="{'is-invalid': personaForm.get('apellido')?.errors && personaForm.get('apellido')?.touched, 'is-valid': !personaForm.get('apellido')?.errors && !personaForm.get('apellido')?.touched}"
                     maxlength="60" minlength="3" required />
                   <!-- errores -->
@@ -217,20 +274,35 @@
                     </p>
                   </div>
                 </div>
+                <!-- dni -->
+                <div class="mb-3">
+                  <label for="inputDni" class="form-label">Numero de Documento</label>
+                  <input type="text" formControlName="dni" name="dni" class="form-control" id="inputDni"
+                    aria-describedby="dni" [defaultValue]="pers?.dni"
+                    [ngClass]="{'is-invalid': personaForm.get('dni')?.errors && personaForm.get('dni')?.touched, 'is-valid': !personaForm.get('dni')?.errors && !personaForm.get('dni')?.touched}"
+                    maxlength="10" minlength="8" required />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('dni')?.errors && personaForm.get('dni')?.touched">
+                    <p *ngIf="personaForm.get('dni')?.hasError('required')" class="text-danger">
+                      El DNI es requerido.
+                    </p>
+                    <p *ngIf="personaForm.get('dni')?.hasError('minlength')" class="text-danger">
+                      El DNI debe tener al menos 8 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('dni')?.hasError('maxlength')" class="text-danger">
+                      El DNI debe tener máximo 10 caracteres.
+                    </p>
+                  </div>
+                </div>
                 <!-- sobre mi -->
                 <div class="mb-3">
                   <label for="form-floating" class="form-label">Sobre mi</label>
                   <div class="form-floating">
                     <textarea class="form-control p-2" placeholder="Leave a comment here" id="floatingTextarea"
-                      [defaultValue]="pers.sobre_mi" value="{{pers.sobre_mi}}"
+                      [defaultValue]="pers?.sobre_mi" value="{{pers?.sobre_mi}}"
                       [ngClass]="{'is-invalid': personaForm.get('sobre_mi')?.errors && personaForm.get('sobre_mi')?.touched, 'is-valid': !personaForm.get('sobre_mi')?.errors && !personaForm.get('sobre_mi')?.touched}"
                       maxlength="500" minlength="10" required></textarea>
-                    <!-- <label for="floatingTextarea">Sobre mi</label> -->
                   </div>
-
-                  <!-- <input type="text" name="sobre_mi" formControlName="sobre_mi" class="form-control" id="inputOcupacion"
-                    aria-describedby="sobre_mi" [defaultValue]="pers.sobre_mi" value="{{pers.sobre_mi}}" [ngClass]="{'is-invalid': personaForm.get('sobre_mi')?.errors && personaForm.get('sobre_mi')?.touched, 'is-valid': !personaForm.get('sobre_mi')?.errors && !personaForm.get('sobre_mi')?.touched}"
-                    maxlength="500" minlength="10" required /> -->
                   <!-- errores -->
                   <div *ngIf="personaForm.get('sobre_mi')?.errors && personaForm.get('sobre_mi')?.touched">
                     <p *ngIf="personaForm.get('sobre_mi')?.hasError('required')" class="text-danger">
@@ -248,7 +320,7 @@
                 <div class="mb-3">
                   <label for="inputTelefono" class="form-label">Telefono</label>
                   <input type="text" formControlName="telefono" name="telefono" class="form-control" id="inputTelefono"
-                    aria-describedby="telefono" [defaultValue]="pers.telefono"
+                    aria-describedby="telefono" [defaultValue]="pers?.telefono"
                     [ngClass]="{'is-invalid': personaForm.get('telefono')?.errors && personaForm.get('telefono')?.touched, 'is-valid': !personaForm.get('telefono')?.errors && !personaForm.get('telefono')?.touched}"
                     maxlength="20" minlength="7" required />
                   <!-- errores -->
@@ -268,7 +340,7 @@
                 <div class="mb-3">
                   <label for="inputEmail" class="form-label">Email</label>
                   <input type="email" formControlName="email" name="email" class="form-control" id="inputEmail"
-                    aria-describedby="email" [defaultValue]="pers.email"
+                    aria-describedby="email" [defaultValue]="pers?.email"
                     [ngClass]="{'is-invalid': personaForm.get('email')?.errors && personaForm.get('email')?.touched, 'is-valid': !personaForm.get('email')?.errors && !personaForm.get('email')?.touched}"
                     maxlength="100" minlength="10" required />
                   <!-- errores -->
@@ -287,6 +359,57 @@
                     </p>
                   </div>
                 </div>
+                <!-- facebook -->
+                <div class="mb-3">
+                  <label for="inputFacebook" class="form-label">URL Facebook</label>
+                  <input type="text" formControlName="facebook" name="facebook" class="form-control" id="inputFacebook"
+                    aria-describedby="facebook" [defaultValue]="pers?.facebook"
+                    [ngClass]="{'is-invalid': personaForm.get('facebook')?.errors && personaForm.get('facebook')?.touched, 'is-valid': !personaForm.get('facebook')?.errors && !personaForm.get('facebook')?.touched}"
+                    maxlength="255" minlength="10" />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('facebook')?.errors && personaForm.get('facebook')?.touched">
+                    <p *ngIf="personaForm.get('facebook')?.hasError('minlength')" class="text-danger">
+                      El facebook debe tener al menos 10 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('facebook')?.hasError('maxlength')" class="text-danger">
+                      El facebook debe tener máximo 255 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- instagram -->
+                <div class="mb-3">
+                  <label for="inputInstagram" class="form-label"> URL Instagram</label>
+                  <input type="text" formControlName="instagram" name="instagram" class="form-control" id="inputInstagram"
+                    aria-describedby="instagram" [defaultValue]="pers?.instagram"
+                    [ngClass]="{'is-invalid': personaForm.get('instagram')?.errors && personaForm.get('instagram')?.touched, 'is-valid': !personaForm.get('instagram')?.errors && !personaForm.get('instagram')?.touched}"
+                    maxlength="255" minlength="10" />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('instagram')?.errors && personaForm.get('instagram')?.touched">
+                    <p *ngIf="personaForm.get('instagram')?.hasError('minlength')" class="text-danger">
+                      El instagram debe tener al menos 10 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('instagram')?.hasError('maxlength')" class="text-danger">
+                      El instagram debe tener máximo 255 caracteres.
+                    </p>
+                  </div>
+                </div>
+                <!-- linkedIn -->
+                <div class="mb-3">
+                  <label for="inputLinkedin" class="form-label">URL LinkedIn</label>
+                  <input type="text" formControlName="linkedin" name="linkedin" class="form-control" id="inputLinkedin"
+                    aria-describedby="linkedin" [defaultValue]="pers?.linkedin"
+                    [ngClass]="{'is-invalid': personaForm.get('linkedin')?.errors && personaForm.get('linkedin')?.touched, 'is-valid': !personaForm.get('linkedin')?.errors && !personaForm.get('linkedin')?.touched}"
+                    maxlength="255" minlength="10" />
+                  <!-- errores -->
+                  <div *ngIf="personaForm.get('linkedin')?.errors && personaForm.get('linkedin')?.touched">
+                    <p *ngIf="personaForm.get('linkedin')?.hasError('minlength')" class="text-danger">
+                      El linkedin debe tener al menos 10 caracteres.
+                    </p>
+                    <p *ngIf="personaForm.get('linkedin')?.hasError('maxlength')" class="text-danger">
+                      El linkedin debe tener máximo 255 caracteres.
+                    </p>
+                  </div>
+                </div>
                 <!-- provincia -->
                 <div class="mb-3">
                   <label for="inputProvinciaId" class="form-label">Provincia</label>
@@ -294,7 +417,7 @@
                     id="inputProvinciaId"
                     [ngClass]="{'is-invalid': personaForm.get('provincia')?.errors && personaForm.get('provincia')?.touched, 'is-valid': !personaForm.get('provincia')?.errors && !personaForm.get('provincia')?.touched}"
                     required>
-                    <option *ngFor="let prov of provincias; let i = index" [selected]="i+1 === pers.provincia.id"
+                    <option *ngFor="let prov of provincias; let i = index" [selected]="i+1 === pers?.provincia?.id"
                       value="{{i+1}}"> {{ prov.name }} </option>
                   </select>
                   <!-- errores -->
@@ -309,7 +432,7 @@
                   <label for="inputImageBackground" class="form-label">Url imagen de fondo</label>
                   <input type="text" formControlName="image_background_header" name="image_background_header"
                     class="form-control" id="inputImageBackground" aria-describedby="image_background_header"
-                    [defaultValue]="pers.image_background_header"
+                    [defaultValue]="pers?.image_background_header"
                     [ngClass]="{'is-invalid': personaForm.get('image_background_header')?.errors && personaForm.get('image_background_header')?.touched, 'is-valid': !personaForm.get('image_background_header')?.errors && !personaForm.get('image_background_header')?.touched}"
                     maxlength="20000" minlength="10" />
                   <!-- errores -->
@@ -327,14 +450,14 @@
                 <div class="mb-3">
                   <label for="inputImagePerfil" class="form-label">Url imagen de perfil</label>
                   <input type="text" formControlName="image_perfil" name="image_perfil" class="form-control"
-                    id="inputImagePerfil" aria-describedby="image_perfil" [defaultValue]="pers.image_perfil"
+                    id="inputImagePerfil" aria-describedby="image_perfil" [defaultValue]="pers?.image_perfil"
                     [ngClass]="{'is-invalid': personaForm.get('image_perfil')?.errors && personaForm.get('image_perfil')?.touched, 'is-valid': !personaForm.get('image_perfil')?.errors && !personaForm.get('image_perfil')?.touched}"
-                    maxlength="20000" minlength="10" required />
+                    maxlength="20000" minlength="10"/>
                   <!-- errores -->
                   <div *ngIf="personaForm.get('image_perfil')?.errors && personaForm.get('image_perfil')?.touched">
-                    <p *ngIf="personaForm.get('image_perfil')?.hasError('minlength')" class="text-danger">
+                    <!-- <p *ngIf="personaForm.get('image_perfil')?.hasError('minlength')" class="text-danger">
                       El link es requerido.
-                    </p>
+                    </p> -->
                     <p *ngIf="personaForm.get('image_perfil')?.hasError('minlength')" class="text-danger">
                       El link debe tener al menos 10 caracteres.
                     </p>
@@ -347,8 +470,8 @@
                 <div class="mb-3">
                   <label for="inputFechaNacimiento" class="form-label">fecha de nacimiento</label>
                   <input type="date" formControlName="fecha_nacimiento" name="fecha_nacimiento" class="form-control"
-                    id="inputFechaNacimiento" aria-describedby="fecha_nacimiento" [defaultValue]="pers.fecha_nacimiento"
-                    value="{{pers.fecha_nacimiento}}"
+                    id="inputFechaNacimiento" aria-describedby="fecha_nacimiento" [defaultValue]="pers?.fecha_nacimiento"
+                    value="{{pers?.fecha_nacimiento}}"
                     [ngClass]="{'is-invalid': personaForm.get('fecha_nacimiento')?.errors && personaForm.get('fecha_nacimiento')?.touched, 'is-valid': !personaForm.get('fecha_nacimiento')?.errors && !personaForm.get('fecha_nacimiento')?.touched}"
                     maxlength="10" required />
                   <!-- errores -->
@@ -415,7 +538,7 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
             </div>
             <div class="col">
-              <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()">
+              <a class="dropdown-item" routerLink="/loguot" routerLinkActive="active" (click)="authService.logOut()" data-bs-dismiss="modal">
                 <button type="button" class="btn btn-warning">
                   Sí
                 </button>

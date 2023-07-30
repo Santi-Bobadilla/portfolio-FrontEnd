@@ -24,6 +24,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import {MatMenuModule} from '@angular/material/menu';
+import { AuthService } from './servicios/Auth/auth.service';
+import { EditarPerfilComponent } from './componentes/editar-perfil/editar-perfil.component';
+import { JwtServiceService } from './servicios/JwtService/jwt-service.service';
+import { InicioComponent } from './componentes/inicio/inicio.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,9 @@ import {MatMenuModule} from '@angular/material/menu';
     PageNotFoundComponent,
     RegisterComponent,
     PortfolioComponent,
-    LoaderComponent
+    LoaderComponent,
+    EditarPerfilComponent,
+    InicioComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,7 +73,8 @@ import {MatMenuModule} from '@angular/material/menu';
     MatMenuModule
   ],
   providers: [PortfolioService,
-    {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true}
+    {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptor,multi: true},
+    JwtServiceService
   ],
 
   bootstrap: [AppComponent]
